@@ -1,0 +1,6 @@
+{
+  "name": "RailOne",
+  "description": "RailOne Progressive Web App with offline support and mPIN login.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

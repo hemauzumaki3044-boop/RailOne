@@ -1,0 +1,163 @@
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import fs from 'fs';
+import path from 'path';
+import {defineConfig} from 'vite';
+import {VitePWA} from 'vite-plugin-pwa';
+
+export default defineConfig(() => {
+  return {
+    plugins: [
+      react(),
+      tailwindcss(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: [
+          'apple-touch-icon.png',
+          'pwa-192x192.png',
+          'pwa-512x512.png',
+          'pwa-maskable-512x512.png',
+          'assets/splash-logo.png',
+          'assets/mpin-logo.png',
+          'assets/face-id.png',
+          'assets/fingerprint.png',
+          'assets/dashboard/lang-icon.png',
+          'assets/dashboard/logo.png',
+          'assets/dashboard/notif-icon.png',
+          'assets/dashboard/planner-reserved.jpg',
+          'assets/dashboard/planner-unreserved.jpg',
+          'assets/dashboard/planner-platform.jpg',
+          'assets/dashboard/more-offerings.jpg',
+          'assets/dashboard/fact-1.jpg',
+          'assets/dashboard/fact-2.jpg',
+          'assets/dashboard/fact-3.jpg',
+          'assets/dashboard/fact-4.jpg',
+          'assets/dashboard/social-banner.jpg',
+          'assets/dashboard/loader-ring.png',
+          'assets/you/back.png',
+          'assets/you/avatar.png',
+          'assets/you/eye.png',
+          'assets/you/pencil.png',
+          'assets/you/wallet.png',
+          'assets/you/wallet-refresh.png',
+          'assets/you/passengers.png',
+          'assets/you/passengers-refresh.png',
+          'assets/you/change-password.png',
+          'assets/you/my-account.png',
+          'assets/you/transfer-ticket.png',
+          'assets/you/my-transactions.png',
+          'assets/you/link-aadhar.png',
+          'assets/menu/avatar.png',
+          'assets/menu/wallet.png',
+          'assets/menu/show.png',
+          'assets/menu/faq.png',
+          'assets/menu/help.png',
+          'assets/menu/reserved.png',
+          'assets/menu/about.png',
+          'assets/menu/rate.png',
+          'assets/menu/share.png',
+          'assets/menu/logout.png',
+        ],
+        manifest: {
+          id: '/',
+          name: 'RailOne',
+          short_name: 'RailOne',
+          description: 'RailOne Progressive Web App with offline support and mPIN login.',
+          theme_color: '#FFFFFF',
+          background_color: '#FFFFFF',
+          display: 'fullscreen',
+          display_override: ['fullscreen', 'standalone'],
+          orientation: 'portrait',
+          start_url: '/',
+          scope: '/',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: 'pwa-maskable-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+          ],
+        },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2}'],
+          globIgnores: ['**/assets/aistudio/**'],
+          navigateFallback: '/index.html',
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'google-fonts-stylesheets',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
+                },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts-webfonts',
+                expiration: {
+                  maxEntries: 20,
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
+          ],
+        },
+        devOptions: {
+          enabled: true,
+          type: 'module',
+        },
+      }),
+      // Copies src/assets into dist/ so root-relative URLs like
+      // "/src/assets/images/..." (e.g. generate_image output) still resolve
+      // in production builds. Do not remove.
+      {
+        name: 'copy-unbundled-src-assets',
+        apply: 'build',
+        closeBundle(error?: Error): void {
+          if (error) {
+            return;
+          }
+          const distDir = path.resolve(__dirname, 'dist');
+          const srcAssets = path.resolve(__dirname, 'src/assets');
+          const distAssets = path.resolve(distDir, 'src/assets');
+          if (fs.existsSync(distDir) && fs.existsSync(srcAssets)) {
+            fs.cpSync(srcAssets, distAssets, {recursive: true, force: true});
+          }
+        },
+      },
+    ],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+    server: {
+      // HMR is disabled in AI Studio via DISABLE_HMR env var.
+      // Do not modify—file watching is disabled to prevent flickering during agent edits.
+      hmr: process.env.DISABLE_HMR !== 'true',
+      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
+      watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+  };
+});
