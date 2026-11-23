@@ -30,6 +30,7 @@ type EditableDetailField =
 
 interface NewTicketInput {
   id: string;
+  tag: 'Unreserved' | 'Reserved';
   type: string;
   dateLabel: string;
   from: string;
@@ -124,6 +125,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
 
   // Create Ticket Sheet state
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [fTag, setFTag] = useState<'Unreserved' | 'Reserved'>('Unreserved');
   const [fFrom, setFFrom] = useState('MGR CHENNAI CTL');
   const [fUts, setFUts] = useState('');
   const [fType, setFType] = useState('JOURNEY');
@@ -267,6 +269,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
   }, [detailKey, editingDetail, persistTickets]);
 
   const openSheet = useCallback(() => {
+    setFTag('Unreserved');
     setFFrom('MGR CHENNAI CTL');
     setFUts('');
     setFType('JOURNEY');
@@ -307,7 +310,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
         const created: BookingTicket = {
           id: data.id,
           uid: `${data.id}-${now}`,
-          tag: 'Reserved',
+          tag: data.tag,
           type: data.type,
           dateLabel: data.dateLabel,
           from: data.from,
@@ -416,13 +419,14 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     closeSheet();
     act('create-ticket', {
       id: uts,
+      tag: fTag,
       type,
       dateLabel: fmtDate(date),
       from: from.toUpperCase(),
       to: to.toUpperCase(),
       km,
     });
-  }, [act, closeSheet, fDate, fFrom, fKm, fTo, fType, fUts]);
+  }, [act, closeSheet, fDate, fFrom, fKm, fTag, fTo, fType, fUts]);
 
   const inDetail = view === 'detail';
   const detailTicket = inDetail
@@ -817,9 +821,27 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
               <label className="mb-[5px] block text-[12.5px] font-semibold text-[#4B5563]">
                 Tag
               </label>
-              <span className="inline-block rounded-[10px] bg-[#E9DAF1] px-[14px] py-[8px] text-[13px] font-semibold text-[#A87CB9]">
-                Reserved
-              </span>
+              <div className="flex items-center gap-[10px]" role="radiogroup" aria-label="Ticket tag">
+                {(['Unreserved', 'Reserved'] as const).map((option) => {
+                  const active = fTag === option;
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => setFTag(option)}
+                      className={`cursor-pointer rounded-[10px] border-[1.5px] px-[14px] py-[8px] text-[13px] font-semibold transition-colors ${
+                        active
+                          ? 'border-[#A87CB9] bg-[#E9DAF1] text-[#8E5AA3]'
+                          : 'border-[#D5DCE6] bg-[#F8FAFC] text-[#6B7280]'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="mb-[12px]">

@@ -14,6 +14,7 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         useCredentials: true,
         includeAssets: [],
+        includeManifestIcons: false,
         manifest: {
           id: '/',
           name: 'RailOne',
