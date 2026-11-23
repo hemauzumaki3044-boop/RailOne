@@ -5,8 +5,26 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
+let cachedInstallPrompt: BeforeInstallPromptEvent | null = null;
+const promptListeners = new Set<(event: BeforeInstallPromptEvent | null) => void>();
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', (event: Event) => {
+    event.preventDefault();
+    cachedInstallPrompt = event as BeforeInstallPromptEvent;
+    promptListeners.forEach((listener) => listener(cachedInstallPrompt));
+  });
+
+  window.addEventListener('appinstalled', () => {
+    cachedInstallPrompt = null;
+    promptListeners.forEach((listener) => listener(null));
+  });
+}
+
 export function usePWAInstall() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(
+    () => cachedInstallPrompt
+  );
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
 
@@ -22,29 +40,30 @@ export function usePWAInstall() {
       !(window as Window & { MSStream?: unknown }).MSStream;
     setIsIOS(ios);
 
-    const onBeforeInstall = (event: Event) => {
-      event.preventDefault();
-      setDeferredPrompt(event as BeforeInstallPromptEvent);
+    const handlePromptUpdate = (nextPrompt: BeforeInstallPromptEvent | null) => {
+      setDeferredPrompt(nextPrompt);
     };
+    promptListeners.add(handlePromptUpdate);
 
     const onAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('beforeinstallprompt', onBeforeInstall);
     window.addEventListener('appinstalled', onAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
+      promptListeners.delete(handlePromptUpdate);
       window.removeEventListener('appinstalled', onAppInstalled);
     };
   }, []);
 
   const install = useCallback(async () => {
-    if (!deferredPrompt) return false;
-    await deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    const promptEvent = deferredPrompt || cachedInstallPrompt;
+    if (!promptEvent) return false;
+    await promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
+    cachedInstallPrompt = null;
     setDeferredPrompt(null);
     return outcome === 'accepted';
   }, [deferredPrompt]);
