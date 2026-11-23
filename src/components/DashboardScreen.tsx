@@ -252,7 +252,7 @@ export function DashboardScreen({
         </header>
 
         {isInitialLoading ? (
-          <DashboardShimmerSkeleton />
+          <DashboardShimmerSkeleton showUpcoming={upcomingTickets.length > 0} />
         ) : (
           <>
             <p className="mx-[16px] mt-[22px] mb-0 text-[13px] font-semibold text-[#10236B]">
@@ -342,29 +342,23 @@ export function DashboardScreen({
           </div>
         </section>
 
-        {/* Upcoming Journey */}
-        <section className="mt-[22px] px-[16px]">
-          <h2 className="mt-0 mb-[12px] text-[18px] leading-[24px] font-bold text-[#10236B]">
-            Upcoming Journey
-          </h2>
-          {upcomingTickets.length === 1 && (
-            <div className="flex justify-center">
-              {renderDashboardTicket(upcomingTickets[0])}
-            </div>
-          )}
-          {upcomingTickets.length > 1 && (
-            <div className="railone-carousel -mx-[16px] flex snap-x snap-mandatory gap-[12px] overflow-x-auto px-[16px] pb-[4px]">
-              {upcomingTickets.map((ticket) => renderDashboardTicket(ticket))}
-            </div>
-          )}
-          {upcomingTickets.length === 0 && (
-            <div className="flex h-[117px] items-center justify-center rounded-[20px] border border-dashed border-[#CBD5E1] bg-[#F8FAFC] px-4 text-center">
-              <p className="m-0 text-[13px] font-medium text-[#7A7D86]">
-                No upcoming journeys found.
-              </p>
-            </div>
-          )}
-        </section>
+        {/* Upcoming Journey — shown only when at least one upcoming ticket exists */}
+        {upcomingTickets.length > 0 && (
+          <section className="mt-[22px] px-[16px]">
+            <h2 className="mt-0 mb-[12px] text-[18px] leading-[24px] font-bold text-[#10236B]">
+              Upcoming Journey
+            </h2>
+            {upcomingTickets.length === 1 ? (
+              <div className="flex justify-center">
+                {renderDashboardTicket(upcomingTickets[0])}
+              </div>
+            ) : (
+              <div className="railone-carousel -mx-[16px] flex snap-x snap-mandatory gap-[12px] overflow-x-auto px-[16px] pb-[4px]">
+                {upcomingTickets.map((ticket) => renderDashboardTicket(ticket))}
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Do You Know */}
         <section className="mt-[22px] px-[16px]">

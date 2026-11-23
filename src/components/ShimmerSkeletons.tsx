@@ -9,7 +9,7 @@ const OFFERING_SKELETON_ITEMS = [
   { line1: 'w-[38px]', line2: 'w-[48px]' },
 ] as const;
 
-export function DashboardShimmerSkeleton() {
+export function DashboardShimmerSkeleton({ showUpcoming = true }: { showUpcoming?: boolean }) {
   return (
     <div aria-busy="true" aria-label="Loading dashboard" className="px-[16px] pt-[18px]">
       {/* Greeting line */}
@@ -42,11 +42,15 @@ export function DashboardShimmerSkeleton() {
         ))}
       </div>
 
-      {/* Upcoming Journey section heading */}
-      <div className="railone-shimmer mt-[28px] h-[16px] w-[140px] rounded-full" />
+      {showUpcoming && (
+        <>
+          {/* Upcoming Journey section heading */}
+          <div className="railone-shimmer mt-[28px] h-[16px] w-[140px] rounded-full" />
 
-      {/* Upcoming Journey card placeholder */}
-      <div className="railone-shimmer mx-auto mt-[14px] h-[117px] w-[268px] rounded-[20px]" />
+          {/* Upcoming Journey card placeholder */}
+          <div className="railone-shimmer mx-auto mt-[14px] h-[117px] w-[268px] rounded-[20px]" />
+        </>
+      )}
     </div>
   );
 }

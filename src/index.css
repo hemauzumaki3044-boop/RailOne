@@ -215,8 +215,9 @@
 }
 
 .railone-mb-hdr {
-  height: calc(109px + env(safe-area-inset-top, 0px));
-  padding-top: env(safe-area-inset-top, 0px);
+  min-height: calc(62px + env(safe-area-inset-top, 0px));
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  padding-bottom: 12px;
 }
 
 .railone-dash-shell {

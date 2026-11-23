@@ -468,13 +468,13 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
           {t.dateLabel}
         </span>
 
-        <span className="absolute top-[95px] left-[11px] m-0 w-[118px] text-[12.5px] leading-[17px] font-semibold uppercase text-black">
+        <span className="absolute top-[95px] left-[11px] m-0 w-[114px] text-[12.5px] leading-[17px] font-semibold uppercase text-black [overflow-wrap:anywhere]">
           {t.from}
         </span>
         <span className="absolute top-[103px] left-1/2 m-0 -translate-x-1/2 text-[10px] leading-[14px] font-medium whitespace-nowrap text-[#ACADB1]">
           — {t.km} km —
         </span>
-        <span className="absolute top-[95px] right-[11.5px] m-0 w-[118px] text-right text-[12.5px] leading-[17px] font-semibold uppercase text-black">
+        <span className="absolute top-[95px] right-[11.5px] m-0 w-[114px] text-right text-[12.5px] leading-[17px] font-semibold uppercase text-black [overflow-wrap:anywhere]">
           {t.to}
         </span>
 
@@ -543,7 +543,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
   const renderList = () => {
     if (tab === 'cancelled') return <EmptyState />;
 
-    const showUp = tab === 'upcoming' || tab === 'all';
+    const showUp = tab === 'upcoming' || (tab === 'all' && upcomingList.length > 0);
     const showDone = tab === 'completed' || tab === 'all';
 
     return (
@@ -572,7 +572,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
               `Completed (${completedList.length})`,
               'text-[#18A44E]',
               !showUp,
-              tab === 'completed'
+              !showUp
             )}
             {completedList.length > 0 ? (
               <div className="flex flex-col items-center gap-[16px]">
@@ -665,7 +665,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
           {isInitialLoading ? (
             <MyBookingsShimmerSkeleton />
           ) : effectiveDetail && detailTicket ? (
-            <div className="min-h-[calc(100dvh-109px)] bg-[#F5F5F5] pt-[0.1px] pb-[40px]">
+            <div className="min-h-[calc(100dvh-62px)] bg-[#F5F5F5] pt-[0.1px] pb-[40px]">
               <div className="railone-dcard relative mx-[10.5px] mt-[15.5px] h-[153px] w-[calc(100%-21px)] rounded-[20px] bg-[#C8EBF1] text-[#1F2A30]">
                 <span
                   onClick={() =>
