@@ -19,15 +19,28 @@
     <meta name="apple-mobile-web-app-title" content="RailOne" />
     <link rel="icon" type="image/png" href="/pwa-192x192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" as="image" href="/assets/splash-logo.png" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="railone-boot-splash" aria-label="Loading RailOne">
+        <img src="/assets/splash-logo.png" alt="RailOne" class="railone-boot-logo" />
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
