@@ -240,10 +240,17 @@ export function MenuDrawer({
           </button>
 
           {/* App version */}
-          <p className="mt-[8px] mb-0 pb-[24px] text-center text-[13px] leading-[16px] text-[#9D9D9D]">
+          <p className="mt-[8px] mb-0 pb-[calc(24px+env(safe-area-inset-bottom,0px))] text-center text-[13px] leading-[16px] text-[#9D9D9D]">
             V-2.1.82-256
           </p>
         </aside>
+
+        {isOpen && (
+          <div
+            aria-hidden="true"
+            className="railone-mb-safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-[65] mx-auto w-full sm:max-w-[430px]"
+          />
+        )}
       </div>
 
       {/* Loader overlay */}

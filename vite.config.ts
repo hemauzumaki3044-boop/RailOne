@@ -52,8 +52,9 @@ export default defineConfig(() => {
           clientsClaim: true,
           skipWaiting: true,
           dontCacheBustURLsMatching: /^assets\/.*-[A-Za-z0-9_-]{8}\.(js|css)$/,
+          importScripts: ['/sw-notifications.js'],
           globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2}'],
-          globIgnores: ['**/assets/aistudio/**'],
+          globIgnores: ['**/assets/aistudio/**', 'sw-notifications.js'],
           navigateFallback: '/index.html',
           runtimeCaching: [
             {

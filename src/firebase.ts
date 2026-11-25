@@ -40,6 +40,7 @@ export interface BookingTicket {
   pax?: string;
   statusText?: string;
   fare?: string;
+  refId?: string;
 }
 
 export const DEFAULT_UPCOMING_JOURNEY: UpcomingJourney = {
@@ -361,6 +362,9 @@ function normalizeTicketItem(raw: unknown, index: number): BookingTicket | null 
   }
   if (typeof data.fare === 'string' && data.fare.trim()) {
     ticket.fare = data.fare.trim();
+  }
+  if (typeof data.refId === 'string' && data.refId.trim()) {
+    ticket.refId = data.refId.trim();
   }
 
   return ticket;

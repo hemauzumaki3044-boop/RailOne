@@ -10,6 +10,12 @@ import {
   type TicketStatus,
 } from '../firebase';
 import { MyBookingsShimmerSkeleton } from './ShimmerSkeletons';
+import {
+  buildTicketNotificationBody,
+  generateTicketReferenceId,
+  requestBookingNotificationPermission,
+  sendTicketBookedNotification,
+} from '../utils/notifications';
 
 interface MyBookingsScreenProps {
   onBackToDashboard: () => void;
@@ -36,6 +42,7 @@ interface NewTicketInput {
   from: string;
   to: string;
   km: number;
+  refId: string;
 }
 
 interface EditingDetailState {
@@ -133,6 +140,8 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
   const [fKm, setFKm] = useState('');
   const [fTo, setFTo] = useState('ARAKKONAM JN.');
   const [fErr, setFErr] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<string | null>(null);
+  const fallbackTimerRef = useRef<number | null>(null);
 
   // Edit Booking Details text sheet state (double-tap on Completed ticket details)
   const [editingDetail, setEditingDetail] = useState<EditingDetailState | null>(null);
@@ -197,6 +206,9 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     return () => {
       if (loaderTimerRef.current !== null) {
         window.clearTimeout(loaderTimerRef.current);
+      }
+      if (fallbackTimerRef.current !== null) {
+        window.clearTimeout(fallbackTimerRef.current);
       }
     };
   }, []);
@@ -320,11 +332,25 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
           expiresAt: now + TICKET_VALIDITY_MS,
           booked: fmtStamp(now),
           via: 'MAS-MPK-MSF',
+          refId: data.refId,
         };
         const nextList = [...ticketsRef.current, created];
         persistTickets(nextList);
         setTab('upcoming');
         setView('list');
+
+        void sendTicketBookedNotification(data.refId, data.tag).then((dispatched) => {
+          if (!dispatched) {
+            if (fallbackTimerRef.current !== null) {
+              window.clearTimeout(fallbackTimerRef.current);
+            }
+            setFallbackNotice(buildTicketNotificationBody(data.refId, data.tag));
+            fallbackTimerRef.current = window.setTimeout(() => {
+              setFallbackNotice(null);
+              fallbackTimerRef.current = null;
+            }, 6500);
+          }
+        });
       }
 
       logDashboardAction(
@@ -396,7 +422,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     [persistTickets]
   );
 
-  const submitTicket = useCallback(() => {
+  const submitTicket = useCallback(async () => {
     const from = fFrom.trim();
     const uts = fUts.trim().toUpperCase();
     const type = fType;
@@ -416,6 +442,10 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
       return;
     }
 
+    // Request notification permission inside direct user gesture before loader timeout
+    await requestBookingNotificationPermission();
+
+    const refId = generateTicketReferenceId();
     closeSheet();
     act('create-ticket', {
       id: uts,
@@ -425,6 +455,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
       from: from.toUpperCase(),
       to: to.toUpperCase(),
       km,
+      refId,
     });
   }, [act, closeSheet, fDate, fFrom, fKm, fTag, fTo, fType, fUts]);
 
@@ -1035,6 +1066,31 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
               Cancel
             </button>
           </form>
+        </div>
+      )}
+
+      {/* Fallback notification banner (shown only if OS push notifications are unavailable/denied) */}
+      {fallbackNotice && (
+        <div
+          role="status"
+          aria-live="polite"
+          onClick={() => setFallbackNotice(null)}
+          className="fixed top-[12px] left-1/2 z-[110] flex w-[calc(100%-24px)] max-w-[406px] -translate-x-1/2 cursor-pointer items-start gap-[12px] rounded-[20px] bg-[#5E5E63]/95 px-[14px] py-[12px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-md"
+        >
+          <img
+            src="/pwa-192x192.png"
+            alt="RailOne"
+            className="mt-[2px] block h-[38px] w-[38px] shrink-0 rounded-[10px]"
+          />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-[8px]">
+              <span className="text-[14.5px] leading-[18px] font-bold text-white">RailOne</span>
+              <span className="text-[11.5px] font-medium text-white/75">Now</span>
+            </div>
+            <p className="mt-[3px] mb-0 text-[12.5px] leading-[17px] font-normal text-white/95">
+              {fallbackNotice}
+            </p>
+          </div>
         </div>
       )}
 

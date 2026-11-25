@@ -11,6 +11,7 @@ import {
   type DashboardFact,
 } from '../firebase';
 import { DashboardShimmerSkeleton } from './ShimmerSkeletons';
+import { requestBookingNotificationPermission } from '../utils/notifications';
 
 interface DashboardScreenProps {
   userName: string;
@@ -241,7 +242,10 @@ export function DashboardScreen({
           <button
             type="button"
             aria-label="Notifications"
-            onClick={() => runAction('notifications')}
+            onClick={() => {
+              void requestBookingNotificationPermission();
+              runAction('notifications');
+            }}
             className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-[#1E6BFF]"
           >
             <img
