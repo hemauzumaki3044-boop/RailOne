@@ -106,7 +106,7 @@ export function YouScreen({
 
   return (
     <div className="min-h-dvh w-full bg-white text-black sm:bg-[#E5E7EB]">
-      <div className="relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white pb-[80px] sm:max-w-[430px]">
+      <div className="railone-you-shell relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white sm:max-w-[430px]">
         {/* Top profile block */}
         <section className="railone-you-top rounded-b-[60px] bg-[#E2F9FF]">
           <div className="relative h-[368px]">
@@ -378,80 +378,87 @@ export function YouScreen({
       {/* Bottom navigation */}
       <nav
         aria-label="Primary navigation"
-        className="railone-bottom-nav fixed bottom-0 left-1/2 z-20 grid h-[58px] w-full -translate-x-1/2 grid-cols-4 bg-[#0166FF] sm:max-w-[430px]"
+        className="railone-bottom-nav fixed inset-x-0 bottom-0 z-20 mx-auto w-full rounded-t-[8px] bg-[#0166FF] sm:max-w-[430px]"
       >
-        <button
-          type="button"
-          onClick={() => runAction('nav-home', onNavigateHome)}
-          className="flex cursor-pointer flex-col items-center justify-center gap-[2px] border-0 bg-transparent p-0 text-[11px] font-medium text-white/[0.78]"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-            className="h-[22px] w-[22px]"
+        <div className="grid h-[61px] grid-cols-4">
+          <button
+            type="button"
+            onClick={() => runAction('nav-home', onNavigateHome)}
+            className="flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] font-medium text-[#91B9FF]"
           >
-            <path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H10v6H4a1 1 0 0 1-1-1z" />
-          </svg>
-          Home
-        </button>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+              strokeLinejoin="round"
+              className="h-[22px] w-[22px]"
+            >
+              <path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H10v6H4a1 1 0 0 1-1-1z" />
+            </svg>
+            Home
+          </button>
 
-        <button
-          type="button"
-          onClick={() => runAction('nav-bookings', onNavigateBookings)}
-          className="flex cursor-pointer flex-col items-center justify-center gap-[2px] border-0 bg-transparent p-0 text-[11px] font-medium text-white/[0.78]"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" className="h-[22px] w-[22px]">
-            <path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" />
-          </svg>
-          My Bookings
-        </button>
-
-        <button
-          type="button"
-          onClick={() => runAction('nav-you')}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-[2px] border-0 bg-transparent p-0 text-[11px] font-medium ${
-            menuOpen ? 'text-white/[0.78]' : 'text-white'
-          }`}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            className="h-[22px] w-[22px]"
+          <button
+            type="button"
+            onClick={() => runAction('nav-bookings', onNavigateBookings)}
+            className="flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] font-medium text-[#91B9FF]"
           >
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 21c1-4 4-6 8-6s7 2 8 6" />
-          </svg>
-          You
-        </button>
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-[22px] w-[22px]">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M4.5 5A2.5 2.5 0 0 0 2 7.5v2.2a2.3 2.3 0 0 1 0 4.6v2.2A2.5 2.5 0 0 0 4.5 19h15a2.5 2.5 0 0 0 2.5-2.5v-2.2a2.3 2.3 0 0 1 0-4.6V7.5A2.5 2.5 0 0 0 19.5 5h-15zm7.5 3.1a.9.9 0 0 1 .9.9v1.2a.9.9 0 0 1-1.8 0V9a.9.9 0 0 1 .9-.9zm0 4.6a.9.9 0 0 1 .9.9v1.2a.9.9 0 0 1-1.8 0v-1.2a.9.9 0 0 1 .9-.9z"
+              />
+            </svg>
+            My Bookings
+          </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            logDashboardAction('nav-menu');
-            onOpenMenu();
-          }}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-[2px] border-0 bg-transparent p-0 text-[11px] font-medium ${
-            menuOpen ? 'text-white' : 'text-white/[0.78]'
-          }`}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            className="h-[22px] w-[22px]"
+          <button
+            type="button"
+            onClick={() => runAction('nav-you')}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] ${
+              menuOpen ? 'font-medium text-[#91B9FF]' : 'font-semibold text-white'
+            }`}
           >
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
-          Menu
-        </button>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-[22px] w-[22px]"
+            >
+              <circle cx="12" cy="8" r="3.8" />
+              <path d="M5 20c1.2-3.7 3.7-5.5 7-5.5s5.8 1.8 7 5.5" />
+            </svg>
+            You
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              logDashboardAction('nav-menu');
+              onOpenMenu();
+            }}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] ${
+              menuOpen ? 'font-semibold text-white' : 'font-medium text-[#91B9FF]'
+            }`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.1"
+              strokeLinecap="round"
+              className="h-[22px] w-[22px]"
+            >
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            Menu
+          </button>
+        </div>
       </nav>
 
       {/* Loader overlay */}

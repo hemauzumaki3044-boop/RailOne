@@ -3,6 +3,7 @@ import { SplashScreen } from './components/SplashScreen';
 import { MpinLoginScreen } from './components/MpinLoginScreen';
 import { DashboardScreen } from './components/DashboardScreen';
 import { MyBookingsScreen } from './components/MyBookingsScreen';
+import { UnreservedTicketScreen } from './components/UnreservedTicketScreen';
 import { YouScreen } from './components/YouScreen';
 import { MenuDrawer } from './components/MenuDrawer';
 import { PWAInstallButton } from './components/PWAInstallButton';
@@ -14,7 +15,7 @@ import {
   syncFirebaseUserProfile,
 } from './firebase';
 
-type ScreenState = 'splash' | 'mpin' | 'dashboard' | 'bookings' | 'you';
+type ScreenState = 'splash' | 'mpin' | 'dashboard' | 'bookings' | 'unreserved' | 'you';
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenState>('splash');
@@ -48,6 +49,14 @@ export default function App() {
               : '#FFFFFF';
       themeColorMeta.setAttribute('content', color);
     }
+
+    const useBlueNavBar =
+      screen === 'dashboard' ||
+      screen === 'bookings' ||
+      screen === 'unreserved' ||
+      screen === 'you';
+    document.documentElement.classList.toggle('railone-nav-blue', useBlueNavBar);
+    document.body.classList.toggle('railone-nav-blue', useBlueNavBar);
   }, [menuOpen, screen]);
 
   const handleSplashFinish = useCallback(() => {
@@ -67,6 +76,11 @@ export default function App() {
   const handleOpenBookings = useCallback(() => {
     setMenuOpen(false);
     setScreen('bookings');
+  }, []);
+
+  const handleOpenUnreserved = useCallback(() => {
+    setMenuOpen(false);
+    setScreen('unreserved');
   }, []);
 
   const handleOpenYou = useCallback(() => {
@@ -105,6 +119,15 @@ export default function App() {
     );
   }
 
+  if (screen === 'unreserved') {
+    return (
+      <>
+        <OfflineIndicator />
+        <UnreservedTicketScreen onClose={handleBackToDashboard} />
+      </>
+    );
+  }
+
   if (screen === 'you') {
     return (
       <>
@@ -139,6 +162,7 @@ export default function App() {
           userName={userName}
           onUserNameChange={setUserName}
           onOpenBookings={handleOpenBookings}
+          onOpenUnreserved={handleOpenUnreserved}
           onOpenYou={handleOpenYou}
           onOpenMenu={handleOpenMenu}
           menuOpen={menuOpen}

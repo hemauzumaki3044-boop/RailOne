@@ -593,7 +593,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
 
   return (
     <div className="min-h-dvh w-full bg-white text-[#212121] sm:bg-[#E5E7EB]">
-      <div className="relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white pb-[92px] sm:max-w-[430px]">
+      <div className="railone-mb-shell relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white sm:max-w-[430px]">
         {/* Header */}
         <header className="railone-mb-hdr sticky top-0 z-10 flex items-center gap-[23px] bg-[#0166FF] pr-[22px] pl-[15px] text-white">
           <button
@@ -768,32 +768,35 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
 
       {/* Bottom tabs */}
       {!effectiveDetail && (
-        <nav
-          aria-label="Booking categories"
-          className="railone-mb-tabs fixed bottom-0 left-1/2 z-20 grid w-full -translate-x-1/2 grid-cols-[repeat(4,78px)] justify-center gap-[10px] rounded-t-[24px] border-t-2 border-[#D3D8E0] bg-[#F2F9FF] pt-[6px] sm:max-w-[430px]"
-        >
-          {TAB_ITEMS.map((item) => {
-            const on = tab === item.key;
-            return (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => act(`tab-${item.key}`)}
-                className={`box-border flex h-[46px] cursor-pointer flex-col items-center justify-center gap-[2px] rounded-[12px] border-0 p-0 text-[12.5px] font-medium ${
-                  on
-                    ? `bg-[#F8FAF9] shadow-[0_1px_3px_rgba(0,0,0,0.08)] ${item.activeTextClass}`
-                    : 'bg-[#E1F2FC] text-[#777D89]'
-                }`}
-              >
-                <TicketTabIcon
-                  fill={on ? item.color : '#EEF1F5'}
-                  stroke={on ? '#1F2937' : '#7B8190'}
-                />
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+        <div className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full sm:max-w-[430px]">
+          <nav
+            aria-label="Booking categories"
+            className="grid w-full grid-cols-[repeat(4,78px)] justify-center gap-[10px] rounded-t-[24px] border-t-2 border-[#D3D8E0] bg-[#F2F9FF] pt-[6px] pb-[10px]"
+          >
+            {TAB_ITEMS.map((item) => {
+              const on = tab === item.key;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => act(`tab-${item.key}`)}
+                  className={`box-border flex h-[46px] cursor-pointer flex-col items-center justify-center gap-[2px] rounded-[12px] border-0 p-0 text-[12.5px] font-medium ${
+                    on
+                      ? `bg-[#F8FAF9] shadow-[0_1px_3px_rgba(0,0,0,0.08)] ${item.activeTextClass}`
+                      : 'bg-[#E1F2FC] text-[#777D89]'
+                  }`}
+                >
+                  <TicketTabIcon
+                    fill={on ? item.color : '#EEF1F5'}
+                    stroke={on ? '#1F2937' : '#7B8190'}
+                  />
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+          <div className="railone-mb-safe-bottom w-full" aria-hidden="true" />
+        </div>
       )}
 
       {/* Create Ticket Bottom Sheet */}

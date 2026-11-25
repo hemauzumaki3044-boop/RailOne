@@ -13,6 +13,11 @@
     overscroll-behavior-y: none;
     background-color: #ffffff;
   }
+
+  html.railone-nav-blue,
+  body.railone-nav-blue {
+    background-color: #0166ff;
+  }
 }
 
 @keyframes splash-fade-in {
@@ -117,6 +122,7 @@
 }
 
 .railone-bottom-nav {
+  background-color: #0166ff;
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -210,8 +216,9 @@
   bottom: -15px;
 }
 
-.railone-mb-tabs {
-  padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+.railone-mb-safe-bottom {
+  height: env(safe-area-inset-bottom, 0px);
+  background-color: #0166ff;
 }
 
 .railone-mb-hdr {
@@ -222,6 +229,15 @@
 
 .railone-dash-shell {
   padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+.railone-you-shell {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+.railone-mb-shell {
+  padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
 }
 
 .railone-mpin-shell {
@@ -234,6 +250,14 @@
 
 .railone-menu-top {
   padding-top: env(safe-area-inset-top, 0px);
+}
+
+.railone-unreserved-hdr {
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+}
+
+.railone-unreserved-shell {
+  padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
 }
 
 @keyframes railone-shimmer {

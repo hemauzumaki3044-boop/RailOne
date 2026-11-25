@@ -16,6 +16,7 @@ interface DashboardScreenProps {
   userName: string;
   onUserNameChange?: (name: string) => void;
   onOpenBookings: () => void;
+  onOpenUnreserved: () => void;
   onOpenYou: () => void;
   onOpenMenu: () => void;
   menuOpen?: boolean;
@@ -62,6 +63,7 @@ export function DashboardScreen({
   userName,
   onUserNameChange,
   onOpenBookings,
+  onOpenUnreserved,
   onOpenYou,
   onOpenMenu,
   menuOpen = false,
@@ -212,7 +214,7 @@ export function DashboardScreen({
 
   return (
     <div className="min-h-dvh w-full bg-white text-[#10236B] sm:bg-[#E5E7EB]">
-      <div className="railone-dash-shell relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white pb-[96px] sm:max-w-[430px]">
+      <div className="railone-dash-shell relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white sm:max-w-[430px]">
         {/* Header */}
         <header className="flex h-[64px] items-center justify-between px-[18px]">
           <button
@@ -284,7 +286,7 @@ export function DashboardScreen({
 
             <button
               type="button"
-              onClick={() => runAction('unreserved')}
+              onClick={() => runAction('unreserved', onOpenUnreserved)}
               className="block cursor-pointer border-0 bg-transparent p-0 text-center"
             >
               <span className="block h-[84px] w-full overflow-hidden rounded-[12px] bg-[#F3F4F6]">
@@ -399,81 +401,102 @@ export function DashboardScreen({
       {/* Bottom navigation */}
       <nav
         aria-label="Primary navigation"
-        className="railone-bottom-nav fixed bottom-0 left-1/2 z-50 grid h-[64px] w-full -translate-x-1/2 grid-cols-4 bg-[#0A66FF] sm:max-w-[430px]"
+        className="railone-bottom-nav fixed inset-x-0 bottom-0 z-50 mx-auto w-full rounded-t-[8px] bg-[#0166FF] sm:max-w-[430px]"
       >
-        <button
-          type="button"
-          onClick={() => handleNavClick('nav-home')}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-[3px] border-0 bg-transparent p-0 text-[11px] font-semibold ${
-            displayedNav === 'nav-home' ? 'text-white' : 'text-white/[0.72]'
-          }`}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-            className="h-[22px] w-[22px]"
+        <div className="grid h-[61px] grid-cols-4">
+          <button
+            type="button"
+            onClick={() => handleNavClick('nav-home')}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] ${
+              displayedNav === 'nav-home'
+                ? 'font-semibold text-white'
+                : 'font-medium text-[#91B9FF]'
+            }`}
           >
-            <path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H10v6H4a1 1 0 0 1-1-1z" />
-          </svg>
-          Home
-        </button>
+            {displayedNav === 'nav-home' ? (
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-[22px] w-[22px]">
+                <path d="M12 3.2 3.5 10.6a.9.9 0 0 0 .6 1.58h1.4v7.32c0 .83.67 1.5 1.5 1.5h3.25v-5.5c0-.55.45-1 1-1h1.5c.55 0 1 .45 1 1V21H17c.83 0 1.5-.67 1.5-1.5v-7.32h1.4a.9.9 0 0 0 .6-1.58L12 3.2z" />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.9"
+                strokeLinejoin="round"
+                className="h-[22px] w-[22px]"
+              >
+                <path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H10v6H4a1 1 0 0 1-1-1z" />
+              </svg>
+            )}
+            Home
+          </button>
 
-        <button
-          type="button"
-          onClick={() => handleNavClick('nav-bookings')}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-[3px] border-0 bg-transparent p-0 text-[11px] font-semibold ${
-            displayedNav === 'nav-bookings' ? 'text-white' : 'text-white/[0.72]'
-          }`}
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" className="h-[22px] w-[22px]">
-            <path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" />
-          </svg>
-          My Bookings
-        </button>
-
-        <button
-          type="button"
-          onClick={() => handleNavClick('nav-you')}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-[3px] border-0 bg-transparent p-0 text-[11px] font-semibold ${
-            displayedNav === 'nav-you' ? 'text-white' : 'text-white/[0.72]'
-          }`}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            className="h-[22px] w-[22px]"
+          <button
+            type="button"
+            onClick={() => handleNavClick('nav-bookings')}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] ${
+              displayedNav === 'nav-bookings'
+                ? 'font-semibold text-white'
+                : 'font-medium text-[#91B9FF]'
+            }`}
           >
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 21c1-4 4-6 8-6s7 2 8 6" />
-          </svg>
-          You
-        </button>
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-[22px] w-[22px]">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M4.5 5A2.5 2.5 0 0 0 2 7.5v2.2a2.3 2.3 0 0 1 0 4.6v2.2A2.5 2.5 0 0 0 4.5 19h15a2.5 2.5 0 0 0 2.5-2.5v-2.2a2.3 2.3 0 0 1 0-4.6V7.5A2.5 2.5 0 0 0 19.5 5h-15zm7.5 3.1a.9.9 0 0 1 .9.9v1.2a.9.9 0 0 1-1.8 0V9a.9.9 0 0 1 .9-.9zm0 4.6a.9.9 0 0 1 .9.9v1.2a.9.9 0 0 1-1.8 0v-1.2a.9.9 0 0 1 .9-.9z"
+              />
+            </svg>
+            My Bookings
+          </button>
 
-        <button
-          type="button"
-          onClick={() => handleNavClick('nav-menu')}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-[3px] border-0 bg-transparent p-0 text-[11px] font-semibold ${
-            displayedNav === 'nav-menu' ? 'text-white' : 'text-white/[0.72]'
-          }`}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            className="h-[22px] w-[22px]"
+          <button
+            type="button"
+            onClick={() => handleNavClick('nav-you')}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] ${
+              displayedNav === 'nav-you'
+                ? 'font-semibold text-white'
+                : 'font-medium text-[#91B9FF]'
+            }`}
           >
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
-          Menu
-        </button>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-[22px] w-[22px]"
+            >
+              <circle cx="12" cy="8" r="3.8" />
+              <path d="M5 20c1.2-3.7 3.7-5.5 7-5.5s5.8 1.8 7 5.5" />
+            </svg>
+            You
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleNavClick('nav-menu')}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-[4px] border-0 bg-transparent p-0 text-[11.5px] leading-[14px] ${
+              displayedNav === 'nav-menu'
+                ? 'font-semibold text-white'
+                : 'font-medium text-[#91B9FF]'
+            }`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.1"
+              strokeLinecap="round"
+              className="h-[22px] w-[22px]"
+            >
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            Menu
+          </button>
+        </div>
       </nav>
 
       {/* Loader overlay */}
