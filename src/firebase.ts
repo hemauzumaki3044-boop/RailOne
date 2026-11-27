@@ -41,6 +41,15 @@ export interface BookingTicket {
   statusText?: string;
   fare?: string;
   refId?: string;
+  mobile?: string;
+  userName?: string;
+  utsCode?: string;
+  qrLabel?: string;
+  trainType?: string;
+  ticketClass?: string;
+  irCode?: string;
+  bandColor?: string;
+  bookingDtDisplay?: string;
 }
 
 export const DEFAULT_UPCOMING_JOURNEY: UpcomingJourney = {
@@ -365,6 +374,33 @@ function normalizeTicketItem(raw: unknown, index: number): BookingTicket | null 
   }
   if (typeof data.refId === 'string' && data.refId.trim()) {
     ticket.refId = data.refId.trim();
+  }
+  if (typeof data.mobile === 'string' && data.mobile.trim()) {
+    ticket.mobile = data.mobile.trim();
+  }
+  if (typeof data.userName === 'string' && data.userName.trim()) {
+    ticket.userName = data.userName.trim();
+  }
+  if (typeof data.utsCode === 'string' && data.utsCode.trim()) {
+    ticket.utsCode = data.utsCode.trim();
+  }
+  if (typeof data.qrLabel === 'string' && data.qrLabel.trim()) {
+    ticket.qrLabel = data.qrLabel.trim();
+  }
+  if (typeof data.trainType === 'string' && data.trainType.trim()) {
+    ticket.trainType = data.trainType.trim();
+  }
+  if (typeof data.ticketClass === 'string' && data.ticketClass.trim()) {
+    ticket.ticketClass = data.ticketClass.trim();
+  }
+  if (typeof data.irCode === 'string' && data.irCode.trim()) {
+    ticket.irCode = data.irCode.trim();
+  }
+  if (typeof data.bandColor === 'string' && data.bandColor.trim()) {
+    ticket.bandColor = data.bandColor.trim();
+  }
+  if (typeof data.bookingDtDisplay === 'string' && data.bookingDtDisplay.trim()) {
+    ticket.bookingDtDisplay = data.bookingDtDisplay.trim();
   }
 
   return ticket;

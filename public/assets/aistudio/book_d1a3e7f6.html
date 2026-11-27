@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0A66FF" />
+  <title>Booking Details - RailOne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #EEF1F5;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #374151;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 412px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #EEF1F5;
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: #0A66FF;
+      padding: calc(12px + env(safe-area-inset-top, 0px)) 15px 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 6px rgba(10, 102, 255, 0.25);
+    }
+
+    .back-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.2px solid rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.08);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+    }
+
+    .back-btn svg {
+      width: 17px; height: 17px;
+      stroke: #FFFFFF; stroke-width: 2.2; fill: none;
+    }
+
+    .header-title { color: #FFFFFF; font-size: 22px; font-weight: 700; line-height: 1.2; }
+    .phone-icon { width: 14px; height: 14px; fill: none; stroke: #FFFFFF; stroke-width: 2; vertical-align: -1px; margin-right: 4px; }
+    .header-subtitle { color: rgba(255, 255, 255, 0.94); font-size: 15px; margin-top: 2px; }
+
+    .greeting-banner-box {
+      width: 100%;
+      background-color: #F8FAFC;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 12px 14px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 12px;
+      white-space: nowrap;
+    }
+
+    .ticket-card {
+      margin: 0 14px;
+      background-color: #F4F6F9;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #E2E6EC;
+    }
+
+    .band-top, .band-bottom {
+      height: 12px;
+      background-color: #47BAE9;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .black-security-box {
+      position: relative;
+      width: 100%;
+      height: 168px;
+      overflow: hidden;
+      background-color: #111215;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='67.2' viewBox='0 0 48 67.2' preserveAspectRatio='none'%3E%3Crect width='48' height='67.2' fill='%23222529'/%3E%3Cpolygon points='24,0 48,33.6 24,67.2 0,33.6' fill='%230E0F12'/%3E%3C/svg%3E");
+      background-size: 12.5% 67.2px;
+      background-repeat: repeat;
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+
+    .side-strip {
+      width: 32px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; position: relative;
+    }
+
+    .side-strip.left::after, .side-strip.right::before {
+      content: "";
+      position: absolute;
+      top: 4px; bottom: 4px;
+      width: 1.5px;
+      background-image: repeating-linear-gradient(to bottom,
+        rgba(255,255,255,0.78) 0px, rgba(255,255,255,0.78) 10px,
+        transparent 10px, transparent 15px);
+    }
+    .side-strip.left::after { right: 0; }
+    .side-strip.right::before { left: 0; }
+
+    .vertical-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      font-weight: 700;
+      color: #9CA3AF;
+    }
+    .vertical-label.en { font-size: 11.5px; letter-spacing: 0.8px; }
+    .vertical-label.hi { font-size: 14px; letter-spacing: 0.5px; }
+
+    .security-center {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 8px 4px 0;
+      overflow: hidden;
+    }
+
+    .preview-heading-box {
+      width: 100%;
+      padding-left: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .timer-wrapper {
+      display: flex; align-items: center; justify-content: center;
+      height: 52px; margin: 2px 0;
+    }
+
+    .digit-slot {
+      position: relative;
+      width: 26px; height: 52px;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .digit-track {
+      position: absolute; top: 0; left: 0; width: 100%;
+      display: flex; flex-direction: column;
+    }
+
+    .digit-track span {
+      display: block;
+      width: 100%; height: 52px;
+      line-height: 52px;
+      text-align: center;
+      color: #EE2B1D;
+      font-size: 48px;
+      font-weight: 900;
+    }
+
+    .digit-track { transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .digit-colon {
+      display: inline-block;
+      height: 52px; line-height: 46px;
+      padding: 0 2px;
+      font-size: 46px; font-weight: 900;
+      color: #EE2B1D;
+    }
+
+    .booking-dt-label { font-size: 14px; color: #9CA3AF; font-weight: 500; text-align: center; margin-top: 1px; }
+
+    .booking-dt-value {
+      font-size: 25px; font-weight: 700;
+      color: #FF8C1A;
+      margin-top: 2px;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .uts-code-clipped {
+      margin-top: 4px;
+      font-size: 10.5px; font-weight: 700;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1;
+      transform: translateY(5px);
+      text-align: center;
+    }
+
+    @keyframes fillAccentBar { 0% { width: 0%; } 100% { width: 100%; } }
+
+    .accent-progress-track { width: 100%; height: 4px; background-color: #E2EEF5; overflow: hidden; }
+
+    .accent-progress-fill {
+      width: 0%; height: 100%;
+      background-color: #47BAE9;
+      animation: fillAccentBar 300s linear forwards;
+    }
+
+    .ticket-details-body { padding: 13px 16px 4px; background-color: #F4F6F9; }
+
+    .detail-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 11px;
+    }
+
+    .field-left { text-align: left; }
+    .field-right { text-align: right; }
+    .field-label { font-size: 13.5px; color: #6B7280; font-weight: 500; line-height: 1.25; }
+
+    .field-value {
+      font-size: 17px; color: #374151; font-weight: 600;
+      margin-top: 1px; line-height: 1.3; letter-spacing: 0.1px;
+    }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background-color: #DCFCE7;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-top: 1px;
+    }
+
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background-color: #22C55E; }
+    .status-text { font-size: 13px; font-weight: 700; color: #16A34A; letter-spacing: 0.3px; }
+
+    .via-ir-section { padding: 2px 16px 4px; background-color: #F4F6F9; }
+
+    .via-pill {
+      display: flex; width: 100%; align-items: center; gap: 8px;
+      background-color: #E9ECF1;
+      border-radius: 7px;
+      padding: 8px 12px;
+      margin: 2px 0 11px 0;
+    }
+
+    .via-icon { width: 14px; height: 14px; stroke: #4B5563; fill: none; stroke-width: 1.9; flex-shrink: 0; }
+    .via-text { font-size: 14.5px; font-weight: 500; color: #374151; }
+    .ir-gst-code { font-size: 11px; font-weight: 500; color: #4B5563; margin-bottom: 2px; }
+
+    .perforated-row {
+      position: relative; height: 22px;
+      display: flex; align-items: center;
+      background-color: #F4F6F9;
+    }
+
+    .thin-seam-line { width: 100%; height: 1px; background-color: #E2E6EC; }
+
+    .notch-left, .notch-right {
+      position: absolute;
+      width: 20px; height: 20px;
+      background-color: #EEF1F5;
+      border-radius: 50%;
+      top: 50%; transform: translateY(-50%);
+      border: 1px solid #E2E6EC;
+      z-index: 5;
+    }
+    .notch-left { left: -11px; }
+    .notch-right { right: -11px; }
+
+    .ticket-validity-footer { padding: 2px 16px 13px; background-color: #F4F6F9; }
+    .validity-note { font-size: 12.5px; color: #374151; line-height: 1.4; }
+
+    .warning-box {
+      margin: 13px 14px 11px;
+      background-color: #F4E4E6;
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: center;
+      color: #B91C1C;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .connecting-btn-wrap { padding: 0 14px; margin-bottom: 18px; }
+
+    .connecting-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1.3px solid #0A66FF;
+      background-color: transparent;
+      color: #0A66FF;
+      font-size: 14.5px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .qr-section { display: flex; justify-content: center; align-items: center; padding: 18px 0 22px; width: 100%; }
+    .qr-box { width: 280px; height: 280px; background-color: transparent; display: flex; align-items: center; justify-content: center; }
+    .qr-svg { width: 280px; height: 280px; display: block; }
+    .qr-svg rect { fill: transparent; }
+
+    .bottom-info-section {
+      border-top: 1px solid #DCE1E8;
+      padding: 16px 18px 20px;
+      color: #4B5563;
+      margin-top: 18px;
+    }
+
+    .dyk-title { font-size: 16px; font-weight: 700; color: #374151; margin-bottom: 8px; }
+    .info-para { font-size: 13.5px; line-height: 1.48; color: #4B5563; margin-bottom: 14px; }
+    .info-para:last-child { margin-bottom: 0; }
+
+    .feedback-section {
+      border-top: 1px solid #DCE1E8;
+      padding: 18px 18px 34px;
+    }
+
+    .feedback-title { font-size: 16.5px; font-weight: 700; color: #374151; line-height: 1.35; margin-bottom: 14px; }
+    .rating-label { font-size: 14.5px; font-weight: 500; color: #374151; margin-bottom: 10px; }
+
+    .star-row { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+
+    .star-btn {
+      background: none; border: none; padding: 0; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    .star-btn svg {
+      width: 28px; height: 28px;
+      stroke: #6B7280; stroke-width: 1.6; fill: transparent;
+      transition: fill 0.15s ease, stroke 0.15s ease;
+    }
+
+    .star-btn.active svg { fill: #F59E0B; stroke: #F59E0B; }
+
+    .desc-box-wrap { position: relative; width: 100%; margin-bottom: 18px; }
+
+    .desc-textarea {
+      width: 100%; height: 112px;
+      border: 1px solid #9CA3AF;
+      border-radius: 6px;
+      background: transparent;
+      padding: 12px 14px 26px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      color: #374151;
+      resize: none;
+      outline: none;
+    }
+
+    .desc-textarea::placeholder { color: #6B7280; }
+    .desc-textarea:focus { border-color: #0A66FF; }
+
+    .char-counter { position: absolute; right: 12px; bottom: 8px; font-size: 12px; color: #6B7280; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 999px;
+      border: none;
+      background-color: #C4C7CC;
+      color: #6B7280;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .submit-btn.ready { background-color: #0A66FF; color: #FFFFFF; }
+
+    [data-editable] { cursor: pointer; border-radius: 4px; transition: background-color 0.15s ease; }
+
+    .editing-active {
+      outline: 2px solid #0A66FF;
+      background-color: rgba(10, 102, 255, 0.12) !important;
+      padding: 2px 6px;
+      color: #111827 !important;
+    }
+
+    .save-toast {
+      position: fixed;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background-color: #111827;
+      color: #FFFFFF;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="top-header">
+      <button class="back-btn" aria-label="Back" onclick="handleBackAction()">
+        <svg viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div>
+        <div class="header-title">Booking Details</div>
+        <div class="header-subtitle"><svg class="phone-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Mobile: <span data-editable="mobile" id="el-mobile">6380621214</span></div>
+      </div>
+    </header>
+
+    <div class="greeting-banner-box">
+      Thank You <span data-editable="user" id="el-user">HEMAKUMAR S</span>, Happy Journey !
+    </div>
+
+    <main class="ticket-card">
+      <div class="band-top" id="band-top" ondblclick="toggleBandColor()"></div>
+
+      <section class="black-security-box">
+        <div class="side-strip left">
+          <span class="vertical-label en">INDIAN RAILWAYS</span>
+        </div>
+
+        <div class="security-center">
+          <div class="preview-heading-box">Dynamic preview will close<br>in</div>
+
+          <div class="timer-wrapper" id="countdown-timer">
+            <div class="digit-slot"><div class="digit-track" id="t0"><span>0</span></div></div>
+            <div class="digit-slot"><div class="digit-track" id="t1"><span>5</span></div></div>
+            <span class="digit-colon">:</span>
+            <div class="digit-slot"><div class="digit-track" id="t2"><span>0</span></div></div>
+            <div class="digit-slot"><div class="digit-track" id="t3"><span>0</span></div></div>
+          </div>
+
+          <div class="booking-dt-label">Ticket Booking Date &amp; Time</div>
+          <div class="booking-dt-value" data-editable="dt" id="el-datetime">26 Nov 2026, 08:58</div>
+          <div class="uts-code-clipped" data-editable="uts" id="el-uts">R21607</div>
+        </div>
+
+        <div class="side-strip right">
+          <span class="vertical-label hi">भारतीय रेल</span>
+        </div>
+      </section>
+
+      <div class="accent-progress-track">
+        <div class="accent-progress-fill"></div>
+      </div>
+
+      <section class="ticket-details-body">
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label" data-editable="qrlabel" id="el-qrlabel">Journey Ticket</div>
+            <div class="field-value" data-editable="qr" id="el-qrticket">XA3NEID052</div>
+          </div>
+          <div class="field-right">
+            <div class="status-badge">
+              <span class="status-dot"></span>
+              <span class="status-text" data-editable="status" id="el-status">ACTIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Source</div>
+            <div class="field-value" data-editable="src" id="el-source">GUINDY</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Destination</div>
+            <div class="field-value" data-editable="dst" id="el-dest">INDRA NAGAR</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Distance</div>
+            <div class="field-value" data-editable="dist" id="el-dist">13 km</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Passenger</div>
+            <div class="field-value" data-editable="pax" id="el-pax">1 Adult, 0 Child</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Ticket Type</div>
+            <div class="field-value" data-editable="ttype" id="el-ttype">JOURNEY</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Train Types</div>
+            <div class="field-value" data-editable="traintype" id="el-traintype">ORDINARY</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Class</div>
+            <div class="field-value" data-editable="tclass" id="el-class">SECOND</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Fare</div>
+            <div class="field-value">₹<span data-editable="fare" id="el-fare">5.00</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="via-ir-section">
+        <div class="via-pill">
+          <svg class="via-icon" viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="2.2" />
+            <circle cx="18" cy="18" r="2.2" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.5 6h4a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-1" />
+          </svg>
+          <span class="via-text">Via: <span data-editable="via" id="el-via">STM-VLCY</span></span>
+        </div>
+        <div class="ir-gst-code" data-editable="ir" id="el-ir">IR:33AAAGM0289C1ZQ</div>
+      </section>
+
+      <div class="perforated-row">
+        <div class="notch-left"></div>
+        <div class="thin-seam-line"></div>
+        <div class="notch-right"></div>
+      </div>
+
+      <section class="ticket-validity-footer">
+        <div class="validity-note">*Valid for start of journey within 1 hour or until departure of the first train.</div>
+      </section>
+
+      <div class="band-bottom" id="band-bottom" ondblclick="toggleBandColor()"></div>
+    </main>
+
+    <div class="warning-box">
+      Note: This ticket is non refundable. Ticket is stored locally on the device. Please do not change your handset or perform factory reset.
+    </div>
+
+    <div class="connecting-btn-wrap">
+      <button class="connecting-btn" type="button">Book Connecting Journey</button>
+    </div>
+
+    <section class="qr-section"><div class="qr-box"><svg class="qr-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="QR code">
+ <g transform="translate(0,220)scale(1,-1)">
+  <rect width="220" height="220" fill="#fff"/>
+  <path d="m22 199v-7h7v7zm8 0v-3h1v3zm6 0v-2h-1v-1h-1v2h-2v-1h1v-1h-1v-1h1v-1h1v1h1v-2h-1v-1h1v-1h2v2h1v-1h1v-1h1v1h1v-1h2v-1h-1v-2h-1v2h-2v-1h-1v1h-1v-1h1v-1h-2v-1h2v1h1v1h1v-4h1v-1h-2v-1h-1v1h-1v2h-2v3h-1v-1h-1v-1h-1v2h-1v2h1v-1h1v1h-1v1h1v1h-1v-1h-1v2h-1v-4h-1v1h-1v-1h-1v1h-3v-2h-1v1h-1v-1h1v-1h-1v-1h1v1h1v-2h-1v-1h-1v-3h1v-1h-1v-1h1v-1h-1v-2h1v2h1v-3h2v-1h-2v-1h-2v-1h2v-2h1v-1h-2v2h-1v-3h1v-2h-1v-1h1v-1h-1v-1h1v-1h-1v-3h1v1h1v-1h1v-1h-2v-1h-1v-1h6v-1h-1v-2h-2v-1h2v1h2v-1h-1v-1h-1v-2h-2v1h1v1h-3v1h1v3h-2v-1h1v-2h-1v-1h1v-1h1v-1h1v-1h-2v-1h-1v-3h1v-1h1v-1h2v-1h-1v-5h1v-1h-1v-1h-1v1h-2v-2h1v-1h-1v-3h2v-1h-2v-5h2v-2h-2v-3h1v-1h-1v-2h2v-1h1v-1h-2v-2h-1v-3h1v-2h-1v-7h4v1h-3v2h1v1h1v-1h1v-1h4v-2h4v-1h-1v-1h-1v-1h-1v2h-3v-1h-1v1h-1v-2h1v-1h3v-3h1v-2h1v-1h-2v-2h-1v1h-1v1h1v1h1v1h-1v1h-1v1h1v1h-1v-1h-3v1h1v1h-1v1h-1v1h1v1h-1v-1h-1v-1h-1v-1h1v-1h-1v-1h2v-1h1v-3h-1v1h-1v-1h-1v-1h1v-1h-1v-4h1v4h1v1h2v-3h-1v1h-1v-1h1v-1h-1v-1h1v1h1v-2h-1v-1h2v-1h1v-1h2v-1h-2v-1h2v-2h-1v1h-2v-1h2v-1h-2v-2h-1v-2h2v-1h-4v1h-2v-3h1v-1h-1v-1h1v1h1v1h-1v1h2v-1h1v-1h1v-3h-1v2h-2v-1h1v-1h1v-2h-2v1h-2v-1h1v-1h-1v-1h1v1h1v-1h2v-6h-1v2h-1v1h1v2h-1v-1h-2v-2h2v-1h-2v-1h1v-1h1v1h1v-1h3v-1h1v-1h-2v1h-1v-1h-1v1h-2v-1h-1v-2h1v-1h-1v-3h2v-1h-2v-3h1v2h1v-1h1v-1h-1v-2h-2v-1h2v-1h1v-1h-2v1h-1v-1h1v-1h-1v-1h1v-1h-1v-1h3v-2h1v2h-1v2h2v-2h2v1h1v-1h1v1h-1v2h-3v1h2v1h1v3h1v2h1v-2h2v1h1v-1h1v1h1v-1h1v-1h-1v-1h-1v1h-4v-1h-1v-4h1v-1h1v2h-1v1h1v1h1v-1h2v1h1v-1h1v-3h-2v1h-1v1h-1v-4h-1v1h-1v-1h1v-3h-1v-1h-2v-3h1v-2h3v1h1v1h2v-1h-1v-1h3v1h1v-1h5v1h-1v1h1v1h1v-1h1v1h2v2h1v-3h-1v-1h-1v-1h1v1h1v1h1v-1h1v2h2v-1h-1v-1h1v-1h1v1h1v-1h2v2h1v-2h1v2h2v-2h3v1h-1v2h2v1h-2v1h3v-1h1v1h-1v1h-3v1h3v1h1v-2h2v2h1v-1h1v-3h1v-2h2v-2h2v1h-1v1h-1v1h-1v1h1v2h-1v1h2v-2h1v-1h-1v-1h2v-1h1v-1h-1v-1h1v1h1v1h-1v1h1v1h1v-2h1v1h1v-1h1v1h1v1h1v-2h-1v-1h-4v-1h6v5h-1v2h2v-1h1v-1h-1v-2h1v1h1v-1h1v-2h1v-1h2v1h-1v1h-1v1h4v-2h-1v-1h2v1h1v-1h1v1h-1v1h-1v1h2v1h2v2h1v-2h1v1h1v-2h-2v-1h-1v1h-1v-1h1v-2h5v1h-1v1h1v1h-1v2h1v-1h1v-4h2v1h1v2h1v-1h1v1h1v-1h1v-1h-2v-1h3v1h1v3h1v1h-2v-1h-1v1h-1v2h1v-1h1v1h-1v1h-1v1h-1v-3h-1v4h1v1h1v-1h4v-1h-2v-1h3v1h3v-1h1v-1h-1v-1h-1v-1h-1v1h-1v1h-2v-1h2v-2h2v-1h-2v-1h-1v-1h1v-1h1v1h1v-1h1v1h1v-1h1v1h1v-1h1v1h-1v2h-1v-1h-1v2h1v1h1v1h1v1h1v1h1v-2h-1v-6h2v1h-1v1h1v1h1v1h1v-2h3v-1h-2v-1h8v1h1v2h1v-1h1v-1h3v-1h4v1h-1v1h1v1h1v1h1v-3h-1v-1h1v1h1v2h1v1h-1v1h2v2h1v-1h1v1h1v-3h-1v-1h1v1h2v-2h-1v-1h-1v1h-2v2h-1v-2h-1v-1h4v-1h6v2h-1v-1h-1v1h-1v2h1v1h-1v2h-3v1h1v2h-1v-2h-1v3h2v1h3v-1h-1v-2h-1v-1h2v1h1v-2h-1v-1h1v-3h2v1h3v-1h-2v-2h-1v-1h2v1h1v1h1v2h1v-1h4v1h-3v1h-3v1h1v1h-1v3h1v1h3v1h1v-2h-1v-1h2v-1h1v-1h-1v-1h-1v1h-1v1h-2v1h1v1h-1v-1h-1v-1h1v-2h1v1h1v-2h2v1h1v1h1v-1h1v2h2v2h1v1h1v-1h1v-1h1v1h-1v1h2v-3h-1v-1h1v-2h2v-1h-1v-1h-1v1h-1v-1h1v-3h1v1h2v-1h3v1h1v-1h2v2h-1v1h-1v1h3v-1h2v-2h-1v1h-1v-2h2v1h2v-1h1v1h-1v2h-2v2h1v-1h1v4h-1v2h1v-1h1v2h1v1h-1v-1h-1v1h-2v1h-1v1h1v1h-2v-1h-1v2h3v1h2v-1h-1v-1h1v-1h-1v-1h3v1h-1v1h1v1h-1v2h-3v1h1v1h-1v1h2v-1h1v-1h1v1h-1v1h1v1h-1v1h1v3h-1v1h1v1h-1v-1h-1v1h-1v-1h-3v-1h-1v3h1v-1h2v1h2v1h1v1h1v1h-4v1h2v1h1v1h1v3h-3v1h1v1h1v-1h1v3h-1v1h1v1h-1v-1h-2v-1h-1v1h-3v1h-1v2h2v-1h6v1h-1v1h1v1h-1v-1h-1v1h-1v-1h1v-1h-4v1h1v2h1v1h-1v1h2v1h-2v1h3v-1h1v-1h-1v-1h-1v-1h2v2h1v1h-1v3h1v3h-1v1h1v1h-2v-2h-1v2h-1v5h2v-1h-1v-1h1v-1h-1v-1h1v1h1v1h1v1h-1v3h1v1h-1v-1h-1v1h-1v-1h-3v1h1v2h1v-1h2v1h1v1h1v2h-1v2h1v1h-3v1h1v1h1v2h1v2h-1v-1h-1v1h-1v2h-1v-1h-1v2h-1v-1h-1v1h-1v-1h-1v-1h-1v2h-2v-1h-5v1h1v1h-1v-1h-2v1h-1v1h1v1h1v-1h2v1h-2v1h1v2h1v1h-2v1h-1v-1h-1v3h1v1h2v-1h1v-2h2v-1h-1v-1h1v-1h-2v-1h4v-2h2v-1h2v2h1v-1h1v-1h2v1h1v-2h1v1h1v1h1v1h-4v3h1v-2h1v1h1v1h1v1h-1v-1h-1v1h-2v1h3v2h1v1h-1v3h1v1h-1v1h1v1h-1v1h1v1h-1v2h-1v2h-1v-2h-3v1h-1v-1h-1v-1h-1v3h4v-1h1v1h-1v1h-2v1h-1v2h1v3h-1v1h4v-2h1v-1h1v-1h-1v-1h-1v1h-1v2h-1v-2h1v-1h1v-2h2v1h1v1h1v1h-1v3h1v3h-3v1h1v1h-1v-1h-1v2h2v1h1v-1h1v1h-1v1h1v3h-1v1h1v1h-1v-1h-1v1h-1v-2h-2v1h-1v-1h-1v1h-2v1h1v1h-1v-1h-1v1h-3v2h1v-1h1v1h-1v1h-1v2h-3v-2h-1v1h-2v1h-1v1h-1v-1h-1v-1h-2v-1h-1v-1h1v-1h-1v-1h1v-1h-1v-1h-1v1h-1v-2h-1v-1h2v-1h1v-1h-2v-1h-2v1h1v1h-2v1h1v1h-1v1h2v1h-1v1h1v1h1v-1h1v2h-2v1h-1v2h-1v-1h-1v1h-1v-1h1v-1h-4v1h2v1h-4v-2h-1v3h3v2h1v-2h3v1h1v-1h2v2h2v-1h-1v-2h-1v-1h1v-1h1v2h1v1h1v-1h1v2h1v1h-2v1h-1v1h1v1h3v1h2v-1h-1v-1h-3v-1h2v-2h1v1h1v-1h1v-1h2v1h-2v1h1v1h-1v-1h-1v2h1v1h1v-1h1v1h-1v2h-1v1h2v1h-2v1h1v1h-1v-1h-1v2h-3v2h1v-1h1v1h1v-1h1v-1h2v1h-1v1h-2v3h2v-1h1v-2h3v-2h1v-1h-1v-1h1v-1h-2v-1h-1v-2h1v1h1v1h1v-1h2v1h1v1h1v-2h1v-1h1v-1h2v-2h1v-1h1v-1h-1v-2h-1v1h-1v-1h-2v5h-2v1h1v1h-1v-1h-1v1h-1v-1h-2v-1h2v1h1v-1h1v-1h1v-4h1v-1h-2v-1h-1v1h-1v-1h1v-1h1v1h1v-2h1v-1h1v-1h2v2h-1v-1h-1v1h-1v3h1v-1h2v-1h1v-2h1v1h1v1h1v3h-1v1h1v3h-1v1h1v1h-1v3h1v1h-1v1h1v1h-1v1h1v1h-1v3h1v3h-1v-1h-1v1h-1v1h1v1h-1v1h2v1h-2v2h-1v-2h-2v1h1v2h1v2h2v-1h-1v-1h1v-2h2v3h-1v1h1v1h-1v3h1v2h-3v-1h2v-1h-3v-1h-2v1h-1v1h2v1h-3v3h-1v-2h-1v2h-1v-2h1v-1h-2v-1h-1v1h-1v4h-2v1h2v1h1v-3h1v3h1v-1h1v-1h2v1h-2v3h-1v-1h-1v-1h-1v2h-1v-1h-1v-1h-1v-1h-1v2h1v1h-2v-3h-1v1h-1v1h-1v-2h-3v1h1v1h-1v1h-1v-1h1v-1h-2v2h-3v-1h1v-1h1v-1h3v-1h-5v2h-1v2h-3v-2h3v-1h-1v-2h-1v2h-4v1h-1v2h-1v-2h-1v-1h-2v1h-1v2h-5v-1h-1v-2h-1v-1h-1v3h1v1h-1v-1h-2v-2h-2v-1h-1v1h-1v1h-1v1h1v1h-6v-3h1v2h3v-1h1v-1h-1v-1h-1v2h-1v-2h-4v1h1v2h-2v1h-1v-2h-1v1h-1v1h-3v-3h1v1h1v-2h-3v-1h2v-1h-1v-1h1v-1h-1v-1h1v-1h-1v-1h-1v5h-1v2h-1v-2h-1v-1h1v1h1v-3h-2v-1h-1v-3h-1v-1h-1v-1h2v-1h1v-1h-1v-1h-1v2h-3v-1h1v-1h-2v-1h2v-2h-1v1h-2v-1h1v-1h-1v-1h1v1h1v-1h2v1h-1v1h4v-1h-2v-2h-1v-1h-1v1h-1v-1h-2v-1h-1v-2h-1v2h-1v2h-1v3h-1v-1h-1v1h-4v-1h-1v-2h1v-1h1v-1h1v1h1v1h1v1h1v-1h1v-2h1v-1h-2v2h-1v-3h-2v1h-2v1h-1v1h-1v3h-1v-1h-2v-1h2v-2h-2v1h-1v-1h1v-1h3v1h1v-3h-1v1h-1v-2h-1v-1h1v1h1v-1h1v-3h1v1h1v-1h3v-1h-1v-1h-1v-1h-1v1h-1v1h-1v-4h-1v-1h-1v2h-1v-1h-2v1h-3v2h-1v1h-2v1h1v1h1v-1h1v-1h1v1h1v-1h1v-2h4v2h-1v-1h-2v1h1v1h-2v1h1v1h-2v1h-1v-1h1v-1h-1v-1h-1v4h2v1h-1v1h-1v1h2v1h-3v-2h1v-1h-3v1h1v1h-2v2h1v-1h1v1h1v1h-1v2h2v-1h1v-1h1v1h1v5h-1v2h-1v-2h-1v4h-1v-1h-1v1h-2v-1h1v-1h-2v-1h-2v1h-1v2h-3v1h1v1h-1v1h1v2h2v-2h-1v-2h2v-1h1v2h1v-1h2v1h1v-1h3v-1h1v-1h1v-1h3v-1h-1v-2h-1v-1h1v-1h1v1h-1v1h2v3h1v1h1v1h-1v5h1v-3h4v-1h-1v-1h-1v1h-1v-1h1v-1h2v-1h1v2h1v-1h3v1h2v-1h-1v-1h-1v-1h-1v1h-1v-1h-2v-1h-1v1h-3v1h-1v-1h-1v-2h1v-1h1v1h1v-1h5v-1h1v-1h1v1h-1v1h1v2h1v2h1v1h1v1h1v1h1v1h1v1h-2v-2h-1v1h-1v3h1v-1h3v1h1v1h-1v1h1v1h-1v2h1v-1h1v2h1v2h1v-2h1v2h-1v1h-2v-1h-1v1h-4v-2h-1v1h-2v1h-6v-1h-1v-1h1v-1h-1v-1h-4v-1h-1v1h-1v1h1v1h-1v-1h-4v-1h-1v2h1v1h1v-1h1v1h1v1h-4v-1h-1v-1h-1v2h-1v-1h-1v1h-2v-2h-1v-1h-2v1h-1v2h-3v-2h-2v1h-2v1h-1v-1h-3v1h-1v-1h1v-1h-1v-5h1v-1h-1v-2h-1v2h-1v1h1v1h-1v1h-1v-1h-1v-2h1v-1h-1v-1h1v-1h1v1h1v-1h1v-2h-1v1h-2v-1h-1v-1h1v-6h-3v-1h-1v-1h-2v1h1v1h1v1h2v1h1v1h-1v1h-1v1h-1v1h-1v1h1v1h1v1h1v1h-4v-1h2v-1h-3v-2h1v-1h2v-2h-2v1h-1v-1h-2v-2h1v-1h1v-1h-1v-1h2v-1h2v1h1v-2h3v-1h-1v-1h-1v1h-3v-1h1v-1h-1v-1h-1v4h-1v1h-1v-1h-2v3h1v1h-1v3h-2v2h-2v1h1v2h1v-1h1v-1h1v-1h1v-1h1v3h-1v1h1v1h1v2h1v1h1v1h1v-1h2v2h-1v-1h-1v3h1v-1h2v1h2v1h-1v1h-2v1h3v1h-3v-1h-1v1h-1v-1h1v-1h-2v2h-2v-1h1v-1h1v-1h-3v-1h-1v2h1v2h-3v-1h-1v-2h-1v1h-1v-2h1v-1h1v-1h-1v-1h1v1h1v-1h1v-2h1v-1h1v-1h-2v-1h-1v3h-2v1h-1v2h-1v-2h-1v2h-1v1h1v1h1v1h-2v-2h-1v3h2v2h-1v-1h-1v-1h-1v1h-1v1h-1v-1h1v-1h-1v-1h-1v2h-2v1h-3v-1h-2v-1h-1v2h-4v-1h-2v1zm22 0v-1h2v1zm31 0v-1h2v1zm14 0v-1h1v1zm41 0v-1h1v-1h1v1h-1v1zm48 0v-7h7v7z"/>
+  <path d="m23 198v-5h5v5zm16 0v-1h1v-1h1v-4h1v4h-1v1h1v1zm7 0v-1h1v1zm34 0v-1h1v-1h-1v-1h2v1h1v1h-2v1zm13 0v-1h1v-2h-1v-1h-1v1h-1v-1h-1v-1h-1v-1h1v-2h2v-2h1v-1h1v3h1v1h2v1h1v-3h-1v1h-1v-1h-1v-1h2v-1h4v-2h1v2h1v-1h1v-3h1v3h-1v2h-1v1h-2v1h-1v-1h-1v2h4v-1h1v-1h1v1h-1v1h1v1h1v2h-1v-2h-1v1h-1v-1h-1v1h-1v1h1v1h-2v-1h-1v-2h-1v3h-1v-1h-1v-1h-1v2h1v2h-2v1z" fill="#fff"/>
+  <rect y="196" x="105" height="2" width="2"/>
+  <path d="m110 198v-1h1v-1h1v1h1v1h-1v-1h-1v1zm10 0v-1h-1v-1h-1v1h-1v-1h1v-2h-2v1h-2v-1h-1v-2h-1v1h-1v-1h1v-1h3v-1h3v1h1v1h1v-2h1v2h1v1h-1v-1h-1v1h-1v2h3v1h2v1h-3v1zm10 0v-1h1v-2h-1v-2h-1v-1h1v1h1v-3h-1v-2h-1v-1h-1v-2h-1v-2h-2v5h1v1h-2v-4h-1v-1h1v-1h1v-1h-1v-1h1v-1h-2v-1h1v-1h2v-2h2v-1h-3v-1h-2v1h1v1h-1v-1h-1v-1h1v-2h1v1h1v1h1v-1h1v1h1v-2h-3v-4h-1v1h-1v-1h1v-3h2v1h1v-4h2v1h1v-2h-2v-1h-2v1h-1v-2h1v-1h-3v1h1v1h-2v1h2v1h-2v1h3v1h-2v2h-1v1h-1v-1h-3v-2h-1v1h-1v2h-3v1h1v3h-3v-1h2v-2h-1v1h-1v-2h2v-1h-1v-1h1v1h2v-3h-2v1h-2v-1h-1v-1h-1v-1h1v-1h1v-1h-1v-1h1v-1h-2v-1h-1v1h-1v1h1v3h-1v-2h-1v-1h-1v-1h-1v2h-1v-3h2v-1h-1v-2h-2v1h1v1h-1v-1h-1v2h-2v1h1v1h1v2h-1v-1h-2v-1h-1v1h-2v1h1v1h-1v1h-1v1h1v1h-1v1h1v1h1v2h-1v2h-1v1h-1v3h1v1h1v2h1v1h2v1h1v-2h1v4h-1v-1h-2v2h-3v-3h-1v-2h-1v-2h-1v4h1v2h-1v-1h-1v1h-3v-4h-1v2h-1v6h-2v2h-2v-4h2v1h1v-2h-1v-1h1v-5h1v-1h-2v-1h2v-1h-4v-1h-1v2h2v2h1v1h-1v2h-1v2h-2v1h1v1h-1v1h1v3h-1v1h1v1h2v-1h2v1h-2v1h-2v-1h-3v-1h1v-2h1v-1h-1v-1h-1v1h-2v1h-1v-6h1v-1h1v1h-1v1h1v2h1v-2h1v-1h-1v-1h1v-1h-3v-1h2v-1h1v-2h-1v1h-1v1h-2v1h-1v-2h1v-1h1v-1h-3v-1h2v-1h-2v-1h-1v2h-2v-1h-1v-4h-1v1h-1v3h-1v1h1v1h-1v1h1v1h-1v-1h-2v1h-1v2h-1v-5h-1v1h-1v1h-1v-1h-2v-2h-1v1h-1v2h3v2h-1v1h2v-2h2v2h-2v1h-1v1h-1v1h1v1h1v1h-1v-1h-3v1h-2v1h5v1h1v1h1v2h-1v-1h-1v1h-1v-1h-1v3h1v-1h3v1h-1v1h-1v1h-2v-1h-1v-2h-1v2h-1v-2h-1v-1h-1v1h-2v1h3v1h-2v2h1v2h-1v3h-1v-1h-1v-1h-1v1h-1v1h-1v-1h1v-1h-1v-1h-1v-3h1v-3h-2v-1h-1v-1h1v-2h-1v-2h1v2h1v-3h-1v-1h-1v-3h5v2h-1v-1h-1v2h3v1h1v-1h1v1h-1v1h-1v-1h-1v3h-2v1h-1v1h-1v1h2v-1h1v-1h2v1h-1v1h-1v1h1v1h-1v2h1v2h1v-2h1v-1h-1v-3h3v-2h-2v-1h-1v-1h2v-1h1v-3h-1v-1h-2v-1h1v-1h-1v-1h1v-1h-1v-1h-1v1h-1v-1h1v-2h-5v-1h-1v1h-1v2h1v1h-2v1h-1v1h1v1h-1v-1h-1v-1h-1v2h1v2h-1v-2h-1v-1h-1v1h-1v2h-1v1h-1v2h1v-1h2v-3h1v4h-1v1h-2v1h1v2h-1v1h-1v-3h-2v1h1v1h-1v-1h-1v1h-1v1h-1v-1h-1v-1h-1v-3h2v-1h-1v-2h1v-2h1v-1h1v-1h4v-1h1v1h2v-1h-1v-1h1v-2h1v-1h-1v-1h-1v-1h-1v-2h-1v-1h-2v1h-1v-1h1v-1h-2v1h-1v-1h-1v-1h-1v-1h1v1h1v1h1v-2h-1v-1h1v-1h-1v-2h1v1h2v-1h-1v-1h1v1h1v-1h1v-1h-3v-1h2v-1h1v-1h-1v-1h-2v-1h1v-1h-2v-1h-2v-1h-1v-2h1v-2h1v-1h1v1h-1v2h-1v2h1v-1h1v1h1v-1h1v-1h-1v-1h1v1h1v-1h2v-1h-4v-1h4v-1h1v-2h-2v-2h1v-2h-1v-1h1v-1h-2v2h-2v-1h1v-1h-1v-1h2v-2h-1v1h-1v-1h-2v2h1v2h-1v-1h-1v-1h-2v-1h1v-2h1v-3h2v1h-1v1h1v1h1v-1h1v-1h-1v-1h1v-1h-3v-1h1v-1h-1v-1h-1v-1h-1v-1h1v1h1v1h1v1h1v-1h1v-1h-2v-1h-1v-1h1v1h2v1h1v1h4v1h-4v1h1v2h2v-1h1v-1h2v-1h-1v-2h1v-1h-1v-1h1v1h1v-1h1v-1h1v1h2v-1h-1v-1h2v-1h-2v-2h-1v1h-1v1h-1v2h-1v-2h-1v-1h-1v-1h-1v2h1v3h-1v-1h-1v1h-1v1h1v1h-1v-1h-1v-1h1v-1h1v-1h1v-1h-1v-2h-1v-1h1v-2h-1v-1h1v-1h-4v-1h2v-1h-3v2h-1v1h-1v1h1v2h-1v-1h-1v-2h-1v-2h1v-3h-1v-2h1v1h1v1h1v2h1v-1h2v-1h-1v-1h-1v-1h-1v-1h1v1h1v-1h1v1h-1v1h1v1h1v1h1v2h1v1h1v-3h1v-3h1v-1h-1v-1h-1v-1h1v-1h2v-1h-1v-1h1v-2h2v-1h1v-3h1v-1h1v-3h-2v-1h-1v1h-1v-2h1v-1h-3v-3h-1v2h-1v2h1v2h1v-1h1v3h-3v-2h-1v-1h1v-1h-1v-2h1v-1h-2v-4h-1v-1h1v-3h-1v-1h-2v-1h2v1h1v1h1v-1h3v1h1v-2h-1v-1h-1v1h-1v-1h-1v1h-1v-2h-2v1h-1v-1h1v-1h-1v-1h-1v-2h2v1h-1v1h1v1h1v-1h1v1h3v-1h-2v-2h-1v1h-1v-3h-1v1h-1v-1h1v-1h-2v-3h-1v-1h1v1h2v-1h-1v-1h2v1h1v2h-1v1h2v-1h2v-1h-2v-1h1v-1h-1v-1h-1v-2h2v-1h-1v-1h-1v-1h-1v1h-2v-1h2v-1h1v1h1v-2h1v4h2v1h-1v1h5v2h1v-1h1v-1h2v-1h1v-1h-2v1h-1v-1h-1v1h-2v-1h-1v1h-1v-2h-1v-2h5v-1h-3v-2h-2v1h1v1h-1v-1h-2v-1h1v-1h-3v1h1v1h-5v1h-1v-1h-1v1h-1v-2h3v-1h-2v-1h2v-1h-1v-2h1v-1h-2v1h-1v-1h1v-1h2v-1h-2v-1h2v-1h-2v-1h1v-1h3v1h-1v1h1v1h1v1h-1v1h2v1h-2v1h1v2h1v1h1v-1h1v-2h-1v1h-1v-1h1v-1h1v-1h1v2h1v-1h1v-1h1v-1h1v1h-1v1h1v1h4v1h1v-2h-1v-1h-1v-1h1v-1h1v1h1v-5h-1v2h-1v-2h1v-1h-2v-2h1v-1h1v1h1v1h2v1h-1v1h2v-1h1v-1h1v-2h1v1h1v1h1v-1h2v-1h-1v-1h1v1h3v-1h1v-1h-1v-1h-1v-1h-1v-1h1v1h2v-1h-1v-3h1v3h1v-3h1v2h1v-1h3v1h-3v1h1v2h2v1h3v2h1v1h2v-1h-1v-2h1v1h1v-1h1v-1h1v1h-1v1h1v2h1v-2h1v-1h1v-1h2v1h-2v1h2v1h1v-1h1v1h-1v1h-1v1h3v-1h1v-1h-1v-1h1v1h1v-4h1v2h4v-1h1v1h1v-2h1v-2h2v1h3v1h-1v2h1v1h1v-2h1v-1h1v-1h-1v-1h1v1h1v1h-1v1h2v4h-2v1h-1v1h-1v-1h-1v1h-1v1h-1v1h-2v1h3v1h1v-1h1v-1h-1v-1h1v1h1v-1h1v-1h2v-1h1v-1h2v-1h-2v-1h2v-1h1v-1h-1v-2h1v1h1v4h1v-1h1v1h2v1h1v1h2v-1h2v1h1v-1h1v-1h3v1h1v-2h1v-1h2v-1h1v1h-1v1h-2v1h4v-1h1v1h-1v1h5v-1h1v-1h2v2h1v-1h5v-1h-1v-1h4v-1h-1v-1h-1v1h-2v-3h-1v-1h-1v1h-2v-1h-1v1h-1v-1h1v-2h1v1h1v1h1v-2h2v2h1v1h1v1h1v-1h1v-1h1v-1h1v-1h1v1h-1v1h2v-1h1v2h-3v1h-1v-1h-1v1h-1v1h3v1h-1v1h1v1h1v1h1v2h-1v1h-1v1h3v1h1v-2h1v2h1v1h-1v2h-2v1h1v1h1v-1h1v-1h1v-2h1v1h2v-2h2v-1h2v2h-2v1h4v-1h-1v-1h1v-1h4v-1h-1v-1h-1v1h-2v-1h1v-1h-1v-1h2v-1h1v1h1v3h1v-1h1v-1h1v2h1v1h1v-2h1v2h1v2h1v-2h1v-1h-2v-1h4v1h1v1h-2v1h1v1h-1v-1h-1v1h-1v1h1v1h1v-1h3v1h-1v1h2v1h-4v1h3v2h1v-1h1v-1h1v1h2v1h-2v1h-3v2h-2v2h-1v1h2v-1h1v-1h1v-1h1v-1h1v1h1v-2h2v-2h1v-1h-1v-2h-2v-1h-1v2h-1v-2h-1v-2h-2v-1h2v-3h-2v-1h-1v-1h-1v1h-1v-3h1v1h2v2h2v1h1v1h1v-1h2v3h3v-1h1v-1h-3v-1h1v-1h1v-2h-2v-1h1v-1h1v-1h-1v-1h1v-1h1v-1h-1v-2h3v3h1v1h-1v1h1v1h-1v1h1v1h1v1h-1v3h1v1h-1v1h-1v1h2v1h1v1h1v-1h1v1h-1v1h2v1h-1v1h1v1h1v2h1v1h-2v1h-1v-1h-1v-2h-1v-1h1v-1h-2v4h1v1h-1v2h-1v1h1v3h-3v-1h-2v-2h-2v1h-1v1h-2v1h4v1h1v-1h1v1h3v1h-1v2h-1v-1h-2v1h-1v1h-1v-1h-1v1h-1v1h2v2h1v-1h1v-1h1v-1h3v2h-1v1h3v-1h-1v-1h1v-1h1v1h2v-3h1v-1h1v1h1v1h-1v1h-1v1h-1v1h1v1h1v1h-4v1h-1v1h-1v-1h1v-1h-2v1h-1v2h-2v1h3v1h1v1h-1v-1h-1v2h3v-1h1v3h-2v1h-1v1h2v-1h2v1h-1v2h-1v1h2v-1h2v2h1v1h1v1h-1v-1h-4v-1h-1v-1h-1v-2h-1v1h-1v2h-1v-2h-1v1h-1v1h1v2h1v-1h2v-1h1v2h1v1h1v-1h1v1h1v1h-4v-2h-1v1h-1v1h-1v-1h-2v1h1v1h3v1h-2v2h-1v1h4v2h-1v1h-2v1h4v-1h1v1h-1v1h1v1h-1v1h2v-1h1v-1h1v2h1v-1h1v2h-2v1h1v1h-1v1h-1v2h2v3h-1v1h-4v-2h-1v1h-1v1h1v1h1v1h-1v-1h-1v-1h-2v2h-1v-1h-1v-1h-1v-1h-2v1h1v1h-3v1h-1v1h-2v1h-1v1h2v1h1v1h1v3h-1v-1h-1v1h-1v-1h1v-3h-3v1h2v1h-3v1h-1v1h2v-1h1v1h-1v1h1v2h2v1h-1v1h1v1h1v-1h1v1h1v-2h1v-1h2v1h1v1h1v2h-1v1h1v1h2v-1h-1v-1h2v-1h-2v-1h3v-2h1v-2h1v1h1v-1h1v2h1v-1h1v1h-1v1h1v1h-2v-2h-3v2h1v-1h1v2h2v1h2v1h-1v1h-1v-2h-2v1h1v3h-2v1h-2v-1h-3v2h1v3h-1v-1h-2v1h1v3h1v-2h3v1h-1v2h-3v-1h-1v1h-1v1h1v1h1v-1h4v1h-3v1h2v2h-1v3h1v1h2v1h1v-1h1v2h2v-1h1v1h1v1h-1v1h-2v-1h-2v1h1v1h-1v-1h-1v1h-1v-3h-2v-1h-2v1h1v1h-1v1h3v2h-1v1h-2v-1h-1v2h-4v1h1v1h1v1h1v-1h1v1h-1v1h-1v-1h-1v-1h-2v1h-1v1h-1v-1h1v-1h-1v-3h-1v2h-1v2h-2v-1h1v-1h-1v-1h2v-1h-2v-1h-1v-1h-1v-1h1v1h1v-1h2v3h1v-1h2v-2h-1v-1h-3v-2h-1v1h-1v-1h1v-1h2v-1h-1v-2h-1v1h-1v1h-1v1h-1v-1h-1v1h-1v-1h1v-1h-2v1h-2v-4h-2v-1h-1v-1h-1v1h-2v1h1v2h-1v-2h-4v1h-1v-1h-1v1h-1v-1h1v-2h1v-2h1v-3h2v1h1v1h1v-1h2v-1h-1v-3h-1v-1h1v-1h-2v-1h2v-1h1v-1h-1v-2h-1v1h-1v-3h2v-1h-3v4h-2v1h-1v-1h-1v1h-1v2h-2v-2h-1v3h2v1h1v-1h3v-1h-2v-1h3v-1h1v3h-2v1h2v1h-2v1h2v1h-4v1h1v1h-1v1h-3v1h3v1h-1v1h-1v1h-2v1h2v3h-2v1h4v-1h1v1h1v1h1v2h2v-1h1v-1h6v1h1v-1h1v3h-1v1h1v1h-4v2h3v-1h1v1h-1v1h2v1h1v1h-2v1h-1v-1h-1v-1h-1v1h-2v1h-1v-1h-2v1h-3v-2h-1v1h-3v1h1v1h1v-1h1v1h-1v1h2v-1h1v1h-1v1h3v1h1v1h1v2h-2v1h3v1h-1v1h2v-2h3v1h1v-1h4v-1h1v1h1v1h3v1h-1v1h4v1h-1v1h-1v-1h-1v2h-1v1h-1v2h1v1h-2v1h1v1h-1v1h2v-2h2v1h1v1h1v1h1v-2h1v-1h1v1h1v-1h1v-2h1v2h1v1h-1v1h2v-1h3v-1h1v-1h3v2h1v-1h1v1h-1v1h-4v-1h-1v1h-3v1h3v1h1v-1h2v1h1v1h-1v1h-2v1h-1v1h1v1h-2v1h1v2h3v1h2v-1h1v1h-1v1h-3v-1h-1v2h-1v1h-2v-1h1v-2h1v-1h-2v1h-1v-2h-1v2h-1v-1h-1v1h-1v1h1v1h2v-1h1v3h1v1h-1v-1h-2v-1h-1v-1h-1v3h-1v3h-3v1h1v1h-1v-1h-1v1h-1v-1h-2v-1h-1v1h-1v-1h-1v-1h-1v-2h-1v-1h1v-1h-1v-1h1v1h1v-1h1v-1h-5v1h1v1h-1v1h1v2h1v1h-1v1h-1v-1h-1v1h-1v-1h-1v-1h1v-1h-1v-1h1v1h1v-3h-1v1h-1v-1h-1v2h-4v7h-1v-2h-4v2h-1v1h-2v-1h-1v1h-1v-2h-1v-1h-1v-1h-1v1h-1v1h-1v-1h-2v-1h-1v1h-1v1h-1v-1h1v-4h-1v2h-1v-2h-1v3h-1v-4h-1v-1h-4v1h-1v2h1v1h-1v1h1v1h-1v-1h-1v-1h-1v2h1v2h-1v1z" fill="#fff"/>
+  <path d="m164 198v-1h1v1zm26 0v-1h1v1z"/>
+  <rect y="193" x="193" height="5" width="5" fill="#fff"/>
+  <rect y="194" x="24" height="3" width="3"/>
+  <path d="m36 197v-1h-1v-1h3v-1h1v-2h1v2h-1v1h-1v2zm26 0v-1h1v1zm23 0v-2h-1v-1h-1v-3h1v-1h1v-3h-1v-1h3v1h-1v1h1v1h-1v1h2v1h-2v2h-1v-1h-1v2h1v1h1v-1h1v-2h1v2h1v1h-1v2zm29 0v-1h2v1z" fill="#fff"/>
+  <rect y="196" x="120" height="1" width="1"/>
+  <rect y="196" x="134" height="1" width="1" fill="#fff"/>
+  <path d="m154 197v-1h1v-1h-4v-2h-1v-1h1v1h1v-1h1v-2h-2v1h-1v-1h-1v4h-2v-1h-1v1h-1v-1h-1v-1h1v-2h-1v1h-1v-1h-4v-2h1v-1h1v-1h-2v1h-1v-1h1v-1h-1v-1h-1v-1h-2v1h1v2h1v1h-1v-1h-3v2h-1v1h1v1h-1v-1h-1v-1h-1v-3h1v-3h-1v-1h2v-2h1v-1h-1v-1h-1v2h-1v1h-1v-1h1v-5h-1v1h-1v-1h1v-1h1v-1h-1v-1h2v2h3v-3h-1v1h-1v-1h1v-1h-1v-1h-1v-2h-1v3h1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-2h-1v-2h1v1h1v1h1v-1h1v-1h-1v-2h2v-1h1v-2h1v2h-1v1h1v1h-1v1h2v-2h1v-1h-1v-3h4v-1h-1v-2h5v-2h1v-1h-3v1h1v1h-3v-1h-1v-1h1v-2h-1v1h-1v1h-1v1h1v1h-2v2h1v-1h1v1h-1v1h-1v-1h-1v1h-2v-2h-2v-1h-1v2h-1v-2h-1v1h-2v1h-1v1h-1v-1h-1v-2h-1v-1h-1v4h1v1h2v3h1v1h-1v-1h-1v1h-2v-1h2v-1h-1v-2h-1v2h-1v2h-1v-2h-3v-2h-1v1h-1v-1h1v-1h1v-2h-2v-1h1v-2h-1v-1h2v-1h-4v1h1v1h-1v1h-1v1h-1v1h-1v-2h1v-1h-1v-1h2v-1h-1v-5h-3v1h-1v1h2v-1h1v2h-2v2h-1v-1h-1v1h-1v2h-1v1h-1v1h-1v-1h1v-1h-1v-1h-2v1h1v1h-1v1h1v2h-1v-2h-1v2h-1v-1h-2v2h1v1h2v1h-2v1h-6v1h-1v1h2v3h-5v4h1v-2h1v-1h2v1h1v1h-1v1h-1v1h-1v-1h-1v1h-3v-1h-5v1h-1v-1h-1v-1h1v-1h-1v-1h-2v-1h-1v3h-1v-1h-1v-1h1v-1h1v-1h-2v1h-1v-1h-1v1h-1v1h-2v2h-3v1h-1v1h-3v-1h-1v-1h1v-2h1v2h1v-1h1v-1h1v-1h-1v-1h-1v1h-2v-1h-1v-1h-4v1h3v2h1v1h-1v2h-2v1h-2v1h2v1h1v1h-2v2h-1v1h-2v-1h2v-2h1v-1h-2v-1h-1v-1h1v-1h-1v-1h1v-1h-3v-1h-1v2h1v1h-1v-1h-2v-1h1v-1h-2v2h-2v-2h-1v1h-1v2h-2v2h1v1h-2v-1h-1v1h-1v-1h1v-1h1v-1h1v-1h1v-1h-1v-3h-2v-1h3v-1h1v1h2v-1h-1v-1h-2v-1h-3v1h2v1h-3v3h1v2h-1v-2h-1v-3h-1v-1h-1v1h-1v-1h1v-2h-3v1h1v1h-1v-1h-1v-1h1v-1h1v-1h1v-1h1v2h1v2h2v-2h-1v-1h1v-1h1v-1h-3v-1h-1v-2h1v1h1v1h1v-1h2v-3h-1v2h-2v-1h-2v-1h1v-1h-1v-2h-1v1h-1v-1h-1v-1h1v-1h1v-1h4v1h1v-2h-2v-1h-1v-1h2v1h3v1h1v-1h1v-1h-1v-1h-2v-1h2v1h1v-2h-1v-1h-1v-1h-1v-1h-1v4h-1v-1h-1v-1h-1v-1h1v-2h-1v-1h3v1h1v-2h-3v-1h-1v-1h-1v-1h-1v-4h1v2h1v-1h1v-1h1v1h-1v1h-1v1h2v-1h1v2h1v-1h1v3h1v-1h2v1h-1v1h3v1h1v-1h4v1h1v-1h2v-2h-1v1h-1v-1h1v-1h-3v-2h-1v1h-1v-1h-1v1h-1v-4h1v-1h-3v1h-1v3h1v-1h1v1h-1v1h1v1h1v2h-1v-2h-3v-1h1v-1h-1v-3h-1v-1h2v-1h-2v-1h2v1h2v-1h-1v-1h-2v-1h3v-1h1v4h1v1h2v-1h-1v-2h-1v-3h-1v-1h1v-1h-1v-2h-1v-2h-1v1h-4v-1h-1v-1h-1v2h-1v1h-1v-1h1v-3h3v2h1v-4h1v-2h1v4h1v-1h1v1h3v-1h1v-1h-2v-1h-3v-1h1v-1h-2v-1h1v-1h-2v2h-1v1h-1v2h-1v1h-1v-3h1v-1h2v-1h-2v-1h3v-2h-1v1h-2v-2h1v-1h1v-1h-1v-1h1v-1h1v1h-1v1h1v1h-1v1h1v1h1v-2h1v1h1v-1h1v2h-1v2h1v-1h1v-1h1v-1h-1v-2h-1v-1h1v-1h-1v-1h1v-1h-2v1h-1v2h1v1h-2v-4h2v-2h-1v-1h1v-1h3v-3h-1v2h-1v-2h-1v-1h1v1h1v-2h1v-1h1v-1h-1v-1h-1v-1h-1v1h-1v-1h-1v-1h-1v1h-1v2h-1v-2h-1v-1h-2v1h-2v-1h2v-1h-2v-1h-1v-1h1v1h1v-1h1v-1h1v-1h1v-1h1v1h-1v1h-1v1h-1v2h2v-2h1v-1h1v-3h-1v-1h-1v-2h-2v1h-1v-1h1v-1h1v-1h-1v-1h1v-1h2v2h1v-1h1v-1h1v1h1v-2h-1v-2h-1v2h-1v-2h-2v-1h1v-1h4v2h1v-2h1v-2h1v-1h-2v1h-1v1h-1v-2h2v-1h2v-1h1v-1h1v1h2v-1h-1v-1h1v-1h-1v-1h2v-1h-1v-1h-1v1h-2v1h1v2h-1v-2h-3v2h-1v-2h-1v2h-1v-1h-1v-1h2v-1h1v-2h-1v-2h-1v2h-1v-1h-1v-1h-1v-2h-1v-2h1v-1h1v1h1v1h2v3h1v-2h1v1h2v-2h1v-1h1v-1h-2v-2h2v-1h-1v-3h2v-1h1v1h1v3h1v-3h1v-1h-2v-1h2v1h1v1h2v-1h1v2h1v-1h1v-1h-1v-2h-1v-1h1v1h4v2h2v-1h-1v-1h2v-2h-1v-2h2v1h1v1h-1v3h3v-1h-2v-1h1v-1h1v1h1v1h1v1h1v1h1v-1h1v1h-1v2h-1v1h2v4h1v1h1v1h1v1h-1v1h1v2h1v-1h1v5h1v-3h1v-1h-1v-2h1v2h2v-2h-1v-1h-1v-1h-1v1h-1v1h-1v-2h2v-1h1v-3h-3v-1h-1v-1h-1v-1h-1v-1h1v1h2v-3h-1v1h-2v-1h2v-1h-1v-1h1v1h1v-2h1v2h1v1h2v1h1v-1h1v-1h1v1h1v-1h1v-3h2v1h1v-2h1v2h1v-1h3v-2h-1v1h-1v-1h1v-2h1v2h1v3h3v-1h2v-1h-1v-1h1v1h1v2h-1v1h-3v1h-1v1h-1v-1h1v-1h-1v-1h-2v1h-1v1h1v1h-1v1h1v1h-1v4h1v1h2v1h2v1h-2v2h1v-1h1v1h3v-1h3v1h1v-1h2v-1h-2v-1h2v-1h1v1h1v-1h1v-1h-1v-1h-4v1h1v1h-1v-1h-1v2h-1v-1h-2v1h1v1h-3v-2h2v-1h-1v-1h-1v-2h1v1h1v-2h1v-1h3v-1h-1v-1h1v1h1v-2h1v2h1v1h1v1h1v-3h1v-1h1v1h1v2h1v-1h1v-1h1v1h-1v1h1v1h1v-1h1v-1h1v1h1v1h-1v-1h-1v2h2v1h-1v1h1v1h-1v1h2v1h-4v1h3v1h-1v1h5v-1h-1v-1h1v-1h1v-2h1v2h1v-2h2v-2h-1v1h-1v-1h-1v1h-2v2h-2v-1h-1v-5h1v2h2v1h2v-1h-1v-1h-1v-1h1v1h1v-1h2v1h-2v1h1v1h1v-1h3v1h-1v2h1v-1h1v-3h-1v-2h-1v2h-1v-2h-2v-1h-3v1h-1v-2h5v1h1v1h1v-1h2v1h1v-1h2v-1h1v1h1v-1h1v1h2v1h1v1h-1v1h-1v-2h-1v-1h-1v1h-1v-1h-1v2h3v1h-2v1h1v2h1v2h1v-2h1v-1h1v-2h3v-1h-1v-2h-1v-1h2v-1h2v-1h-1v-1h1v1h1v1h1v1h-1v1h-1v1h-1v3h1v-1h2v1h3v-1h1v1h-1v1h-2v1h-2v-2h-1v1h-1v1h1v1h1v1h4v1h1v-1h1v-1h1v-1h4v-1h1v1h1v1h-1v1h4v1h-2v1h-2v1h1v1h3v1h2v-1h-1v-5h1v4h3v-1h-2v-3h2v-1h-5v1h-1v-1h1v-1h2v-2h1v2h3v-1h-2v-2h2v-1h1v1h-1v1h1v1h2v1h1v1h1v-1h1v1h-1v1h1v1h-1v-1h-1v1h-1v3h1v-2h4v1h-1v1h1v1h1v-2h1v3h-2v1h-1v1h1v1h-1v1h-1v1h1v1h1v1h2v1h1v-1h1v-1h-2v-1h1v-1h2v-1h2v2h-1v-1h-1v1h-1v1h1v1h1v1h-1v-1h-1v1h-1v1h2v2h1v-2h1v1h1v-2h2v1h1v-1h1v1h-1v1h-1v1h-1v-1h-1v1h-1v1h-2v1h1v1h2v1h1v1h1v1h1v1h1v-1h1v1h-1v1h-2v2h1v-1h1v1h1v1h-1v1h2v1h1v1h-1v-1h-2v-1h-5v-1h1v-3h-1v2h-1v-1h-1v1h-1v1h-2v-1h2v-1h-1v-1h1v-1h-2v-1h1v-2h1v1h1v-1h1v-1h-1v-1h-1v1h-2v2h-1v-1h-1v1h-1v1h-2v1h1v1h-1v-1h-1v-2h3v-2h-1v1h-1v-1h-1v1h-1v2h-1v1h-2v2h1v-1h2v2h-1v-1h-1v1h-1v3h-2v2h-1v1h-1v1h2v-1h1v-2h1v1h1v-1h1v1h-1v1h1v1h1v1h-1v1h3v-1h-1v-1h2v-1h-3v-1h3v1h1v-1h2v-1h1v-1h-2v1h-1v-1h-1v1h-1v-1h1v-1h-2v2h-1v-2h-1v1h-1v-1h1v-1h2v-1h1v-1h2v2h1v-1h1v2h1v1h1v-1h1v3h-3v1h1v1h3v-1h1v-1h-1v-1h1v1h2v2h2v-1h-1v-1h1v-1h-2v-1h3v2h1v-1h1v1h-1v2h-1v1h-1v2h1v2h-1v2h-1v1h1v1h1v1h1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h1v-3h-2v1h1v1h-1v-1h-1v3h1v1h-1v1h-1v1h1v1h1v-1h3v-1h-1v-1h2v1h1v-1h1v1h1v1h-1v2h-1v2h1v1h1v-2h2v1h1v1h1v2h1v2h1v1h-1v-1h-1v2h-1v-1h-1v-1h1v-3h-1v-1h-1v1h-3v1h-2v3h1v-1h1v-1h2v1h1v1h-2v1h3v1h-1v2h-2v1h-1v-1h1v-1h-1v-1h-1v1h-3v2h-1v-1h-1v-1h1v-1h-4v-2h-4v1h1v1h1v-1h1v2h1v1h1v-1h1v1h-1v1h2v1h-3v2h-2v-1h-1v1h-1v1h-4v1h3v1h2v-1h2v1h-2v2h-1v2h-1v-1h-1v1h-2v-1h-1v3h-1v1h-1v2h-3v1h1v2h1v1h1v-1h1v-1h-1v-1h3v2h1v-1h2v1h-2v2h-1v-1h-1v2h-2v1h1v1h1v-1h2v-1h2v2h1v1h1v2h1v1h-1v2h1v-1h1v2h1v1h1v-1h3v-1h2v-2h2v-1h-3v2h-1v-1h-1v2h-2v-1h-1v-1h1v-1h1v1h1v-1h1v-1h-4v-1h1v-1h-2v1h-1v-2h-1v-1h-1v-1h-2v-1h4v-1h-1v-1h-1v-1h-2v-1h-3v-1h1v-1h3v-2h1v1h1v1h1v1h2v1h1v1h1v1h-1v-1h-1v-1h-1v1h-2v1h1v1h2v1h1v-1h1v1h1v-1h1v-1h2v1h-2v1h1v1h-1v-1h-1v1h-1v1h-1v2h1v1h2v-1h-1v-1h1v-1h3v1h-2v2h-1v1h2v-1h1v-1h1v1h1v1h-1v1h1v2h-1v1h-1v1h-3v1h1v1h-1v-1h-1v1h-1v1h-1v1h-1v1h-1v-1h1v-3h-1v-1h-7v1h-1v-3h1v1h2v-2h3v-1h-1v-2h-1v2h-2v1h-1v-1h-2v-1h-1v-1h-1v-1h-2v1h1v2h2v1h-2v-1h-1v-2h-1v-1h1v-3h1v2h1v-3h-2v-2h-1v-2h1v-3h-1v1h-2v-1h-1v1h-1v3h-1v2h-1v-2h1v-2h-3v1h1v3h-3v-2h-2v2h1v1h-1v-1h-1v1h-3v2h-1v1h-1v1h1v1h2v-2h2v-1h1v2h-2v1h1v1h1v1h1v-3h2v1h1v-1h1v1h1v1h-1v1h-1v2h-2v1h-1v-1h1v-1h-4v1h1v1h1v1h1v1h-3v2h-1v-2h-1v1h-1v2h4v1h1v-1h1v1h-1v1h-1v1h-1v-1h1v-1h-3v1h-1v2h4v3h1v1h2v-1h-1v-1h1v-1h2v1h-2v1h3v1h1v-2h-1v-2h1v2h1v2h4v-1h1v-1h1v1h1v2h1v1h-1v-1h-1v-1h-2v1h1v1h-1v1h3v2h2v1h-3v-2h-2v1h-1v2h-1v-1h-1v-1h-1v1h-2v-2h-4v2h-1v1h-2v1h1v2h1v-2h1v-1h1v-2h2v1h-1v2h-1v3h-1v-1h-1v2h2v1h-2v1h-1v1h1v1h1v-2h1v1h1v-1h2v2h1v-1h1v1h2v1h1v-1h1v3h3v1h1v-2h1v-1h1v2h1v1h1v-1h4v-1h-2v-1h2v-1h1v1h-1v1h1v1h1v-1h1v1h-1v1h2v1h-2v-1h-1v-1h-1v1h-3v2h-1v-1h-1v1h-1v3h-3v1h1v1h-2v1h1v1h-2v1h4v1h1v-2h-2v-1h1v-2h1v1h1v1h2v-1h1v-1h1v-1h1v-1h-3v2h-1v-1h-1v-1h1v-1h3v-1h-1v-1h2v1h1v1h1v-1h1v1h-1v1h-1v3h1v1h-1v3h1v1h3v2h1v-2h2v1h1v2h1v-2h2v1h1v1h1v1h2v-3h-2v-1h-1v-1h-2v-2h1v-1h1v-1h1v1h-1v1h-1v1h1v1h1v1h3v-1h2v1h1v-1h1v1h-1v1h-1v1h-1v2h-2v1h-1v1h-1v-2h-2v-2h-1v2h-1v1h2v1h1v1h-1v1h-2v1h2v1h-2v-1h-1v-1h-1v1h-1v1h2v1h2v1h-1v1h-1v-1h-1v1h-1v1h1v1h-1v-1h-1v2h-2v-1h-1v1h-1v-1h-1v-2h-1v-1h1v-1h1v4h1v-1h1v-1h-1v-1h2v2h1v-1h1v-1h-1v-1h-2v-2h-1v-1h-3v-1h-1v1h-2v1h-2v1h-1v-1h-1v-1h-1v-1h-1v-1h-1v1h-1v1h2v3h-2v1h-1v4h-3v-2h-1v3h-1v1h-1v1zm40 0v-3h3v3z"/>
+  <path d="m33 196v-1h1v1zm19 0v-1h1v1zm18 0v-1h1v1zm7 0v-1h2v1zm-15-1v-2h1v-1h1v-1h1v-1h1v1h1v1h1v1h-1v1h1v1h-1v-1h-1v1h-1v-3h-1v2h-1v1z" fill="#fff"/>
+  <rect y="194" x="87" height="1" width="1"/>
+  <path d="m111 195v-1h1v1zm44 0v-1h1v1z" fill="#fff"/>
+  <rect y="192" x="44" height="2" width="1"/>
+  <path d="m51 194v-3h3v3zm26 0v-2h1v2zm2 0v-3h3v3zm28 0v-3h3v3z" fill="#fff"/>
+  <path d="m115 194v-1h-1v-1h1v1h1v-1h1v-1h1v1h1v1h-1v-1h-1v1h-1v1z"/>
+  <path d="m135 194v-3h3v3zm28 0v-3h3v3zm-128-1v-1h1v1z" fill="#fff"/>
+  <path d="m48 193v-1h1v1zm4 0v-1h1v1z"/>
+  <rect y="192" x="55" height="1" width="1" fill="#fff"/>
+  <rect y="192" x="66" height="1" width="1"/>
+  <rect y="192" x="73" height="1" width="1" fill="#fff"/>
+  <path d="m80 193v-1h1v1zm10 0v-1h1v1zm2 0v-3h2v1h-1v2zm2 0v-1h1v1zm2 0v-1h1v1zm4 0v-1h1v1zm8 0v-1h1v1zm24 0v-1h1v1zm4 0v-1h1v1z"/>
+  <path d="m145 193v-1h1v-1h1v1h1v1h-1v-1h-1v1zm8 0v-1h1v-2h1v-1h1v1h1v-2h1v-1h1v-1h-2v1h-1v-1h1v-1h2v-1h-1v-1h2v2h1v-1h1v-2h-4v-1h-7v1h-1v1h2v-1h3v1h1v-1h1v1h-1v1h-1v-1h-3v1h2v1h-2v-1h-1v2h4v1h-1v2h-2v-2h-1v3h-1v-1h-1v1h-1v-2h-1v2h-2v-1h-1v1h-1v-1h-1v-1h2v-1h-2v-1h1v-3h-1v2h-3v-1h-1v-1h-1v-1h-2v1h-1v1h1v1h-3v-2h2v-1h-1v-1h3v-1h-2v-2h-1v-2h-2v-1h1v-1h1v1h1v-2h1v-1h1v-1h1v1h2v-2h2v1h1v-1h1v1h-1v2h-2v1h1v1h2v1h3v-1h1v-1h-2v1h-1v-1h-1v-1h1v-3h1v-1h-1v-3h-1v1h-1v1h1v1h-1v-1h-1v1h-2v-3h-3v-1h-2v-1h2v1h3v1h4v-1h1v1h1v-3h-1v1h-1v-1h-2v1h-3v-2h-4v-1h3v-1h1v1h1v-1h2v-1h-2v-1h2v-1h1v1h1v-2h1v2h1v-1h1v-1h-1v-1h-2v-1h-1v-1h-1v-1h1v-1h-2v2h-2v-1h-1v-1h1v-2h-1v-1h1v-5h1v-4h1v-1h1v-2h-1v1h-1v-1h1v-1h-2v3h-2v-3h2v-1h3v-1h1v1h1v-2h-3v1h-1v-1h1v-2h1v-1h-1v-1h1v1h1v-2h-4v1h1v1h-1v1h1v1h-2v-2h-1v-2h-1v1h-1v-1h-1v1h-1v-1h1v-1h-2v3h4v1h1v1h-1v-1h-1v2h1v1h-1v1h1v1h-2v1h2v1h-2v-1h-1v-2h-1v1h-1v-1h1v-1h-1v-1h-2v1h-2v-2h2v-1h-3v1h-1v1h-1v-1h-1v1h-1v1h1v1h1v1h1v-1h2v1h1v-1h2v1h-2v2h1v-1h1v1h1v1h-1v1h1v2h2v-1h-1v-3h1v3h2v1h-2v1h2v1h1v1h1v-1h1v4h-1v2h-1v1h1v2h-1v1h-1v1h-2v4h-1v-2h-2v-1h-1v-1h-1v1h-1v-1h-2v-2h1v-2h3v2h1v-3h-1v-1h1v1h2v-1h-1v-1h1v-1h-2v1h-1v-1h1v-2h-1v1h-1v1h-1v1h-1v-1h1v-3h-3v-1h-2v1h-1v2h1v1h2v-2h1v2h-1v1h1v1h1v1h-1v2h-1v4h2v1h-3v2h-1v-3h1v-1h-2v1h-1v-2h1v-1h-3v-1h2v-1h1v-1h-2v1h-2v1h-1v1h1v1h1v1h1v1h-1v1h-1v1h1v1h-1v2h-1v-2h-1v-1h1v-3h1v-1h-1v-1h-1v-1h-1v-1h1v-1h-1v-1h-1v2h-1v1h-3v-2h1v1h2v-2h-2v-1h2v-1h-1v-1h-1v1h-1v-1h-1v1h-3v-2h3v-1h1v2h1v-2h2v2h1v-1h1v1h1v-2h-1v-1h-2v-3h1v-2h-2v1h-3v-3h1v1h1v-3h-2v-2h1v1h1v-1h1v-1h1v1h-1v1h-1v1h4v-1h-1v-1h1v1h1v-1h1v1h1v1h1v1h1v2h1v-2h1v-1h-2v-2h-1v-3h-1v2h-2v-1h-1v1h-1v-2h-1v1h-2v-1h1v-2h-1v-1h1v-3h-1v-1h-1v1h-1v2h-1v1h1v2h1v1h-2v1h1v1h-1v-1h-1v2h1v2h-1v1h1v1h-1v1h1v2h-1v2h-1v1h2v2h-1v-1h-1v-1h-1v3h-2v1h2v2h-1v1h-1v1h1v1h-1v2h-1v-2h1v-1h-2v1h-1v1h1v1h-2v-1h-2v1h-1v-1h1v-1h-1v-1h-1v-1h1v-1h1v-1h-1v-1h-1v1h-1v2h-2v1h2v1h1v1h-1v2h-1v4h-2v1h1v1h1v1h1v1h-2v-1h-1v-2h-1v1h-1v1h1v1h-1v-1h-1v2h-2v1h-1v2h2v-1h1v1h1v1h-4v-1h-1v1h-1v-1h1v-2h1v-1h-2v1h-1v-2h-1v5h-1v1h-2v1h2v1h-1v1h-1v-1h-1v-1h-1v-1h-2v-1h-1v-1h-2v1h-1v-1h-1v1h-1v-1h-1v-1h-2v1h-3v-1h-1v-1h-1v-1h-3v2h-1v-2h-1v1h-1v1h-1v2h-1v1h-1v1h-2v-3h-1v1h-1v-1h-1v1h-1v2h-1v-1h-1v-2h1v1h1v-2h-2v-1h-1v-2h2v1h1v1h1v-2h-1v-1h-1v-1h1v-1h-1v-2h-1v-1h-1v-1h1v1h1v-4h-1v-1h1v-1h-3v1h1v1h-1v-1h-1v-1h-1v1h-1v1h2v1h1v1h-2v-1h-1v-1h-2v2h-1v-2h-1v-2h-1v-1h1v-1h1v1h1v1h2v-1h-1v-1h1v-1h1v1h3v1h1v-2h-1v-1h1v-1h-1v-5h-1v-1h-1v-2h1v-1h3v1h-3v2h2v4h1v1h-1v1h2v-2h1v-1h-2v-1h1v-1h-1v-1h1v-1h2v-2h2v1h-1v2h-1v1h3v1h2v2h-1v-1h-1v3h-1v1h3v-1h-1v-1h2v1h1v1h-2v1h-1v2h-1v1h-1v1h2v-1h1v-1h2v-1h-1v-1h1v1h1v-2h5v-1h-2v-1h-1v1h-1v-1h1v-1h1v-1h-1v-2h3v1h1v1h1v-2h-1v-1h-1v-1h-1v1h-1v-1h-1v-2h-2v1h1v1h-1v-1h-2v1h1v1h-2v1h-1v-1h-1v-1h1v-2h2v-2h1v-1h3v-1h-2v-1h-3v1h1v1h-1v-1h-1v-1h1v-1h-4v-2h4v-1h-4v-1h1v-1h-2v-1h2v1h1v-1h1v-1h-1v-1h-1v-1h1v-2h1v-1h1v-2h-2v2h-2v-1h1v-1h-2v1h-1v1h-1v-1h1v-2h1v-1h1v-1h-2v1h-1v-1h1v-1h1v-1h1v-1h-1v-1h-2v-1h1v-3h1v1h1v2h1v1h1v-2h-1v-1h1v1h1v-1h1v-1h-2v-1h2v-1h-3v1h-1v-1h1v-2h-1v-1h-1v-2h-2v-1h5v1h-2v1h1v2h1v1h1v-1h2v-1h-3v-1h2v-3h-1v-1h-1v1h-1v-2h1v-1h-1v-2h-1v-1h-1v-2h-1v-1h1v-1h3v-1h1v1h-1v1h2v1h-1v1h1v1h2v-1h-1v-1h1v1h2v-1h1v2h1v-3h1v1h1v-1h1v-1h1v-1h-1v-1h-1v-2h-1v-1h-1v-1h-1v1h-1v1h1v1h1v1h-1v-1h-2v-1h-1v1h-1v-1h1v-1h-2v1h-2v1h-1v1h-1v1h-1v-1h-1v-2h-1v-2h-1v3h-1v-3h1v-1h-3v1h1v1h-1v1h-2v-3h2v-3h1v-2h1v-1h1v-1h-2v1h-1v-1h-1v1h-1v-1h1v-1h1v-1h2v-1h1v-1h1v1h-1v2h2v-1h1v-2h-1v-1h-1v-1h1v-1h-1v-2h1v-2h1v2h1v-2h1v-2h1v2h-1v2h1v1h-1v1h2v-1h1v-1h-1v-1h2v-2h3v1h1v2h-1v2h2v-3h1v1h3v2h-1v1h-1v-2h-1v1h-1v1h1v1h1v1h-1v1h1v1h-1v1h1v1h-3v1h2v2h3v-1h-2v-1h1v-4h2v-2h1v1h1v2h1v-1h1v-1h-1v-1h-1v-1h1v-1h-2v-1h-1v-1h1v-1h-1v-1h-1v1h-1v-1h1v-3h1v-1h-1v-1h-1v1h-2v-1h-1v2h2v1h1v1h-1v1h-2v-1h2v-1h-2v-1h-1v-2h1v-1h1v-1h-2v1h-3v-1h-1v1h-1v-2h-1v-1h-1v-2h2v1h1v1h1v-1h1v-1h-2v-1h-1v-2h-1v-1h-1v-3h-1v1h-1v-2h1v-1h1v1h1v4h1v-1h1v-1h-1v-2h1v1h1v-2h2v-2h1v2h1v-1h1v-1h3v-1h2v-1h5v-1h1v1h2v1h-3v1h1v1h2v1h1v4h-1v2h1v1h1v1h1v3h-1v1h2v-1h2v2h1v2h-1v-2h-4v-1h-3v1h2v1h-4v1h1v1h1v1h1v-1h1v1h1v-1h1v-2h2v1h-1v1h1v1h2v1h-2v1h1v2h1v1h-1v1h1v1h1v2h-1v3h-1v1h1v2h1v-1h1v-3h-1v-1h1v1h1v-1h2v-1h-1v-1h-2v-3h-1v-2h1v-1h1v2h1v1h1v1h1v-1h1v-1h3v-4h-1v1h-2v-1h-1v-1h1v-2h-2v-1h2v1h2v-2h1v-1h2v-1h-3v-1h3v1h2v1h-2v1h-1v2h-1v1h-2v1h2v1h3v-2h1v-1h-2v-1h1v-1h1v1h1v3h-1v1h2v-1h1v-2h-1v-1h2v-1h-2v-1h1v-4h-1v1h-1v1h1v1h-1v-1h-2v-1h2v-1h1v-1h1v1h5v-1h1v1h1v-1h1v2h-3v1h3v1h1v-2h1v-2h3v1h1v1h-1v1h1v2h1v-1h1v-1h-1v-3h-1v-2h-1v-1h1v1h2v5h1v1h1v1h-1v1h2v2h-1v-1h-2v1h-2v-1h-1v1h-1v-1h1v-4h-1v2h-1v4h1v2h-3v-1h-1v-1h2v-2h-1v-1h-1v2h-1v4h5v1h1v1h1v-1h4v1h2v-1h-1v-1h1v1h1v-1h1v1h1v3h1v-2h1v-1h1v-1h-1v-1h-1v1h-1v-1h1v-1h1v-1h-1v-2h1v-1h1v-1h-1v-1h-1v-1h-1v2h-2v-2h1v-3h1v2h1v-1h1v1h-1v1h4v-1h1v-1h2v2h1v-1h1v-1h-1v-1h-1v-1h1v1h1v-2h-1v-2h1v-1h1v1h-1v2h1v1h1v-2h1v-1h-1v-1h1v1h1v-2h1v-1h1v-1h1v2h1v3h3v-3h1v-1h1v-1h3v1h-1v1h-1v1h-2v2h-1v1h-2v1h-1v-2h-1v1h-2v1h1v1h1v1h-1v3h1v-1h1v2h1v-2h1v-1h2v-1h-1v-1h5v2h1v-2h1v-1h-3v-2h-1v1h-1v1h-1v-1h1v-2h3v-1h1v1h1v2h2v2h-2v1h1v1h-1v1h2v-1h1v-1h1v-1h-1v-3h1v1h1v-1h1v1h3v1h-2v1h1v3h1v1h1v2h1v-2h1v-1h-2v-1h1v-2h2v1h-1v1h2v-1h1v1h-1v2h-1v1h2v1h-2v1h3v-1h1v1h1v-1h2v1h1v-2h-2v-2h-2v-1h3v1h1v-1h1v-1h-3v-1h3v-2h1v-2h-1v1h-2v-1h2v-1h1v-2h1v1h2v1h-1v1h-1v3h1v1h2v-2h1v1h1v1h-1v1h1v1h-1v-1h-2v1h1v2h1v-1h1v1h-1v1h-2v2h-2v-1h-1v-1h1v1h1v-2h1v-1h-2v1h-1v-1h-2v1h1v3h-1v1h-2v-1h-1v1h-1v2h-2v1h2v3h1v1h2v-1h-1v-1h3v-1h1v-1h1v-1h-1v-1h1v1h1v-2h2v-1h2v1h1v1h2v1h1v1h1v1h1v1h-2v1h-3v1h-1v-1h-1v-1h-1v-1h1v-1h1v-1h-1v-1h-2v1h1v1h-3v1h-1v1h2v-1h1v1h-1v1h1v1h-2v-1h-1v-1h-1v2h-1v1h-2v2h-1v1h3v1h-1v1h2v1h-2v-1h-1v-1h-2v1h-1v3h-1v-3h1v-1h-1v-2h-1v2h-1v-1h-2v1h1v1h-1v1h2v-1h1v1h-1v1h1v1h-2v2h3v1h3v1h-1v1h-1v-1h-3v1h2v2h-1v1h-2v1h3v2h1v-3h1v-1h1v1h1v-1h1v1h-1v1h-1v-1h-1v2h1v1h3v-2h1v2h1v-2h1v1h1v-2h3v-1h1v-1h2v-1h1v1h-1v1h3v-1h1v-1h3v1h1v2h1v1h-2v1h1v2h-1v-1h-2v1h-2v1h-1v2h1v1h1v1h-1v1h-1v1h1v1h1v1h1v-1h1v1h-1v1h-1v-1h-1v1h-2v1h-3v1h1v1h2v-1h1v-1h3v1h3v-2h-1v1h-1v-1h1v-2h2v-1h1v-1h1v1h-1v2h-2v1h1v1h1v2h-2v1h-1v1h-1v1h1v1h-1v-1h-2v1h1v1h2v1h-2v-1h-1v-1h-3v-1h-1v-1h-2v1h-1v1h-2v2h3v1h2v1h1v1h-1v2h-1v-1h-1v-1h-1v3h-3v-1h2v-1h-2v-1h-1v2h-1v1h1v1h-1v-1h-1v-1h1v-2h-1v1h-1v-1h1v-3h-1v-1h2v-1h-4v-1h2v-1h-2v-3h-1v2h-2v-2h-3v-1h1v-1h1v1h4v-1h-3v-2h-1v1h-1v-1h-1v-1h1v-3h-2v1h1v1h-1v1h-1v1h1v1h1v1h-1v1h-1v1h1v1h-1v1h1v1h-3v-1h-1v1h-1v-1h-1v2h4v1h1v-1h1v1h2v-1h-1v-2h1v-1h1v2h1v1h1v-1h1v2h-1v1h-1v-2h-1v3h-1v1h1v1h-1v-1h-2v2h-1v2h1v-1h1v-1h2v1h3v-1h1v1h1v1h1v1h-1v-1h-1v1h-1v-1h-1v2h-2v1h1v1h1v-1h1v-1h1v2h-2v2h-2v1h2v1h-5v1h1v1h-1v1h-5v-2h-1v3h-1v1h-1v-1h-1v1h-1v-1h-1v3h3v1h-3v-1h-2v1h1v1h-1v1h1v1h-2v-2h-1v-1h1v-3h-1v2h-3v2h-2v-2h1v-1h2v-2h3v1h1v-1h1v-3h-2v2h-2v-1h-1v-2h3v-1h-1v-1h1v-1h-3v1h1v1h-1v-1h-1v-2h4v-1h1v1h1v3h1v-2h1v-1h-1v-2h-1v-1h-1v1h-3v-1h-2v1h1v1h-2v1h-4v-2h1v1h3v-1h-2v-3h-1v-1h1v-2h-1v1h-3v1h2v3h-4v2h1v-1h1v4h2v3h3v1h1v1h1v2h-1v-2h-2v1h1v1h-1v1h-2v1h1v1h1v4h1v-2h2v1h-1v1h5v3h1v1h1v-1h2v-1h1v1h1v1h-4v1h1v2h1v-1h1v1h1v1h-3v-1h-2v1h1v1h-1v-1h-1v1h-2v1h2v1h1v1h1v1h-1v1h-1v1h1v1h1v1h3v1h-1v1h2v1h-4v1h3v2h1v-1h1v-1h2v-1h3v1h1v-1h1v1h3v2h1v1h-1v-1h-1v1h-1v-1h-1v-2h-1v1h-1v-1h-1v2h-3v1h-1v1h-1v-1h-1v-1h-1v1h-1v-2h-1v1h-1v1h1v1h1v2h1v1h-2v1h2v1h2v2h1v1h-1v-1h-4v1h-1v-1h-1v1h-1v1h1v1h1v1h1v-1h2v-1h-1v-1h2v2h1v1h1v1h-1v1h-1v1h1v1h1v-2h2v-1h-1v-1h2v-1h1v1h1v1h1v-1h1v1h-1v1h1v1h1v-2h1v2h2v1h1v3h-1v1h-4v1h1v2h1v-1h1v-1h1v1h1v-1h1v1h-1v1h-1v1h1v1h-1v-1h-1v-1h-1v1h-2v1h2v2h2v-1h1v1h3v2h2v-2h1v-2h-1v-1h1v1h1v1h3v1h2v1h1v1h2v3h1v-1h1v-1h1v-1h1v1h-1v1h-1v1h-1v1h1v1h1v-1h1v1h1v-1h1v1h1v1h-3v1h-1v1h-1v-1h-3v-1h-2v-1h-1v-1h-2v2h-1v1h-1v-1h-1v2h-1v-2h-2v-1h-1v-1h-1v1h-1v1h-1v1h1v1h1v1h-1v1h-1v1h-3v1h1v1h1v1h-1v-1h-1v-1h-1v1h-1v1h-1v-1h-1v1z" fill="#fff"/>
+  <path d="m164 193v-1h1v1zm4 0v-1h1v1zm2 0v-1h1v1z"/>
+  <rect y="192" x="177" height="1" width="1" fill="#fff"/>
+  <path d="m182 193v-1h1v1zm4 0v-1h1v1z"/>
+  <path d="m77 191v-1h1v1zm-52-1v-1h-1v-1h1v1h1v-1h1v-1h2v1h1v1h-1v1h-1v-1h1v-1h-2v1h-1v1z" fill="#fff"/>
+  <rect y="189" x="56" height="1" width="1"/>
+  <path d="m73 190v-1h1v1zm35 0v-1h1v-1h2v-1h1v1h1v-1h1v1h-1v1h1v1h-1v-1h-1v1h-2v-1h-1v1zm72 0v-1h-1v-1h1v1h1v1zm-120-1v-1h1v1z" fill="#fff"/>
+  <path d="m98 189v-1h1v1zm13 0v-1h1v1z"/>
+  <path d="m115 189v-4h1v3h1v1zm25 0v-1h1v1z" fill="#fff"/>
+  <path d="m145 189v-1h1v1zm14 0v-2h1v-1h1v1h1v1h-1v1zm-107-1v-1h1v1z"/>
+  <rect y="187" x="90" height="1" width="1" fill="#fff"/>
+  <rect y="187" x="101" height="1" width="1"/>
+  <path d="m160 188v-1h1v1zm-127-1v-1h1v-2h1v-1h1v-1h1v1h-1v2h-1v1h-1v1zm98 0v-1h1v1z" fill="#fff"/>
+  <path d="m147 187v-1h1v-3h-1v-3h1v1h1v-1h2v1h-1v1h-1v3h1v1h1v1h-2v-1h-1v1zm-109-1v-1h1v1zm15 0v-1h1v1z"/>
+  <path d="m63 186v-1h1v1zm50 0v-1h1v1zm5 0v-1h1v1z" fill="#fff"/>
+  <path d="m144 186v-2h1v-1h1v1h-1v2zm35 0v-1h-1v-1h-1v-1h-1v-1h-2v-1h-3v1h-1v1h-2v2h-1v-2h-3v-1h3v-1h4v-2h-3v-1h1v-1h2v1h1v1h1v1h1v-1h1v1h1v2h1v1h1v1h1v1h1v1zm-154-1v-3h1v1h1v1h-1v1zm25 0v-1h-1v-1h1v-1h1v1h-1v1h1v1zm5 0v-1h2v1zm20-1v-1h1v1z"/>
+  <path d="m86 184v-1h1v-1h1v1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m128 184v-1h-1v-2h-1v1h-1v-1h1v-3h1v-1h1v-1h1v2h-2v1h1v2h1v3zm62 0v-1h1v1z"/>
+  <rect y="183" x="197" height="1" width="1" fill="#fff"/>
+  <path d="m28 183v-1h-1v-1h1v-1h-2v-1h1v-1h-1v-1h1v1h2v1h-1v1h1v1h-1v1h2v1z"/>
+  <rect y="181" x="59" height="2" width="1" fill="#fff"/>
+  <path d="m78 183v-1h1v1zm60 0v-1h-1v-2h-1v-1h1v1h1v-2h1v-1h-1v-1h2v1h2v-1h1v2h1v-1h2v-1h1v1h1v-1h1v-1h-1v-1h1v-3h-1v2h-1v-2h-1v2h-1v1h-1v-1h1v-3h4v-1h-2v-1h1v-2h1v2h2v-1h-1v-1h1v-1h2v-2h2v3h-1v1h1v1h1v-1h1v-1h-1v-1h1v1h4v3h-2v-1h-1v-1h-1v3h-1v3h1v1h-1v-1h-1v1h-1v-1h-1v1h-1v1h-1v2h3v-2h2v2h1v-1h1v2h4v2h1v-1h2v1h1v1h-3v1h-1v-2h-2v1h-1v-1h-3v-1h1v-1h-1v-1h-1v1h-1v1h1v1h-1v-1h-1v-1h-1v1h-6v1h-2v1h2v1h-2v-1h-1v1h-1v-1h-1v1h-2v1z"/>
+  <rect y="182" x="167" height="1" width="1" fill="#fff"/>
+  <rect y="181" x="44" height="1" width="1"/>
+  <path d="m70 182v-1h1v1zm44 0v-1h-1v-1h2v2zm-79-1v-1h1v1zm2 0v-3h3v1h-2v2zm2 0v-1h1v1z" fill="#fff"/>
+  <path d="m51 181v-2h1v-1h2v-1h2v1h-2v1h1v1h-1v1h-1v-1h-1v1z"/>
+  <path d="m67 181v-1h2v1zm40 0v-1h1v1zm13 0v-1h2v1zm18 0v-1h1v-2h4v1h-3v2zm36 0v-1h1v1zm-121-1v-1h1v1zm5 0v-1h1v-1h1v1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m79 180v-1h1v-1h1v1h-1v1z"/>
+  <rect y="179" x="159" height="1" width="1" fill="#fff"/>
+  <path d="m30 179v-3h1v-1h1v1h-1v3zm58 0v-2h1v-1h1v2h-1v1zm6 0v-2h1v1h1v1z"/>
+  <path d="m144 179v-1h1v1zm-73-1v-1h1v1z" fill="#fff"/>
+  <path d="m78 178v-2h1v-2h1v1h1v1h-1v1h-1v1zm58 0v-1h-1v-1h-1v-1h1v-2h1v-1h1v2h1v1h-1v1h-1v1h1v1z"/>
+  <path d="m146 178v-1h1v1zm2 0v-1h1v-1h1v1h1v1h-1v-1h-1v1z" fill="#fff"/>
+  <path d="m182 178v-1h1v1zm16 0v-1h1v1zm-170-1v-1h1v1zm57 0v-1h1v1z"/>
+  <rect y="176" x="110" height="1" width="1" fill="#fff"/>
+  <path d="m177 177v-2h3v1h1v1z"/>
+  <path d="m41 176v-2h1v1h1v-3h1v3h1v1h-1v-1h-1v1z" fill="#fff"/>
+  <path d="m55 176v-1h1v1zm32 0v-1h1v1zm6 0v-1h-1v-1h1v1h1v1z"/>
+  <rect y="175" x="107" height="1" width="1" fill="#fff"/>
+  <rect y="174" x="115" height="2" width="1"/>
+  <path d="m135 176v-1h1v1zm14-1v-1h1v-1h1v-1h-1v-1h-1v-1h1v-1h1v-1h1v-1h-1v-1h2v1h1v1h1v1h-4v1h-1v1h1v1h1v-2h3v1h-2v2h-2v1h-1v1zm21 0v-1h1v-1h1v1h1v1zm-146-1v-1h1v-2h5v3z" fill="#fff"/>
+  <path d="m62 174v-1h1v1zm14 0v-1h1v1zm11 0v-1h2v-1h-1v-1h1v-5h1v-2h-1v-1h1v1h1v3h2v1h1v2h-1v-2h-1v1h-1v1h1v1h-1v1h1v1h-1v-1h-1v1h-1v1z"/>
+  <path d="m119 174v-1h-1v-1h1v1h1v-3h2v3h-2v1z" fill="#fff"/>
+  <path d="m193 174v-1h1v1zm-167-1v-1h1v1zm2 0v-1h1v1zm19 0v-1h1v1zm17 0v-1h1v1zm75 0v-1h1v1zm21 0v-1h1v1z"/>
+  <path d="m189 173v-1h-1v-4h-1v-1h2v-1h1v3h-1v3h2v1zm-158-1v-1h1v-1h1v2zm58 0v-1h1v-1h1v1h-1v1zm89 0v-1h1v1z" fill="#fff"/>
+  <rect y="170" x="101" height="1" width="1"/>
+  <path d="m123 171v-1h1v1zm73 0v-1h1v1zm-169-1v-3h3v3zm24 0v-3h3v3zm9 0v-1h1v1zm19 0v-3h3v3zm6 0v-1h1v1zm22 0v-3h3v3zm11 0v-2h-1v1h-1v-1h1v-1h1v1h2v1h-1v1zm17 0v-3h3v3zm28 0v-3h3v3zm10 0v-1h1v1z" fill="#fff"/>
+  <rect y="169" x="184" height="1" width="1"/>
+  <path d="m191 170v-3h3v3zm-166-1v-3h1v3z" fill="#fff"/>
+  <rect y="168" x="28" height="1" width="1"/>
+  <path d="m38 169v-2h2v1h-1v1z" fill="#fff"/>
+  <path d="m52 169v-1h1v1zm28 0v-1h1v1z"/>
+  <rect y="167" x="90" height="2" width="1" fill="#fff"/>
+  <path d="m101 169v-1h1v1zm7 0v-1h1v1z"/>
+  <rect y="168" x="128" height="1" width="1" fill="#fff"/>
+  <path d="m136 169v-1h1v1zm28 0v-1h1v1zm28 0v-1h1v1z"/>
+  <path d="m62 168v-1h-1v-1h1v1h1v1zm70 0v-1h1v1z" fill="#fff"/>
+  <path d="m145 168v-2h2v1h-1v1z"/>
+  <rect y="167" x="159" height="1" width="1" fill="#fff"/>
+  <rect y="167" x="184" height="1" width="1"/>
+  <path d="m195 168v-2h-2v-1h-1v-1h1v-1h2v1h1v2h1v-1h1v1h-1v1h-1v1zm-172-1v-1h1v1zm41 0v-1h1v1z" fill="#fff"/>
+  <path d="m94 167v-1h1v1zm10 0v-1h1v1z"/>
+  <rect y="166" x="167" height="1" width="1" fill="#fff"/>
+  <path d="m49 166v-1h-1v-1h1v-1h1v-1h-2v1h-1v1h-1v1h-1v-2h2v-2h-1v1h-1v-2h-2v-1h2v-2h-1v1h-1v-2h-1v-1h2v1h2v-1h3v-2h-1v1h-1v-1h-1v1h-1v-1h1v-1h-2v1h-1v-1h1v-1h2v-1h1v1h2v-1h1v-1h2v-1h1v1h2v-1h3v1h1v-1h2v1h1v1h-1v2h1v-1h1v-2h1v-1h1v-1h1v1h1v1h1v-1h1v-2h1v-1h1v-2h1v-1h-1v-1h-1v-1h-1v-1h-1v-2h-1v-1h1v-2h-1v-3h-1v1h-2v1h-1v2h1v-1h1v-1h1v1h-1v1h-1v2h-1v1h1v1h1v-3h1v2h1v2h1v3h1v1h-1v1h-1v1h-1v-2h-1v1h-1v1h-2v-3h-1v2h-1v1h-1v1h-2v-1h2v-1h1v-1h-1v-1h-1v-1h2v-1h1v-2h2v-1h-3v-1h-2v-1h-1v-1h2v1h1v-1h1v-2h1v-1h-1v-1h-1v1h-1v-4h-1v1h-3v1h-2v-1h-1v-1h-1v1h-1v-2h1v-1h-1v-1h-2v-1h2v1h1v1h1v-1h1v1h1v-1h1v1h-1v1h2v-2h2v-1h-3v-1h-1v1h-3v-1h-1v-1h-1v-1h-1v-1h1v-1h1v-1h1v-1h2v-2h-1v1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-1h1v1h1v-2h2v1h1v-2h-2v-1h-1v-1h1v-1h1v-1h2v1h2v-1h-1v-1h2v-1h2v-1h-2v-1h-1v1h-1v1h-4v-1h1v-1h2v-1h1v1h1v-1h4v-1h-3v-1h-1v-4h-2v1h1v1h-1v-1h-2v-1h-1v-1h-1v-1h-1v-3h1v1h1v1h2v-1h3v1h2v-2h2v1h1v-1h2v-1h-2v-1h1v-1h1v-2h1v1h1v1h1v-1h1v1h1v-1h1v-1h-1v-1h1v-1h1v1h1v-3h-3v2h-1v-1h-1v2h-1v-2h-1v2h-2v2h-1v-2h-1v-2h1v1h1v-4h-1v2h-2v-1h1v-1h-3v-1h-1v-1h-1v-1h-1v1h-1v1h1v1h2v1h-1v2h-2v-1h-1v-1h-1v1h-1v1h-1v1h-2v2h-1v-2h-1v-2h-1v-1h1v-2h2v-1h-1v-1h1v-1h-1v-1h1v1h1v-1h2v-2h1v1h1v-1h1v-1h1v1h-1v1h1v1h2v1h-1v1h3v1h1v1h3v1h1v2h1v-1h1v2h1v-1h1v-1h-1v-1h-1v-1h-1v-2h-1v1h-2v-1h2v-1h-2v-3h2v2h1v-2h1v2h-1v1h2v1h1v-3h-1v-1h1v-1h-1v-1h2v2h-1v1h3v1h-1v1h1v1h1v1h1v-2h-1v-3h1v3h1v3h1v-1h1v-1h-1v-1h2v-1h-3v-3h-2v-1h1v-1h1v-1h-1v-1h-2v1h-2v-1h-1v2h-1v-1h-1v-1h2v-5h-2v-1h1v-1h-2v1h-2v-2h1v1h1v-2h2v2h1v-1h1v-1h-1v-1h1v1h1v1h-1v1h2v1h1v-1h1v2h1v-1h1v-1h1v1h1v3h-1v-1h-1v1h-1v1h1v2h-1v1h3v-2h-1v-1h1v1h1v3h-1v2h-1v-1h-1v2h3v2h1v1h2v2h-3v-1h-1v4h1v-1h2v1h-2v1h2v1h2v1h2v-1h-1v-2h-2v-1h2v-1h-1v-2h1v-1h1v1h1v-1h2v-1h1v-2h1v-1h-1v-1h-4v-1h5v-1h-2v-1h-1v-1h2v-2h1v-1h1v-2h1v-1h1v-1h1v1h2v-1h1v-1h1v-2h1v2h1v-4h-1v-1h-1v-1h2v-2h1v1h1v1h3v1h-1v1h-1v1h-1v1h-1v2h-1v2h2v-3h1v4h2v3h-1v-2h-1v2h-2v1h1v2h2v-2h2v1h1v-1h2v-1h1v-1h1v-1h3v4h1v1h-1v-1h-1v2h2v3h1v-1h2v-3h-1v-1h1v-1h-1v-1h-1v-1h1v1h1v-2h1v2h-1v1h3v-1h2v-2h1v-1h2v1h1v1h1v-2h-1v-1h3v-1h-1v-1h1v-1h-1v-2h-1v-1h-1v-1h1v1h1v-1h2v-1h-1v-1h1v1h1v-1h1v1h-1v3h1v1h1v1h1v-1h2v-1h-3v-1h-1v-1h1v-2h1v1h1v1h-1v1h2v1h3v-1h-1v-1h2v1h1v7h-1v2h1v2h-1v-1h-1v-2h-1v2h-1v1h1v3h1v-1h1v-1h1v1h6v1h-1v3h1v-2h1v-1h3v-1h-1v-1h1v-1h-1v-1h1v-2h1v2h1v-1h1v-1h-1v-1h-6v1h-1v-1h-1v3h1v-1h1v1h-1v1h-1v1h-1v-1h-1v-1h-1v-3h1v-1h-1v-1h1v-1h1v-1h1v-1h-3v-1h2v-1h-1v-1h1v1h1v-2h-3v-1h-1v-1h1v-1h2v1h-2v1h5v1h4v-1h-1v-1h1v1h1v1h1v-3h-1v-1h1v1h1v2h1v1h-2v1h1v2h1v1h-1v2h1v1h1v-1h1v-2h-1v-2h1v2h1v-1h1v1h-1v3h1v-2h1v-1h3v1h-3v2h-1v1h2v-1h1v1h1v2h1v1h-1v-1h-2v1h-2v1h6v1h-6v-1h-1v2h-1v2h1v1h-1v3h1v-1h1v1h-1v1h-1v1h2v2h-1v-1h-1v1h-3v1h-1v1h2v-1h3v2h1v-2h1v1h1v1h-2v1h-1v1h-1v3h-1v-2h-1v-1h2v-1h-1v-1h-1v1h-2v1h1v1h-1v1h2v1h-2v1h3v1h1v-1h1v2h1v1h-1v-1h-1v1h-3v-2h-2v2h1v1h1v2h3v1h1v2h-1v2h-4v1h-1v1h-1v1h1v1h1v1h-1v1h-1v1h1v1h1v-2h1v1h1v-2h2v1h1v1h1v-1h1v1h-1v1h-1v2h-2v-1h1v-1h-4v1h1v2h3v1h1v1h1v-1h4v1h-1v1h-1v1h-1v-1h-2v-1h-1v-1h-4v1h1v1h1v-1h1v2h1v1h1v-1h1v1h-1v1h-1v1h1v1h1v1h-1v1h-1v-1h-4v1h-1v2h-3v-2h-2v-1h-1v-1h-1v-1h1v1h1v1h4v1h1v-1h1v-3h-1v1h-1v1h-2v-1h1v-2h1v-1h1v1h1v1h1v2h2v-2h-1v-1h-1v-1h-1v-2h-1v-1h-1v2h-3v-1h-1v-1h-1v1h-1v-1h-3v-1h-1v1h-1v1h-1v-2h-1v-1h2v1h1v-1h1v-1h1v1h-1v1h2v-2h1v-1h-4v-1h-1v-1h6v1h1v1h-1v1h1v1h1v1h-1v1h4v-1h-1v-2h-2v-1h3v-1h-1v-2h-1v-1h2v-1h-1v-1h-1v-1h-1v1h-2v-1h-1v1h-1v-1h1v-1h-3v2h-1v-2h-1v3h7v1h-1v1h-1v-1h-4v1h-2v1h-1v1h-1v-1h-2v-1h-1v1h-1v-3h-2v1h1v2h-1v1h1v1h2v-1h2v1h-2v1h-2v1h2v1h-3v1h1v1h-1v-1h-1v1h-3v1h4v1h1v1h1v2h1v3h-1v-1h-1v1h-1v1h1v1h2v-1h3v2h1v1h-2v1h-1v1h-1v1h1v1h1v-1h1v3h-1v1h1v1h-1v-1h-1v-1h-1v-3h-1v-1h-1v-1h-1v-1h-1v1h-1v-1h-1v-1h-3v2h1v-1h1v1h1v1h1v1h1v1h-3v1h1v1h2v1h1v-1h2v1h-1v1h-3v1h2v1h1v1h1v1h2v1h1v1h-3v-2h-1v-1h-2v-1h-1v-1h-1v-2h-1v-2h-2v-1h-2v1h-1v-1h-1v2h-2v2h-1v-3h1v-1h2v-3h-2v-1h-2v1h-2v3h2v2h-1v1h1v3h-1v-2h-1v1h-1v-1h1v-1h-1v-1h1v-1h-1v-1h-1v-1h-1v-1h2v-2h-1v1h-2v-1h-1v-1h-2v2h2v1h-4v2h-4v1h1v1h1v-1h1v2h1v-1h2v1h-2v1h-1v-1h-1v1h-1v3h1v-2h1v2h1v2h1v1h-1v-1h-1v1h-1v1h1v1h1v2h-1v-2h-1v1h-1v1h1v1h1v1h1v1h-1v-1h-1v2h-1v1h1v1h-1v1h-1v-1h-1v-1h-1v2h1v1h1v2h-2v1h-2v1h-1v-1h1v-2h-1v-1h1v-1h1v-2h1v-1h-2v1h-1v2h-1v-1h-1v-1h2v-1h1v-1h-1v-1h-2v1h1v1h-1v-1h-1v-1h-3v-1h-4v1h-1v-1h1v-1h-2v6h1v1h-1v1h3v1h2v-1h3v1h-2v1h1v1h-1v1h1v2h1v-1h1v1h-1v1h-1v2h-1v1h1v1h-3v1h1v1h-1v-1h-2v-3h-1v1h-1v1h1v1h-1v-1h-3v2h-1v-1h-3v2h2v2h-1v1h1v1h-1v1h-1v1h2v1h-3v-4h1v-1h1v-1h-2v1h-1v2h-1v1h1v2h-2v-1h-1v-1h-4v1h-1v-1h-1v-1h2v-1h-2v-1h2v1h1v-1h1v-1h-1v-1h-1v1h-2v-1h-1v1h-2v1h2v2h-2v1h-2v-2h1v1h1v-2h-1v-1h1v-3h2v-3h1v-2h-1v1h-1v-1h-1v1h-1v1h1v1h1v1h-1v-1h-1v-1h-1v-2h-1v-2h-1v1h-4v1h1v1h-1v1h-2v1h-1v1h-3v1h-1v1h1v2h-1v1h4v-1h-2v-3h1v1h1v-1h1v-1h2v-1h1v-1h1v-1h1v-1h1v1h1v6h-1v1h1v2h-1v-2h-2v1h-1v1h-1v-1h-1v1h-2v1h-1v1h-1v1h1v1z"/>
+  <path d="m57 166v-1h-1v-2h1v2h2v1z" fill="#fff"/>
+  <path d="m92 166v-1h1v1zm29 0v-1h1v1z"/>
+  <path d="m187 166v-1h1v1zm-164-1v-1h1v1zm49 0v-1h-1v-1h1v1h1v1zm58 0v-1h1v1z" fill="#fff"/>
+  <path d="m146 165v-3h1v-1h1v1h1v1h-1v1h-1v1zm47 0v-1h1v1z"/>
+  <rect y="163" x="33" height="1" width="1" fill="#fff"/>
+  <path d="m92 164v-1h2v1zm77 0v-1h1v1z"/>
+  <rect y="163" x="180" height="1" width="1" fill="#fff"/>
+  <rect y="162" x="41" height="1" width="1"/>
+  <path d="m68 163v-1h1v1zm8 0v-1h1v1zm20 0v-1h1v1z" fill="#fff"/>
+  <path d="m111 163v-1h1v1zm32 0v-1h-1v-1h1v1h1v1z"/>
+  <path d="m70 162v-2h-1v-1h-1v-1h-4v-1h4v1h1v-3h-1v1h-1v-1h-1v1h-1v-1h1v-3h-1v-1h-1v-2h2v1h-1v1h2v-1h1v1h1v-3h1v-1h1v1h4v-1h1v1h3v-1h-2v-1h2v1h1v1h1v2h1v1h1v1h1v-3h1v-3h1v2h1v-1h2v1h-1v2h1v1h1v1h-2v1h-1v1h1v1h-1v1h-1v-1h1v-1h-2v-1h-1v1h-1v1h-3v1h-4v-1h4v-1h-4v-1h1v-1h-5v1h1v1h1v2h-1v1h2v3h-1v1h-3v1z" fill="#fff"/>
+  <path d="m83 162v-1h-1v-1h-1v1h-1v-1h-1v-1h3v1h1v-2h2v1h1v1h-1v1h-1v1zm56 0v-1h2v1zm45 0v-2h-1v-1h2v3z"/>
+  <path d="m197 162v-1h1v1zm-162-1v-1h2v-1h-1v-2h-1v-1h1v-1h1v1h2v2h-2v1h2v2zm48 0v-1h1v1zm14 0v-1h1v1z" fill="#fff"/>
+  <rect y="160" x="159" height="1" width="2"/>
+  <path d="m164 161v-1h1v1zm3 0v-2h-1v-1h2v1h1v-1h1v2h1v1h-2v-1h-1v1z" fill="#fff"/>
+  <rect y="160" x="193" height="1" width="1"/>
+  <path d="m45 160v-1h2v1zm7 0v-1h-1v-1h1v-1h2v1h-1v1h1v1z" fill="#fff"/>
+  <path d="m70 160v-2h1v-2h-1v-1h-1v-1h-1v-1h1v1h1v-1h2v1h1v2h-1v1h1v2h1v1z"/>
+  <rect y="159" x="117" height="1" width="1" fill="#fff"/>
+  <path d="m128 160v-1h1v1zm28 0v-1h1v-1h-1v-1h1v1h4v1h-4v1z"/>
+  <path d="m173 160v-1h1v-1h-1v-1h1v1h1v1h-1v1z" fill="#fff"/>
+  <path d="m186 160v-1h1v-1h-1v-1h1v-1h1v2h1v-1h1v1h-1v1h-2v1zm-126-1v-1h1v1z"/>
+  <rect y="158" x="137" height="1" width="1" fill="#fff"/>
+  <rect y="158" x="193" height="1" width="2"/>
+  <path d="m40 158v-1h1v1zm17 0v-1h1v1z" fill="#fff"/>
+  <path d="m154 158v-1h-1v-2h2v3zm30 0v-1h1v1zm-148-1v-1h1v1z"/>
+  <rect y="156" x="46" height="1" width="1" fill="#fff"/>
+  <rect y="156" x="60" height="1" width="1"/>
+  <path d="m56 156v-1h2v1zm36 0v-2h1v1h1v1zm21 0v-3h1v3zm81 0v-1h1v-1h1v-1h1v2h1v1h-1v-1h-2v1zm-156-1v-1h1v1zm12 0v-2h-1v-2h1v-1h2v-1h1v1h-1v1h1v2h-2v2zm20 0v-1h2v1z" fill="#fff"/>
+  <path d="m116 155v-1h1v1zm14 0v-1h-2v-1h-3v-1h3v1h1v-1h4v-1h-1v-1h3v1h-1v2h-3v2z"/>
+  <path d="m137 155v-1h1v1zm-80-1v-1h1v1zm37 0v-1h1v1zm5 0v-1h1v1zm9 0v-1h1v1z" fill="#fff"/>
+  <path d="m144 154v-1h-1v-3h-4v-1h-1v-1h1v-1h1v1h1v1h1v-2h1v-1h-4v-1h2v-2h2v-1h-3v-1h3v1h1v1h-1v1h-1v1h2v-1h1v2h-1v1h-1v3h1v1h1v1h-1v1h1v1z"/>
+  <rect y="152" x="40" height="1" width="1" fill="#fff"/>
+  <path d="m50 153v-2h2v1h-1v1zm31 0v-1h2v1zm4 0v-1h1v-1h-1v-1h1v-1h1v4zm-16-1v-1h1v-1h1v-1h-1v-1h1v1h4v-1h1v2h-1v1h-2v-1h-2v1h-1v1zm8 0v-1h2v-1h-1v-1h1v-1h1v2h1v1h-1v1zm28 0v-1h1v1zm33 0v-1h1v1z"/>
+  <rect y="151" x="147" height="1" width="1" fill="#fff"/>
+  <path d="m114 151v-1h1v1zm6 0v-1h3v1z"/>
+  <path d="m156 151v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <path d="m180 151v-2h1v2zm-147-1v-1h-1v-1h1v1h1v1zm11 0v-2h1v-5h-1v-1h2v5h1v-1h1v1h-1v1h-1v1h-1v1z"/>
+  <rect y="149" x="59" height="1" width="2" fill="#fff"/>
+  <path d="m97 150v-1h1v1zm52 0v-1h1v1zm33 0v-1h1v1zm2 0v-2h-1v-1h2v-1h-1v-1h-1v1h-2v1h-1v-1h-1v-1h-1v-1h-1v-1h1v-1h1v1h1v-2h-3v-1h1v-1h2v-2h4v1h-2v2h-1v-1h-1v2h1v2h-1v1h1v1h2v-2h-1v-2h1v-2h2v1h1v1h2v1h1v1h-3v-1h-1v-2h-1v2h-1v1h2v1h1v1h1v1h-1v1h-1v3zm-146-1v-1h1v1z"/>
+  <path d="m82 149v-1h1v-1h-1v-1h-2v-1h-1v-2h1v1h2v-1h1v1h-1v2h1v1h1v1h-1v1z" fill="#fff"/>
+  <path d="m117 149v-2h-1v1h-2v-1h1v-1h1v-4h-1v1h-1v-2h-1v-1h-1v-1h1v1h5v-1h-1v-2h-1v1h-1v1h-1v-1h-1v-2h1v-1h-2v1h-1v-2h2v-1h1v-1h1v1h1v1h1v3h2v-1h1v1h-1v1h3v-1h-1v-2h2v1h1v2h1v-1h1v1h-1v2h1v2h-2v-2h-1v1h-2v-1h1v-1h-3v1h1v2h-1v1h-1v1h1v1h-1v-1h-1v3h1v-1h1v2h-1v1zm3 0v-1h2v1zm3 0v-1h1v1z"/>
+  <rect y="148" x="126" height="1" width="1" fill="#fff"/>
+  <path d="m132 149v-1h-1v-1h1v-2h-1v-1h-2v-1h1v-1h-1v-1h-1v2h-1v-3h2v1h1v1h2v1h1v1h-1v1h1v1h1v-1h1v1h1v1h-1v-1h-1v1h-2v1h3v1zm26 0v-1h1v1zm17 0v-1h1v1zm12 0v-1h1v1zm-145-1v-1h1v-2h1v2h-1v1zm20 0v-1h1v1zm49 0v-1h1v1zm-57-1v-1h1v1z"/>
+  <path d="m73 147v-1h1v-1h-2v1h-1v-1h1v-2h1v1h1v1h1v1h-1v1zm24 0v-1h-1v-1h2v2z" fill="#fff"/>
+  <rect y="146" x="120" height="1" width="1"/>
+  <rect y="145" x="38" height="1" width="1" fill="#fff"/>
+  <path d="m112 146v-1h1v1zm53 0v-2h2v2z"/>
+  <path d="m185 146v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <rect y="144" x="191" height="1" width="1"/>
+  <path d="m64 144v-1h1v1zm11 0v-1h-1v-1h-1v-1h-1v-1h1v1h1v-4h-1v-1h-1v2h-1v1h-1v-2h-1v-1h1v1h1v-2h1v-1h1v-1h-1v-2h1v1h1v2h1v-2h1v-1h-2v-1h-4v-2h2v-1h1v-1h-2v1h-3v1h1v2h-1v1h-1v-1h-1v1h-1v-1h1v-3h-2v1h1v1h-1v-1h-2v-1h-1v3h1v-1h1v1h1v2h-1v-2h-1v1h-1v-1h-1v-4h1v-1h-2v-1h2v-1h-1v-3h1v1h4v-1h2v-3h-2v1h1v1h-4v-2h-2v1h1v1h-2v2h-2v-2h-1v1h-1v1h1v1h2v1h-3v-2h-1v2h-2v-1h-2v-1h-1v-1h1v1h1v-1h2v1h1v-1h1v-2h1v-1h1v-1h2v-1h-2v-1h-1v2h-1v1h-1v-2h1v-1h1v-2h-1v-2h-2v-1h1v-2h2v-2h1v1h1v2h3v-2h-1v1h-1v-4h1v1h2v1h1v-2h-2v-1h-1v-1h-1v-2h2v-5h-1v-1h-2v-1h-1v1h-1v-1h1v-1h1v-1h2v-1h1v1h2v-1h1v-1h-1v-1h-1v-2h1v1h1v2h1v1h2v1h1v1h-3v1h2v1h1v-1h1v-2h1v-1h1v1h1v-1h1v-1h-1v-1h-1v1h-3v-1h-2v-1h1v-1h2v-2h-1v-1h1v1h1v2h1v-1h1v1h-1v1h2v-1h1v-1h-1v-1h1v1h1v-2h-1v-2h1v-1h1v2h1v-1h1v1h-1v1h1v1h-1v1h-2v1h3v2h-1v1h2v1h-4v1h2v1h1v-1h2v-1h1v-1h1v-1h1v-1h2v-1h-2v-1h1v-2h-1v-2h-1v-1h1v-1h-2v-1h1v-1h1v-2h2v2h1v2h1v-2h1v-1h1v1h1v-2h2v-2h-1v-1h-1v2h-1v1h-1v-1h1v-1h-2v-1h1v-2h2v-1h-1v-1h1v-2h-1v1h-2v-1h-1v-1h3v-1h2v-1h-3v1h-1v-1h1v-1h3v1h1v-1h1v-1h1v-1h1v-1h-1v-1h1v-1h1v6h1v-1h1v1h-1v1h1v1h-5v1h2v1h1v-1h2v1h1v2h1v-2h1v-1h1v-1h1v1h1v1h1v-1h2v1h1v-2h1v-1h-2v1h-1v-1h1v-1h3v2h-1v2h1v1h-1v1h-4v-1h-1v1h-1v2h2v-1h3v1h-1v1h-1v1h1v5h-1v-4h-1v-1h-1v2h1v1h-1v-1h-1v-2h1v-1h-1v-1h-1v2h-1v1h-1v1h-2v-1h-1v1h-2v-3h-1v-1h-1v1h-1v1h1v2h-1v1h3v1h-4v2h1v-1h1v2h1v-2h3v1h1v-3h1v2h1v1h1v-1h1v-1h-1v-1h1v1h1v1h1v1h-1v1h1v3h1v-2h1v-1h-1v-1h1v1h3v-1h-1v-1h1v1h1v1h1v-2h-1v-1h-1v-1h-1v-1h1v-3h1v1h1v1h-1v2h1v2h1v-6h-1v-1h2v-1h2v-1h2v-1h3v1h-1v1h1v1h1v-3h1v-3h1v-3h1v2h1v1h1v-1h1v-1h1v1h1v1h1v1h1v1h1v-2h1v2h1v-1h1v2h1v2h1v-2h1v-1h5v1h-1v1h1v1h1v1h1v-1h2v-1h-1v-1h2v2h1v1h1v-1h1v1h-1v2h2v-2h2v1h-1v1h-1v1h-1v1h-1v2h1v2h-1v1h1v1h-1v-1h-1v2h2v1h-1v1h-1v-1h-1v-3h1v-1h-4v3h1v-2h1v3h-2v1h-1v-1h-1v1h-1v1h3v1h1v-2h2v2h1v1h-4v3h1v-2h1v1h1v-1h1v1h1v-1h1v3h3v1h1v1h-1v1h-2v-1h2v-1h-3v1h-1v1h1v1h-1v1h-1v1h-1v-1h1v-1h-1v-1h-1v1h-2v1h-1v-1h-1v-3h-1v2h-2v-1h-1v1h-1v1h-1v-1h1v-1h-2v1h-1v1h-1v-3h1v1h1v-1h1v-1h-1v-2h-1v1h-1v1h-1v-3h1v1h1v-1h2v1h1v-1h1v-1h4v-1h-1v-1h-1v1h-1v-2h-1v-1h2v1h1v-1h1v-1h1v-3h-1v1h-1v2h-4v1h-1v-1h-1v-3h-2v-1h-1v1h-2v1h-1v1h1v1h-1v-1h-1v2h1v1h-1v2h1v-1h1v-1h2v-1h-1v-2h1v-1h2v1h-2v2h1v-1h1v1h-1v1h-1v1h1v1h-1v1h-2v-1h-1v2h1v3h-1v-3h-3v2h-1v-2h-2v5h-1v1h1v1h2v1h-2v1h1v1h1v-1h1v1h-1v1h1v1h1v-1h1v1h-1v2h-2v1h1v1h-1v-1h-2v-1h-1v2h-1v1h-1v1h-1v2h-1v1h1v1h-2v5h1v-2h1v-2h1v-1h2v1h1v-2h-1v-2h1v-1h-1v-1h1v-1h1v2h3v1h-4v2h1v2h-1v2h-1v-2h-2v1h1v1h-2v1h1v1h1v1h1v1h-1v-1h-1v1h-2v-1h-1v2h2v2h1v-1h1v-1h1v1h-1v2h1v2h1v-2h1v2h-1v1h-1v-1h-1v-2h-1v1h-1v-2h-3v-1h-2v1h-3v-2h1v-2h-1v1h-2v1h1v2h-2v-1h1v-1h-4v1h-1v2h-1v1h-1v1h-1v-2h1v-1h-2v-1h-1v3h-1v2h-1v2h1v-1h1v1h-1v1h2v1h-1v1h-1v1h-1v1h1v2h1v3h1v1h-2v1h2v4h-1v1h1v1h-1v-1h-1v-1h-1v-2h-2v-1h1v-1h1v-1h-1v-1h-1v2h-1v1h-1v-1h-3v-1h1v-1h-2v-1h-1v-1h1v-1h-1v-1h-2v1h1v2h-1v-2h-1v1h-1v1h1v1h1v1h1v1h-1v-1h-1v1h-1v-1h1v-1h-1v-1h-3v1h1v1h-1v2h-1v-1h-1v-1h1v-2h-2v1h-2v1h2v1h-2v3h-2v1h1v1h-1v1h2v-2h1v3z" fill="#fff"/>
+  <path d="m86 144v-2h-2v-1h2v-1h1v-1h1v1h1v1h-2v1h1v1h1v1h-1v-1h-1v1z"/>
+  <rect y="143" x="178" height="1" width="1" fill="#fff"/>
+  <rect y="142" x="56" height="1" width="1"/>
+  <path d="m60 143v-1h1v-1h1v-1h2v1h1v-2h1v1h1v1h-2v1h-1v-1h-1v2h-1v-1h-1v1z" fill="#fff"/>
+  <path d="m90 143v-1h1v1zm60 0v-1h1v1zm-128-1v-3h2v2h-1v1z"/>
+  <path d="m27 142v-3h3v3zm24 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm9 0v-1h1v1zm19 0v-3h3v3zm23 0v-1h-1v-1h1v-1h1v1h1v1h2v1zm5 0v-3h3v3z" fill="#fff"/>
+  <path d="m172 142v-1h-1v-1h1v-1h3v1h-1v1h-1v1z"/>
+  <rect y="139" x="191" height="3" width="3" fill="#fff"/>
+  <path d="m198 142v-1h1v1zm-170-1v-1h1v1zm18 0v-1h2v1zm6 0v-1h1v1zm5 0v-1h1v1zm23 0v-1h1v1zm19 0v-1h1v1zm9 0v-1h1v1zm28 0v-1h1v1zm28 0v-1h1v1zm4 0v-1h1v1z"/>
+  <rect y="140" x="172" height="1" width="1" fill="#fff"/>
+  <path d="m192 141v-1h1v1zm-52-1v-1h2v1z"/>
+  <path d="m195 140v-2h2v-1h1v1h-1v1h-1v1zm-162-1v-1h1v1z" fill="#fff"/>
+  <path d="m75 139v-1h1v1zm23 0v-1h2v1zm29 0v-1h1v-1h1v1h-1v1z"/>
+  <rect y="138" x="133" height="1" width="1" fill="#fff"/>
+  <path d="m168 139v-1h-1v-1h-2v-1h1v-2h1v2h2v1h-1v1h2v-1h2v1h-1v1zm18 0v-2h-1v-1h-2v-1h2v1h1v1h1v2zm-163-1v-1h1v1z"/>
+  <path d="m26 138v-1h1v1zm2 0v-1h1v1z" fill="#fff"/>
+  <rect y="137" x="49" height="1" width="1"/>
+  <rect y="136" x="89" height="2" width="1" fill="#fff"/>
+  <path d="m142 138v-1h1v1zm14 0v-2h2v-2h1v-1h1v1h1v-1h2v-1h1v2h1v1h-2v1h-2v1h-1v-2h-1v2h-2v1zm17 0v-2h-2v-1h3v2h1v1z"/>
+  <path d="m61 137v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m74 137v-1h-1v-1h1v1h1v1zm20 0v-3h-1v1h-1v-1h-2v-1h3v-1h-3v-1h-1v-1h2v1h1v-2h-3v-1h-2v2h-3v1h1v2h-2v-3h1v-2h1v-1h-2v-1h4v-1h-1v-1h-1v-1h3v-3h-1v-2h-3v1h1v1h1v1h-1v-1h-1v1h-1v1h1v2h-2v-1h1v-1h-2v3h1v2h-2v3h1v1h-3v-1h-1v-1h1v-2h2v-1h1v-1h-1v-1h-1v-1h-1v1h-1v1h1v1h-1v2h-2v1h1v1h-1v-1h-3v-1h1v-1h3v-1h-2v-1h-2v-1h4v-1h1v-3h-1v1h-1v2h-2v-1h-2v1h-1v1h-2v1h1v1h-1v-1h-1v2h-1v-1h-2v1h-1v-2h-2v-1h1v-1h-1v-1h2v1h1v-1h2v-1h1v-1h2v-1h-1v-2h-1v-1h1v1h4v-1h-2v-2h1v1h1v-4h-1v1h-1v-1h1v-1h1v-1h1v-1h-1v-1h-1v2h-1v1h-1v-1h-1v2h1v3h-1v1h-1v-1h1v-2h-3v1h-1v1h2v1h-2v-1h-1v-1h-1v1h-1v-1h-2v-2h1v-2h1v1h1v-2h2v1h1v-3h-1v-3h-1v-2h-1v-1h-1v1h-1v-1h1v-1h2v2h1v1h1v-1h1v-1h2v-2h1v-1h1v3h1v-1h1v1h4v1h-4v1h4v1h1v-1h1v-1h1v1h1v1h-1v-1h-1v2h1v1h-1v-1h-2v-1h-1v1h-1v-1h-2v1h-1v-1h-1v1h-1v1h2v1h1v1h1v-1h1v-1h1v1h1v-1h1v1h-1v1h-3v1h1v2h1v-1h1v-1h1v-1h1v-1h1v1h-1v1h1v1h-1v1h2v-2h1v-1h-1v-1h1v1h1v2h1v-3h-1v-1h1v-1h1v-2h-1v1h-1v1h-1v-3h-1v-2h1v-1h-1v-1h-1v1h-1v2h-1v-3h2v-1h-1v-5h2v-1h1v-1h1v-1h1v-1h1v1h2v-1h-1v-1h1v-1h-1v-3h-1v-3h1v-1h-2v-1h1v-1h1v2h1v2h-1v1h2v1h1v-1h1v-2h-2v-1h1v-1h1v2h1v1h1v1h-1v1h-2v1h-1v-1h-1v3h1v1h-1v1h1v3h1v-1h2v-2h1v-2h-2v2h-1v-3h3v-1h1v-3h1v2h1v-3h1v2h1v1h1v1h1v2h1v-1h1v2h1v-1h1v-1h1v-1h-2v-1h-1v-3h1v-1h1v1h1v1h-1v-1h-1v2h1v1h2v1h1v-1h7v-1h-4v-1h1v-1h1v1h1v-1h1v-2h2v-1h-1v-3h2v-1h1v1h1v1h1v-2h4v2h2v-1h-1v-2h-1v-2h1v-1h1v-1h-1v-2h1v-1h1v2h-1v1h1v2h1v-5h1v-1h1v1h-1v1h3v2h2v1h-3v-2h-2v1h1v1h-1v1h2v3h1v-2h1v-1h1v1h-1v1h1v1h1v-2h1v-2h-1v-1h2v2h1v1h1v1h3v1h-1v2h-2v3h1v1h1v-2h-1v-1h2v1h1v-1h2v-1h-3v-1h1v-1h1v-1h1v-1h-1v-1h1v1h1v1h-1v1h2v-2h2v-1h1v1h1v3h1v1h-1v2h1v2h-1v-1h-1v-2h-3v-1h-1v1h-1v3h-1v1h-1v-1h-2v1h-2v-2h-2v-2h-1v1h-5v2h1v-1h1v1h-1v1h-1v1h-1v-1h-2v2h-1v2h1v3h-3v2h-1v-2h-1v-1h4v-1h-1v-4h-1v3h-1v1h-2v2h-1v1h-1v1h1v1h2v1h1v1h1v1h-1v-1h-1v1h-2v-2h-2v1h-1v1h-2v-2h-1v1h-1v2h2v1h-1v2h1v2h1v-1h2v-1h-2v-1h1v-2h1v1h2v-1h2v1h1v-1h1v1h1v1h-1v1h1v1h1v1h1v1h1v1h-1v-1h-3v1h-2v1h1v2h-1v1h-1v-1h-1v2h-2v-2h-2v2h1v2h1v1h1v1h-1v1h-1v1h1v1h-1v-1h-1v1h-2v-1h-1v4h-2v1h-1v-1h-2v1h-2v-1h-1v1h-2v-3h1v-1h-2v1h-1v1h-1v1h-3v-1h-2v-1h2v-1h-3v1h-1v-2h1v-1h1v-1h1v2h2v1h2v-1h-1v-1h1v-1h3v-1h-1v-1h-1v-1h-1v2h-1v1h-2v-1h-1v-1h-1v-1h-1v-2h1v-1h-2v2h-1v-1h-1v1h-1v1h2v1h2v1h-1v1h-1v1h-1v2h-1v1h1v1h-1v-1h-2v-1h-1v-3h-2v1h1v1h-1v1h-1v6h1v-2h1v-1h-1v-1h3v1h1v2h1v-2h1v3h1v1h-1v1h1v1h-1v1h1v1h1v1h1v-2h1v-2h-1v1h-1v-4h-1v-3h1v3h3v1h1v1h1v1h-1v-1h-1v2h3v-5h2v1h-1v4h-1v2h-1v2h1v1h1v2h-1v1h-2v-1h-1v-2h-1v-1h-3v1h2v1h1v1h-1v-1h-2v1h1v1h2v2h1v1h1v-2h2v1h-1v3h1v-2h1v2h-1v1h1v1h-1v-1h-1v-1h-1v1h-1v2z"/>
+  <path d="m114 137v-1h1v-1h-1v-2h1v2h1v2zm8 0v-1h1v1z" fill="#fff"/>
+  <rect y="136" x="150" height="1" width="1"/>
+  <path d="m43 136v-1h1v1zm-6-1v-1h1v1z" fill="#fff"/>
+  <path d="m55 135v-1h1v1zm20 0v-1h1v-1h1v-1h1v1h-1v2z"/>
+  <rect y="134" x="162" height="1" width="1" fill="#fff"/>
+  <path d="m53 134v-1h1v1zm6 0v-1h1v1z"/>
+  <path d="m68 134v-1h1v1zm2 0v-1h1v1z" fill="#fff"/>
+  <path d="m81 134v-1h-1v-1h1v1h1v1z"/>
+  <path d="m95 134v-1h1v1zm41 0v-1h1v-1h1v1h-1v1zm61 0v-1h-1v-1h1v1h1v1zm-164-1v-1h-1v-1h-1v-1h1v1h2v1h1v1z" fill="#fff"/>
+  <path d="m43 133v-1h3v1zm13 0v-1h1v-1h-1v-1h1v1h1v2zm110 0v-1h1v1z"/>
+  <path d="m172 133v-1h1v1zm-102-1v-1h1v1z" fill="#fff"/>
+  <path d="m144 132v-1h-1v-1h-1v-1h1v1h1v1h1v1z"/>
+  <rect y="131" x="178" height="1" width="1" fill="#fff"/>
+  <path d="m25 131v-1h1v1zm3 0v-1h1v1z"/>
+  <rect y="130" x="100" height="1" width="1" fill="#fff"/>
+  <path d="m118 131v-3h2v-1h-1v-1h1v1h2v1h1v1h1v-1h1v2h-3v1h-1v-1h1v-2h-1v1h-1v2z"/>
+  <path d="m152 131v-1h1v1zm-74-1v-1h1v1z" fill="#fff"/>
+  <path d="m198 130v-1h1v1zm-162-1v-1h-1v-1h1v1h1v1z"/>
+  <path d="m53 129v-1h-1v-1h2v2zm32 0v-1h1v1z" fill="#fff"/>
+  <rect y="128" x="104" height="1" width="1"/>
+  <path d="m152 129v-1h1v1zm17 0v-1h-1v-1h3v2zm15 0v-1h1v1zm-141-1v-2h1v1h1v1zm14 0v-1h1v1zm32 0v-1h1v1zm7 0v-1h1v1zm70 0v-1h-1v-1h1v1h1v1zm26 0v-1h1v1zm-169-1v-2h1v-1h1v2h-1v1z" fill="#fff"/>
+  <rect y="126" x="137" height="1" width="1"/>
+  <path d="m194 127v-1h3v-1h1v1h-1v1zm-118-1v-1h1v1zm12 0v-3h1v-1h1v1h-1v2h1v1zm8 0v-1h-1v-1h-1v-1h1v1h1v1h1v1z" fill="#fff"/>
+  <path d="m121 126v-1h3v1zm65 0v-1h-1v-1h-2v-1h2v-1h-1v-1h1v-1h-2v-1h3v2h-1v1h1v1h-1v1h1v1h1v1zm-158-1v-1h1v1z"/>
+  <path d="m65 125v-2h1v-1h1v-1h1v2h-1v1h-1v1zm68 0v-1h1v1zm8 0v-1h-1v-2h1v2h1v1z" fill="#fff"/>
+  <rect y="124" x="147" height="1" width="1"/>
+  <path d="m174 125v-1h2v-1h1v2zm-66-1v-1h1v1z" fill="#fff"/>
+  <rect y="123" x="130" height="1" width="1"/>
+  <path d="m166 124v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m191 124v-1h-1v-1h1v1h1v-1h1v1h1v1h-1v-1h-1v1z"/>
+  <path d="m69 123v-1h1v1zm10 0v-2h1v2zm17 0v-1h1v1z" fill="#fff"/>
+  <rect y="122" x="143" height="1" width="1"/>
+  <path d="m44 122v-2h2v1h-1v1z" fill="#fff"/>
+  <path d="m52 122v-1h1v1zm63 0v-1h1v1z"/>
+  <path d="m69 121v-1h2v1zm5 0v-1h-1v-1h-4v-1h3v-1h2v1h1v-1h1v-2h-1v1h-2v-2h1v1h1v-1h2v1h1v1h1v-1h2v1h1v2h1v1h1v1h-1v1h-1v-1h-4v-1h-1v-1h1v1h4v-1h-1v-1h-5v3h-1v1zm79 0v-1h-1v-2h1v1h1v2z" fill="#fff"/>
+  <path d="m191 121v-2h1v1h1v1z"/>
+  <path d="m28 120v-1h1v-1h-2v1h-2v-1h-2v-1h3v-2h1v2h2v-1h-1v-1h2v1h1v2h-1v1h-1v1z" fill="#fff"/>
+  <path d="m74 120v-1h-1v-1h1v1h1v1z"/>
+  <path d="m88 120v-2h-1v-1h-1v-2h1v2h1v1h2v1h-1v1zm43 0v-2h1v2zm-88-1v-1h2v1zm8 0v-1h3v1z" fill="#fff"/>
+  <path d="m57 119v-1h1v-1h1v1h-1v1z"/>
+  <rect y="118" x="93" height="1" width="1" fill="#fff"/>
+  <path d="m103 119v-1h-2v-1h2v1h1v1z"/>
+  <path d="m127 119v-1h-1v-1h-1v-2h-1v-2h1v-1h1v1h1v-2h1v2h1v-3h-1v-1h1v1h1v2h1v1h-1v1h-1v1h-1v-2h-1v2h-1v2h1v-1h2v2h-1v1zm44 0v-1h1v-1h1v1h2v1z" fill="#fff"/>
+  <path d="m26 118v-1h1v1zm87 0v-1h1v1zm4 0v-1h-1v-1h-2v-1h-1v-2h1v1h1v1h2v-1h1v1h-1v2h1v1z"/>
+  <path d="m164 118v-2h-1v-1h3v1h-1v2zm23 0v-1h-1v-1h-1v-1h1v-1h2v-1h2v1h-2v1h3v1h-1v2z" fill="#fff"/>
+  <path d="m36 117v-1h-1v-1h3v1h-1v1zm26 0v-1h-1v-1h1v1h2v1zm31-1v-1h1v1zm48 0v-1h1v1z"/>
+  <rect y="115" x="148" height="1" width="1" fill="#fff"/>
+  <rect y="115" x="153" height="1" width="1"/>
+  <rect y="115" x="161" height="1" width="1" fill="#fff"/>
+  <rect y="115" x="169" height="1" width="1"/>
+  <path d="m42 115v-1h1v1zm61 0v-1h1v-2h1v1h1v1h-2v1z" fill="#fff"/>
+  <path d="m120 115v-1h1v1zm5 0v-1h1v1z"/>
+  <rect y="111" x="27" height="3" width="3" fill="#fff"/>
+  <rect y="113" x="46" height="1" width="2"/>
+  <rect y="111" x="51" height="3" width="3" fill="#fff"/>
+  <rect y="113" x="57" height="1" width="1"/>
+  <path d="m79 114v-3h3v3zm19 0v-1h1v1zm9 0v-3h3v3zm28 0v-3h3v3zm20 0v-1h1v1zm8 0v-3h3v3zm28 0v-3h3v3z" fill="#fff"/>
+  <rect y="112" x="28" height="1" width="1"/>
+  <path d="m39 113v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <rect y="112" x="52" height="1" width="1"/>
+  <path d="m61 113v-1h-1v-1h1v1h1v-1h2v1h-2v1zm12 0v-2h-1v-1h2v1h1v-1h1v1h2v1h-3v1z" fill="#fff"/>
+  <path d="m80 113v-1h1v1zm28 0v-1h1v1zm28 0v-1h1v1zm28 0v-1h1v1z"/>
+  <path d="m167 113v-1h1v-1h-1v-2h-2v-1h2v1h2v1h1v2h1v1h-2v-1h-1v1zm19 0v-1h1v-1h2v1h-2v1z" fill="#fff"/>
+  <path d="m192 113v-1h1v1zm-136-1v-2h1v-1h2v1h-1v1h-1v1z"/>
+  <path d="m87 112v-4h2v-1h-2v-2h-1v1h-1v1h1v1h-2v-2h1v-1h-1v-1h1v1h1v-2h1v1h2v1h-1v1h1v1h2v2h-3v1h1v2z" fill="#fff"/>
+  <path d="m159 112v-1h-1v-1h3v1h-1v1z"/>
+  <path d="m65 111v-1h1v-2h2v-1h1v-1h-1v-1h-1v-1h-2v-1h1v-2h2v4h1v1h2v1h-1v2h-1v-1h-1v1h-1v2zm34 0v-1h1v1zm3 0v-1h1v-2h-1v-1h-1v-2h-1v-1h1v1h2v-1h-1v-1h-1v-2h-1v2h-1v1h-1v-1h1v-1h-2v-2h-1v2h-1v-1h-1v1h-1v-1h-2v2h-2v-1h1v-2h-1v1h-1v1h-3v-3h2v2h1v-4h1v2h1v1h3v-1h-2v-1h-1v-1h1v-2h-1v1h-3v1h-1v1h-1v-1h-1v4h-1v-3h-1v-1h-1v-1h-2v-1h1v-1h-1v-1h1v-1h1v1h1v1h-1v1h1v1h1v1h1v-2h-1v-1h1v-1h-1v-1h-1v-1h-1v-1h1v1h2v1h1v-1h1v1h1v3h1v-1h1v1h1v-1h1v-1h2v2h2v-1h1v1h1v-1h1v-1h-1v-1h1v1h1v-4h-1v-1h2v-1h1v-1h1v-1h2v-1h1v-1h1v1h-1v2h1v1h-1v1h2v1h3v-2h1v2h1v-3h2v-1h-3v-1h1v-2h1v-1h-1v-2h1v-1h1v-1h1v1h-1v1h1v1h-1v1h2v-1h2v-1h-2v-1h2v-1h-1v-1h-2v-1h3v-1h1v1h1v-2h1v1h1v1h-2v3h2v1h-2v-1h-2v1h1v1h3v3h-1v-1h-1v1h-2v1h1v2h-1v-2h-2v1h-1v4h2v1h-2v-1h-3v2h-2v-1h-3v1h2v1h-1v1h1v1h1v-1h1v4h1v1h-1v-1h-1v2h-1v1h1v2h1v-1h1v-1h-1v-1h2v1h1v-1h1v1h1v-1h1v-1h1v1h1v2h2v2h-1v-1h-1v1h-1v-1h-1v-1h-2v2h-1v4h2v1h-2v-1h-1v2h3v1h-1v1h-1v-1h-1v-1h-1v1h-1v-1h-2v1h-2v-1h1v-2h1v-3h-2v1h-1v1h1v2h-1v1h-1v2z" fill="#fff"/>
+  <rect y="110" x="143" height="1" width="1"/>
+  <rect y="110" x="154" height="1" width="1" fill="#fff"/>
+  <rect y="110" x="168" height="1" width="1"/>
+  <rect y="109" x="126" height="1" width="1" fill="#fff"/>
+  <path d="m184 110v-3h1v1h1v2z"/>
+  <path d="m189 110v-1h1v1zm4 0v-1h2v1z" fill="#fff"/>
+  <path d="m46 109v-1h1v1zm58 0v-1h1v-1h-2v-2h1v-1h-1v-1h1v-4h-2v1h-2v1h-2v-1h-1v-1h2v1h1v-1h1v-2h-1v1h-2v-1h-1v1h-2v2h-1v1h-1v-1h1v-1h-1v-3h-1v-1h1v1h2v1h2v-2h3v-1h1v1h-1v1h5v-3h3v2h-1v-1h-1v2h2v1h1v1h-1v3h-3v2h2v1h-1v1h-1v1h1v2h-1v1z"/>
+  <path d="m52 108v-2h-1v-1h1v1h1v2zm44 0v-1h-1v-1h-1v-1h1v-1h2v1h-1v1h1v2z" fill="#fff"/>
+  <path d="m110 108v-2h2v-1h1v2h-1v1z"/>
+  <rect y="107" x="158" height="1" width="1" fill="#fff"/>
+  <path d="m62 107v-1h1v1zm56 0v-1h1v1z"/>
+  <path d="m121 107v-1h1v1zm-90-1v-2h-1v-1h3v1h-1v2zm11 0v-2h1v2zm101 0v-1h1v1zm7 0v-2h-1v-2h1v2h1v2z" fill="#fff"/>
+  <path d="m163 106v-1h1v1zm35 0v-1h1v1zm-89-2v-1h-1v-1h2v2z"/>
+  <path d="m161 104v-3h2v-1h1v1h-1v1h-1v2z" fill="#fff"/>
+  <path d="m170 104v-1h-2v-1h1v-1h2v1h-1v1h1v1zm2 0v-2h1v2z"/>
+  <path d="m39 103v-1h1v1zm5 0v-1h1v1zm25 0v-2h1v2zm60 0v-1h1v1z" fill="#fff"/>
+  <rect y="102" x="137" height="1" width="1"/>
+  <rect y="102" x="164" height="1" width="1" fill="#fff"/>
+  <path d="m193 103v-1h-1v-1h1v-1h2v1h1v1h-1v-1h-2v1h1v1z"/>
+  <rect y="101" x="36" height="1" width="1" fill="#fff"/>
+  <path d="m112 102v-1h2v1zm6 0v-1h-1v-1h1v1h1v1z"/>
+  <path d="m187 102v-1h-1v-1h-1v-1h1v1h1v1h1v1z" fill="#fff"/>
+  <rect y="100" x="27" height="1" width="2"/>
+  <rect y="100" x="53" height="1" width="1" fill="#fff"/>
+  <rect y="100" x="124" height="1" width="1"/>
+  <path d="m81 100v-1h1v1zm24 0v-1h-1v-2h1v-1h1v1h1v3zm30 0v-1h1v1z" fill="#fff"/>
+  <path d="m64 99v-3h2v-3h1v3h-1v1h1v2h-1v-2h-1v2zm9 0v-1h-1v-1h1v-1h2v-1h-1v-4h-1v4h-1v1h-1v-2h-1v2h-1v-2h1v-1h-1v-1h1v-1h3v-2h1v2h2v1h1v1h-1v1h1v2h-1v1h-2v2zm2 0v-1h1v1zm30 0v-2h1v2z"/>
+  <path d="m121 99v-1h-2v-1h-1v-1h2v1h1v-1h2v1h1v1h-2v1zm12 0v-2h-2v-1h2v-1h1v1h1v-1h2v1h-2v1h3v1h-3v-1h-1v2z" fill="#fff"/>
+  <rect y="98" x="168" height="1" width="1"/>
+  <path d="m28 98v-1h2v1zm5 0v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m51 98v-2h1v1h1v1z"/>
+  <rect y="97" x="94" height="1" width="1" fill="#fff"/>
+  <path d="m121 98v-1h1v1zm38 0v-1h1v1zm11 0v-1h1v-1h-1v-2h-1v1h-1v-2h-1v1h-1v1h1v1h-2v-2h-1v-1h1v-2h1v-2h2v1h1v-1h2v-1h-1v-1h-2v-1h-1v2h-2v1h-2v1h-1v-1h-2v1h-1v-1h1v-1h2v-2h-1v1h-1v-1h1v-1h-1v-1h-1v1h-1v-1h-1v-2h-1v-1h1v1h2v-1h-1v-1h1v1h1v1h1v-1h1v1h5v2h2v-1h-1v-1h1v-1h2v-2h2v-1h1v-1h2v1h2v2h1v-1h1v-1h1v-2h1v1h1v1h-2v1h1v1h-1v-1h-1v1h-1v1h-2v1h1v1h-1v-1h-2v1h-1v2h1v-1h1v2h1v1h-2v1h-1v1h2v1h1v1h-2v1h-1v-1h-1v3h-2v1h4v1h-3v1h1v1h-1v-1h-1v1z"/>
+  <path d="m56 97v-2h1v2zm2 0v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m85 97v-3h1v1h1v1h-1v1z"/>
+  <path d="m98 97v-1h1v1zm30 0v-2h2v1h-1v1z" fill="#fff"/>
+  <path d="m177 97v-2h3v1h1v1h-1v-1h-1v1zm12 0v-1h1v1zm5 0v-1h1v1z"/>
+  <path d="m24 96v-1h1v1zm7 0v-3h1v-1h1v1h1v-2h1v2h1v-1h2v1h-2v1h1v1h-1v-1h-1v1h-2v-2h-1v3z" fill="#fff"/>
+  <path d="m62 96v-5h1v5zm92 0v-1h1v1z"/>
+  <path d="m43 95v-1h1v-1h-3v-1h3v-1h2v1h-2v1h1v2z" fill="#fff"/>
+  <path d="m64 95v-1h1v1zm39 0v-2h1v2z"/>
+  <rect y="94" x="119" height="1" width="2" fill="#fff"/>
+  <rect y="93" x="80" height="1" width="1"/>
+  <path d="m128 94v-1h1v1zm3 0v-1h-1v-1h-2v-1h2v1h1v1h1v1z" fill="#fff"/>
+  <path d="m144 94v-1h1v1zm5 0v-1h-1v-1h-1v1h-1v-3h1v1h1v-1h1v-1h-1v-1h1v1h1v1h1v1h-1v-1h-1v3h1v1zm-127-1v-1h1v1z"/>
+  <path d="m26 93v-3h1v1h2v1h-1v1zm25 0v-1h-1v-1h-1v-1h1v1h1v1h2v1z" fill="#fff"/>
+  <rect y="92" x="64" height="1" width="1"/>
+  <path d="m70 93v-1h1v1zm5 0v-1h1v1z" fill="#fff"/>
+  <rect y="92" x="85" height="1" width="1"/>
+  <rect y="92" x="94" height="1" width="2" fill="#fff"/>
+  <path d="m101 93v-1h1v-1h-1v-1h-1v-2h1v-1h1v2h1v-1h2v1h-2v1h-1v1h2v1h-2v1z"/>
+  <path d="m166 93v-1h1v1zm2 0v-2h-1v-1h1v1h1v-1h2v-1h1v1h1v1h-2v1h1v1h-2v-1h-1v1zm-114-1v-1h-2v-1h2v1h1v1z" fill="#fff"/>
+  <rect y="91" x="59" height="1" width="1"/>
+  <path d="m88 92v-2h2v-1h1v-2h1v-1h2v-2h-1v1h-2v-1h1v-1h2v1h1v-1h2v2h-2v2h-3v4h-3v1z" fill="#fff"/>
+  <rect y="91" x="106" height="1" width="1"/>
+  <path d="m125 92v-1h1v-1h1v1h-1v1zm7 0v-1h1v1z" fill="#fff"/>
+  <path d="m138 92v-1h1v1zm2 0v-1h1v1z"/>
+  <path d="m37 91v-2h1v1h1v1z" fill="#fff"/>
+  <rect y="89" x="64" height="2" width="1"/>
+  <path d="m93 91v-1h1v-1h2v1h1v1h-1v-1h-2v1zm27 0v-1h1v1z" fill="#fff"/>
+  <path d="m143 91v-1h-4v-2h3v-1h1v-1h1v-1h1v1h-1v3h1v1h-1v1zm35 0v-1h1v1z"/>
+  <path d="m23 90v-1h1v1zm60 0v-1h1v1z" fill="#fff"/>
+  <path d="m106 90v-1h1v1zm4 0v-1h1v1z"/>
+  <path d="m143 90v-1h-1v-1h1v1h1v1zm-116-1v-2h2v1h-1v1z" fill="#fff"/>
+  <rect y="88" x="189" height="1" width="1"/>
+  <path d="m192 89v-2h3v1h-2v1zm4 0v-1h1v1zm-166-1v-1h1v1z" fill="#fff"/>
+  <path d="m46 88v-2h2v1h-1v1zm27 0v-2h1v-1h1v1h-1v2zm40 0v-1h1v1zm42 0v-1h2v1z"/>
+  <path d="m163 88v-1h2v1zm8 0v-1h-1v-1h-1v-2h1v-2h1v-1h2v-1h1v-2h1v1h2v2h-3v2h-2v-1h-1v3h-1v1h3v1h1v1h-1v-1h-1v1z" fill="#fff"/>
+  <rect y="86" x="68" height="1" width="2"/>
+  <rect y="86" x="96" height="1" width="3" fill="#fff"/>
+  <rect y="86" x="104" height="1" width="1"/>
+  <rect y="86" x="116" height="1" width="1" fill="#fff"/>
+  <rect y="86" x="178" height="1" width="1"/>
+  <rect y="83" x="27" height="3" width="3" fill="#fff"/>
+  <path d="m39 86v-3h1v1h3v1h-2v1z"/>
+  <path d="m51 86v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm6 0v-1h1v1z" fill="#fff"/>
+  <path d="m28 85v-1h1v1zm24 0v-1h1v1z"/>
+  <rect y="84" x="57" height="1" width="1" fill="#fff"/>
+  <path d="m80 85v-1h1v1zm28 0v-1h1v1zm19 0v-2h1v-1h-1v-1h1v1h1v1h-1v2zm5 0v-1h1v1zm4 0v-1h1v1z"/>
+  <rect y="83" x="161" height="2" width="1" fill="#fff"/>
+  <rect y="84" x="164" height="1" width="1"/>
+  <rect y="84" x="184" height="1" width="1" fill="#fff"/>
+  <path d="m192 85v-1h1v1zm-77-1v-1h-1v-1h2v-1h1v1h1v-1h2v1h-2v1h-2v1z"/>
+  <rect y="83" x="158" height="1" width="1" fill="#fff"/>
+  <rect y="82" x="22" height="1" width="2"/>
+  <path d="m49 83v-1h1v1zm22 0v-1h1v1z" fill="#fff"/>
+  <path d="m76 83v-1h-1v-1h1v1h1v1z"/>
+  <rect y="81" x="28" height="1" width="1" fill="#fff"/>
+  <path d="m144 82v-1h1v1zm-120-1v-1h-2v-1h1v-1h-1v-2h2v-1h-2v-3h2v3h2v3h-2v2h1v-1h2v1h-1v1z"/>
+  <path d="m71 81v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m137 81v-1h1v1zm51 0v-1h1v1zm-150-1v-1h1v1z"/>
+  <path d="m45 80v-1h-1v-1h1v-1h1v-1h1v-1h-1v-1h1v1h1v1h-1v1h1v1h1v-3h1v-2h-1v1h-1v-1h1v-1h1v1h1v-2h1v1h1v2h-1v-1h-1v2h-1v3h-1v1h-3v1z" fill="#fff"/>
+  <rect y="78" x="98" height="2" width="1"/>
+  <path d="m124 80v-2h-1v-1h-1v-1h1v-1h2v-3h-1v-1h-1v-1h1v-1h1v1h3v2h-1v-1h-2v1h1v1h2v1h1v-1h1v-1h1v1h1v1h-1v1h-3v-1h-2v1h1v1h1v2h1v1h-1v-1h-1v-1h-1v1h-1v2zm-72-1v-1h1v1zm18 0v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m96 79v-1h1v1zm-50-1v-1h1v1z"/>
+  <path d="m66 78v-1h-1v-2h1v-1h1v1h1v-1h1v4h-1v-1h-1v1zm7 0v-1h1v1z" fill="#fff"/>
+  <path d="m124 78v-1h1v1zm20 0v-1h1v1z"/>
+  <path d="m155 78v-1h1v1zm12 0v-1h2v1z" fill="#fff"/>
+  <rect y="77" x="194" height="1" width="1"/>
+  <rect y="76" x="24" height="1" width="1" fill="#fff"/>
+  <path d="m40 77v-1h1v-3h1v-1h1v1h1v1h-1v2h-1v1z"/>
+  <rect y="76" x="51" height="1" width="1" fill="#fff"/>
+  <path d="m66 77v-1h1v1zm52 0v-1h1v1zm-86-1v-1h2v1z"/>
+  <path d="m96 76v-1h1v1zm69 0v-1h2v-1h1v1h1v1h-1v-1h-1v1zm-84-1v-1h1v1zm5 0v-2h1v2zm47 0v-2h1v2zm2 0v-2h1v-1h-1v-1h-1v-1h1v1h2v1h1v1h-2v2z" fill="#fff"/>
+  <rect y="74" x="188" height="1" width="1"/>
+  <path d="m115 74v-1h1v1zm28 0v-1h-1v-1h1v1h1v1zm2 0v-2h2v-1h1v2h1v1zm40 0v-1h1v1z" fill="#fff"/>
+  <path d="m99 73v-2h-1v-1h-1v-2h-1v-1h1v-1h1v3h3v-1h1v1h-1v1h-1v1h1v1h-1v1zm-19-1v-2h4v-1h1v2h-3v1z"/>
+  <path d="m161 72v-1h2v-1h-1v-1h3v2h-1v1z" fill="#fff"/>
+  <path d="m44 71v-1h1v1zm10 0v-2h1v-1h1v1h-1v2zm37 0v-1h-1v-1h1v-1h1v1h-1v1h1v1zm14 0v-1h1v1zm10 0v-2h2v-1h1v2h1v1h-2v-1h-1v1zm65 0v-1h1v1z"/>
+  <path d="m36 70v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <path d="m68 70v-2h1v2zm27 0v-1h-2v-3h2v1h-1v1h1v1h1v1z"/>
+  <path d="m109 70v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <path d="m138 70v-1h2v-2h1v3zm-92-1v-2h-1v-1h-1v-1h1v-2h-1v-1h1v1h1v-1h1v1h-1v4h1v-1h1v-1h1v2h1v1h1v-1h1v1h-1v1h-2v-2h-2v2zm15 0v-1h1v1zm19 0v-1h1v1z"/>
+  <path d="m153 69v-2h-2v-1h-1v-1h-1v-1h3v-1h-1v-1h4v1h-1v2h-1v1h1v3zm33 0v-1h1v1z" fill="#fff"/>
+  <path d="m53 68v-2h-2v-1h-1v-1h1v-1h1v-3h2v2h-1v1h-1v2h1v-1h1v1h1v1h1v1h-2v1z"/>
+  <rect y="67" x="72" height="1" width="1" fill="#fff"/>
+  <rect y="67" x="138" height="1" width="1"/>
+  <rect y="67" x="149" height="1" width="1" fill="#fff"/>
+  <path d="m33 67v-2h-1v-1h1v-1h1v-1h1v-1h1v-1h-1v-2h2v2h2v1h-3v1h-1v1h-1v1h1v2h-1v1z"/>
+  <rect y="66" x="59" height="1" width="1" fill="#fff"/>
+  <path d="m91 67v-1h1v1zm10 0v-1h1v-1h1v1h1v1zm4 0v-1h1v1zm3 0v-1h1v1zm5 0v-1h1v1zm62 0v-1h-1v-1h1v-1h1v2h1v1z"/>
+  <path d="m179 67v-1h1v-1h-1v-1h1v-1h1v-1h1v1h1v2h-2v1h-1v1z" fill="#fff"/>
+  <rect y="65" x="36" height="1" width="1"/>
+  <path d="m41 66v-1h1v1zm12 0v-1h1v1z" fill="#fff"/>
+  <path d="m82 66v-2h-1v-1h1v1h1v2z"/>
+  <path d="m117 66v-1h1v-2h2v2h1v1h-1v-1h-2v1z" fill="#fff"/>
+  <path d="m151 66v-1h1v1zm10 0v-1h1v1z"/>
+  <path d="m184 66v-2h1v2zm-117-1v-1h1v1zm4 0v-1h-2v-4h2v1h1v-1h1v1h-1v1h-1v2h1v1z" fill="#fff"/>
+  <path d="m91 65v-2h1v-1h2v-2h1v2h1v1h-3v1h-1v1zm55 0v-3h1v3zm-82-1v-1h-2v-1h2v-1h1v1h-1v1h1v1z"/>
+  <path d="m134 64v-1h-2v-1h2v1h1v1zm31 0v-1h2v1zm3 0v-1h1v1z" fill="#fff"/>
+  <rect y="62" x="28" height="1" width="1"/>
+  <rect y="62" x="67" height="1" width="1" fill="#fff"/>
+  <rect y="62" x="84" height="1" width="1"/>
+  <path d="m130 63v-2h-1v-1h2v3zm12 0v-1h1v1zm7 0v-1h1v1z" fill="#fff"/>
+  <path d="m187 63v-1h-1v-1h2v1h1v1zm-117-1v-1h1v1zm9 0v-1h1v1zm25 0v-1h-1v-2h3v1h-2v1h1v1z"/>
+  <path d="m121 62v-2h1v2zm4 0v-1h1v-1h1v-1h1v-1h1v-1h-1v-2h-1v-1h3v1h1v1h1v-1h1v2h-2v-1h-1v2h1v1h-1v-1h-1v1h-1v1h-1v1h-1v1z" fill="#fff"/>
+  <path d="m193 62v-1h-1v-1h1v1h1v1zm-46-1v-1h1v1z"/>
+  <path d="m153 61v-2h-2v-1h-1v-3h-1v-1h-4v1h3v2h1v1h-4v1h-1v-1h-1v1h-1v-1h1v-2h1v2h1v-3h-1v-1h-1v-1h1v-3h1v3h1v-2h2v1h-1v1h2v-2h2v3h-1v1h1v1h1v2h3v-1h1v1h1v1h1v1h-1v1h-2v-1h1v-1h-2v2zm-104-1v-1h1v1zm18 0v-1h1v1zm16 0v-1h1v1zm8 0v-1h-1v-1h1v1h1v1zm6 0v-1h3v1zm36 0v-1h1v1z" fill="#fff"/>
+  <path d="m175 59v-1h-1v-1h1v-1h2v1h-1v2zm2 0v-1h1v1z"/>
+  <rect y="55" x="27" height="3" width="3" fill="#fff"/>
+  <rect y="57" x="33" height="1" width="1"/>
+  <path d="m49 58v-1h1v1zm2 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm4 0v-3h1v1h1v1h-1v1z" fill="#fff"/>
+  <path d="m120 58v-1h1v1zm2 0v-1h1v-1h-1v-1h-2v-1h-1v-1h1v-1h1v1h-1v1h3v-1h1v1h-1v2h1v-1h1v2h-2v1z"/>
+  <path d="m135 58v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3z" fill="#fff"/>
+  <path d="m196 58v-1h1v1zm-168-1v-1h1v1zm24 0v-1h1v1zm21 0v-1h1v1zm7 0v-1h1v1zm4 0v-1h1v1zm24 0v-1h1v1zm28 0v-1h1v1zm28 0v-1h1v1z"/>
+  <rect y="56" x="184" height="1" width="1" fill="#fff"/>
+  <rect y="56" x="192" height="1" width="1"/>
+  <rect y="55" x="48" height="1" width="2" fill="#fff"/>
+  <rect y="55" x="104" height="1" width="1"/>
+  <path d="m116 56v-1h-1v-1h-1v-2h3v2h-1v1h1v1z" fill="#fff"/>
+  <path d="m58 55v-1h1v-2h-4v1h-1v-1h-2v-1h2v-4h1v2h1v1h-1v1h2v-1h2v-1h-1v-1h2v-1h-4v-1h3v-1h1v1h1v-2h-1v-1h-3v-1h4v1h1v-1h2v-3h1v-1h2v1h-2v4h-2v2h2v-1h3v-2h-1v1h-1v-3h1v1h1v-1h2v1h-2v1h1v1h1v1h-2v1h1v1h-1v1h2v2h1v-1h1v1h-1v1h1v1h-2v-1h-1v-1h-1v2h-1v-1h-1v-1h-1v-1h-2v1h1v1h1v1h-1v-1h-1v1h-1v-3h1v-3h-1v2h-1v1h-1v1h1v1h-2v2h1v-1h1v1h2v1h1v1h1v1h-2v-1h-1v1h-2v-1h-1v1z"/>
+  <path d="m61 54v-1h1v1zm17 0v-1h1v-1h2v2z" fill="#fff"/>
+  <path d="m115 54v-1h1v1zm29 0v-1h1v1zm5 0v-1h1v1z"/>
+  <path d="m193 54v-1h-1v-1h1v-1h1v1h3v1h-2v1zm-152-1v-1h1v-1h1v1h-1v1z" fill="#fff"/>
+  <rect y="52" x="65" height="1" width="2"/>
+  <path d="m98 53v-1h-1v-2h1v2h1v-1h1v1h-1v1z" fill="#fff"/>
+  <rect y="52" x="108" height="1" width="1"/>
+  <rect y="52" x="127" height="1" width="1" fill="#fff"/>
+  <path d="m188 53v-1h-1v-2h-1v-1h-1v1h-1v-1h1v-1h-1v-1h1v1h1v-1h1v-1h-1v-1h-1v-1h1v-1h1v1h-1v1h1v1h2v1h1v1h-1v1h1v1h-1v1h1v1h-1v1zm-138-1v-1h-1v-1h1v1h1v1z"/>
+  <path d="m54 52v-1h1v1zm28 0v-1h-2v-1h2v-1h1v-2h-1v-2h-1v-1h2v-1h-1v-1h-2v-1h1v-1h1v-1h-1v-1h-2v-1h-1v-1h2v1h1v1h4v-2h-1v-1h1v-1h2v1h1v-1h1v-1h1v1h1v1h-1v1h1v1h-1v2h-1v1h1v1h1v1h1v1h-1v-1h-1v1h-1v-3h-1v1h-1v1h-2v1h1v1h1v-1h1v1h3v1h1v1h-1v-1h-5v3h-1v1h-1v1h1v1h-2v1z" fill="#fff"/>
+  <path d="m103 52v-2h1v-2h1v-1h1v2h-1v1h-1v2zm19 0v-2h1v-2h1v2h-1v2zm35 0v-1h1v1z"/>
+  <path d="m188 52v-1h1v1zm-143-1v-1h-1v-1h-1v1h-2v-2h1v1h1v-1h1v-1h2v2h1v2z" fill="#fff"/>
+  <path d="m82 51v-1h1v1zm28 0v-1h1v1z"/>
+  <path d="m113 51v-2h1v2zm48 0v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <path d="m45 50v-1h-1v-1h1v1h1v1zm92 0v-1h1v1z"/>
+  <path d="m187 50v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <path d="m28 49v-1h1v-1h-1v-1h2v1h1v1h-2v1z"/>
+  <rect y="48" x="67" height="1" width="1" fill="#fff"/>
+  <rect y="48" x="95" height="1" width="1"/>
+  <path d="m196 49v-1h1v1zm-173-1v-2h1v-1h1v1h-1v2zm14 0v-2h1v1h1v1z" fill="#fff"/>
+  <path d="m52 48v-1h-1v-1h-1v-1h1v-1h1v-1h2v2h1v-2h1v2h-1v1h-1v-1h-3v1h1v1h1v1z"/>
+  <path d="m65 48v-1h1v-2h1v2h-1v1zm22 0v-1h1v1zm24 0v-5h-2v-1h1v-2h-3v-1h-5v-2h1v-1h1v-1h1v1h1v1h-1v-1h-1v2h3v1h4v-1h-1v-1h-1v1h-1v-1h1v-2h1v1h1v1h1v-1h1v1h1v1h-1v1h2v2h1v-1h1v1h-1v1h-4v5h1v1zm3 0v-2h-1v-2h1v1h1v3z" fill="#fff"/>
+  <path d="m129 48v-2h2v-1h-1v-2h1v-1h1v-2h2v2h-2v1h-1v2h1v3z"/>
+  <rect y="46" x="135" height="2" width="1" fill="#fff"/>
+  <path d="m169 48v-1h-1v-1h1v1h1v1z"/>
+  <rect y="47" x="188" height="1" width="1" fill="#fff"/>
+  <path d="m33 47v-1h1v1zm50 0v-3h1v-1h1v1h1v1h-1v1h-1v1z"/>
+  <rect y="46" x="154" height="1" width="1" fill="#fff"/>
+  <path d="m194 47v-1h1v1zm-166-2v-1h1v1z"/>
+  <rect y="44" x="46" height="1" width="1" fill="#fff"/>
+  <rect y="44" x="57" height="1" width="1"/>
+  <path d="m72 45v-1h1v1zm7 0v-1h1v1z" fill="#fff"/>
+  <path d="m119 45v-1h1v1zm41 0v-1h1v1zm20 0v-1h1v1zm13 0v-1h1v1z"/>
+  <path d="m93 44v-1h1v1zm12 0v-1h1v1zm18 0v-1h1v1zm32 0v-1h-3v-1h3v-1h1v1h1v2z" fill="#fff"/>
+  <path d="m189 44v-1h-1v-1h-2v-1h-1v-1h-1v-1h1v-1h1v-1h1v-1h1v2h-2v1h1v1h1v1h1v-2h1v1h1v2h-1v-1h-1v2h1v1z"/>
+  <rect y="43" x="197" height="1" width="1" fill="#fff"/>
+  <rect y="42" x="27" height="1" width="2"/>
+  <rect y="42" x="39" height="1" width="1" fill="#fff"/>
+  <path d="m75 43v-1h-2v-1h2v1h1v1zm2 0v-1h1v1zm66 0v-1h1v1z"/>
+  <rect y="42" x="182" height="1" width="1" fill="#fff"/>
+  <path d="m53 42v-1h3v1zm30 0v-1h1v1zm12 0v-2h1v2zm79 0v-1h1v-1h1v1h-1v1zm-146-1v-1h1v1z"/>
+  <path d="m39 41v-2h-1v-3h1v-1h1v1h-1v1h1v1h1v2h-1v1z" fill="#fff"/>
+  <path d="m61 41v-1h-1v-2h1v1h1v-1h1v-1h1v1h-1v3zm24 0v-2h1v-2h2v-1h2v1h-2v1h1v1h-1v-1h-1v1h-1v2zm8 0v-1h1v1z"/>
+  <path d="m100 41v-1h-1v-1h2v1h1v1z" fill="#fff"/>
+  <path d="m111 41v-1h1v-1h1v1h-1v1z"/>
+  <path d="m186 41v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <path d="m83 40v-1h1v1zm99 0v-1h-2v-1h2v-1h1v1h-1v1h1v1zm-143-1v-1h1v1z"/>
+  <path d="m46 39v-1h1v1zm5 0v-2h1v2zm-19-1v-1h1v1zm2 0v-1h2v1zm97 0v-1h1v-1h-1v-1h1v1h1v1h-1v1zm66 0v-1h1v1zm-139-1v-2h1v2zm94 0v-1h-1v-2h-1v-1h-1v1h-1v-3h1v-1h-1v-1h-1v1h-1v-1h1v-1h-1v-1h2v2h1v-1h1v1h1v1h4v-1h1v1h-1v1h-1v1h-1v2h2v1h-1v2zm-70-1v-1h1v1z" fill="#fff"/>
+  <path d="m189 36v-1h-2v-1h-1v-1h1v-3h-1v-1h1v1h2v1h1v1h-1v1h-1v1h1v1h1v1z"/>
+  <rect y="34" x="23" height="1" width="1" fill="#fff"/>
+  <path d="m53 35v-1h1v1zm66 0v-1h-2v-1h2v1h1v1z"/>
+  <path d="m142 35v-1h1v1zm14 0v-1h1v1zm-128-1v-1h1v1zm11 0v-1h-1v-1h2v2z" fill="#fff"/>
+  <rect y="33" x="72" height="1" width="1"/>
+  <path d="m194 34v-3h1v1h1v1h-1v1zm-148-1v-1h1v-1h-1v-2h-2v2h-2v-3h-1v2h-1v-3h2v-1h-3v2h-1v1h1v2h-1v-2h-1v3h-2v-1h-1v-3h-1v-1h-1v-2h-1v-1h1v-1h2v3h-1v1h1v1h1v-3h2v-1h1v-1h1v2h1v-1h1v-1h2v2h2v1h1v-1h1v2h2v1h1v2h-2v2h-1v1z" fill="#fff"/>
+  <path d="m59 33v-1h-1v-1h3v2z"/>
+  <rect y="32" x="86" height="1" width="1" fill="#fff"/>
+  <path d="m150 33v-1h-1v-1h1v-1h-1v-1h1v1h1v1h-1v1h1v1z"/>
+  <path d="m192 33v-1h1v1zm-141-1v-1h1v1z" fill="#fff"/>
+  <rect y="31" x="71" height="1" width="1"/>
+  <path d="m128 32v-5h-1v-2h1v1h1v1h1v1h-1v2h1v-1h1v-2h1v1h2v1h-2v1h-1v1h-2v1z" fill="#fff"/>
+  <rect y="31" x="152" height="1" width="1"/>
+  <rect y="31" x="188" height="1" width="1" fill="#fff"/>
+  <path d="m23 31v-1h1v1zm4 0v-1h3v-1h1v2zm8 0v-2h1v-1h1v1h-1v2z"/>
+  <rect y="30" x="55" height="1" width="1" fill="#fff"/>
+  <path d="m47 30v-2h2v1h-1v1z"/>
+  <rect y="27" x="51" height="3" width="3" fill="#fff"/>
+  <path d="m58 30v-2h1v-1h2v1h-1v2z"/>
+  <path d="m79 30v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm28 0v-3h3v3zm4 0v-2h1v2z" fill="#fff"/>
+  <path d="m198 30v-1h1v1zm-176-1v-7h7v7zm30 0v-1h1v1zm28 0v-1h1v1zm28 0v-1h1v1z"/>
+  <path d="m122 29v-1h-1v-1h2v2z" fill="#fff"/>
+  <rect y="28" x="136" height="1" width="1"/>
+  <path d="m152 29v-1h-1v-1h1v1h1v1z" fill="#fff"/>
+  <path d="m164 29v-1h1v1zm13 0v-1h1v-2h3v1h-1v1h1v1h-1v-1h-1v1zm15 0v-1h1v1z"/>
+  <rect y="23" x="23" height="5" width="5" fill="#fff"/>
+  <path d="m42 28v-1h1v-1h-1v-1h-1v-1h1v1h1v1h1v1h-1v1z"/>
+  <path d="m63 28v-1h1v1zm14 0v-1h1v1zm81 0v-1h1v1z" fill="#fff"/>
+  <path d="m186 28v-1h1v1zm12 0v-1h1v1zm-174-1v-3h3v3zm13 0v-1h1v1z"/>
+  <path d="m73 27v-1h1v1zm11 0v-1h1v1zm27 0v-2h1v2z" fill="#fff"/>
+  <path d="m176 27v-1h-2v-1h2v-1h1v-1h-2v-1h2v1h1v-1h4v2h-1v-1h-1v2h-4v1h1v1zm12 0v-1h1v1z"/>
+  <path d="m51 26v-1h1v1zm3 0v-1h2v1z" fill="#fff"/>
+  <path d="m69 26v-4h2v1h1v2h-2v1z"/>
+  <path d="m96 26v-1h1v1zm13 0v-1h1v1zm22 0v-1h1v1z" fill="#fff"/>
+  <rect y="25" x="144" height="1" width="1"/>
+  <rect y="24" x="104" height="1" width="1" fill="#fff"/>
+  <rect y="24" x="187" height="1" width="1"/>
+  <rect y="23" x="54" height="1" width="1" fill="#fff"/>
+  <path d="m66 24v-1h1v-1h1v2zm23 0v-1h-1v-1h2v2z"/>
+  <path d="m102 24v-1h1v1zm6 0v-1h1v1zm10 0v-1h1v1zm2 0v-1h1v1z" fill="#fff"/>
+  <path d="m171 24v-1h2v-1h1v2z"/>
+  <rect y="23" x="178" height="1" width="1" fill="#fff"/>
+  <path d="m46 23v-1h1v1zm27 0v-1h1v1zm56 0v-1h1v1zm39 0v-1h1v1z"/>
+ </g>
+</svg></div></section>
+
+    <section class="bottom-info-section">
+      <div class="dyk-title">Do you know?</div>
+      <p class="info-para">IR recovers only 57% of cost of travel on an average.</p>
+      <p class="info-para">This ticket is booked on a personal user ID. It's sale/purchase is an offence u/s 143 of the Railways Act, 1989.</p>
+      <p class="info-para">For enquiry and integrated railway helpline, please dial 139.</p>
+    </section>
+
+    <section class="feedback-section">
+      <div class="feedback-title">How was your ticket booking experience?</div>
+      <div class="rating-label">Rate your experience</div>
+      <div class="star-row" id="star-row"></div>
+      <div class="desc-box-wrap">
+        <textarea class="desc-textarea" id="feedback-text" maxlength="300" placeholder="Describe your experience (optional)"></textarea>
+        <span class="char-counter" id="char-counter">0/300</span>
+      </div>
+      <button class="submit-btn" id="submit-btn" type="button">Submit Feedback</button>
+    </section>
+  </div>
+
+  <div class="save-toast" id="toast">Saved</div>
+
+  <script>
+    // Countdown: 05:00 down to 00:00 (matches 300s progress bar)
+    let remaining = 300;
+    function setupDigitTracks() {
+      ['t0', 't1', 't2', 't3'].forEach(id => {
+        const track = document.getElementById(id);
+        track.innerHTML = '';
+        for (let n = 0; n <= 9; n++) {
+          const sp = document.createElement('span');
+          sp.textContent = n;
+          track.appendChild(sp);
+        }
+      });
+    }
+
+    function renderTimer() {
+      const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const s = String(remaining % 60).padStart(2, '0');
+      const digits = [m[0], m[1], s[0], s[1]];
+      ['t0', 't1', 't2', 't3'].forEach((id, i) => {
+        const d = Number(digits[i]); document.getElementById(id).style.transform = 'translateY(' + (-d * 52) + 'px)';
+      });
+    }
+    setupDigitTracks();
+    renderTimer();
+    const timerId = setInterval(() => {
+      if (remaining > 0) { remaining--; renderTimer(); }
+      else { clearInterval(timerId); }
+    }, 1000);
+
+    // Back button
+    function handleBackAction() {
+      if (window.history.length > 1) window.history.back();
+    }
+
+    // Double-tap band to toggle color
+    let bandAlt = false;
+    function toggleBandColor() {
+      bandAlt = !bandAlt;
+      const color = bandAlt ? '#0A66FF' : '#47BAE9';
+      document.getElementById('band-top').style.backgroundColor = color;
+      document.getElementById('band-bottom').style.backgroundColor = color;
+    }
+
+    // Double-tap editable fields
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
+    }
+
+    document.querySelectorAll('[data-editable]').forEach(el => {
+      el.addEventListener('dblclick', () => {
+        el.contentEditable = 'true';
+        el.classList.add('editing-active');
+        el.focus();
+      });
+      el.addEventListener('blur', () => {
+        el.contentEditable = 'false';
+        el.classList.remove('editing-active');
+        showToast('Saved');
+      });
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+      });
+    });
+
+    // Star rating
+    const starRow = document.getElementById('star-row');
+    const submitBtn = document.getElementById('submit-btn');
+    let rating = 0;
+    for (let i = 1; i <= 5; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'star-btn';
+      btn.setAttribute('aria-label', i + ' star');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>';
+      btn.addEventListener('click', () => {
+        rating = i;
+        starRow.querySelectorAll('.star-btn').forEach((b, idx) => b.classList.toggle('active', idx < i));
+        updateSubmit();
+      });
+      starRow.appendChild(btn);
+    }
+
+    // Feedback text counter
+    const feedbackText = document.getElementById('feedback-text');
+    const counter = document.getElementById('char-counter');
+    feedbackText.addEventListener('input', () => {
+      counter.textContent = feedbackText.value.length + '/300';
+      updateSubmit();
+    });
+
+    function updateSubmit() {
+      submitBtn.classList.toggle('ready', rating > 0);
+    }
+
+    submitBtn.addEventListener('click', () => {
+      if (rating === 0) return;
+      showToast('Thank you for your feedback');
+    });
+  </script>
+</body>
+</html>

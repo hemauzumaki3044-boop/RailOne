@@ -294,3 +294,126 @@
   background-size: 200% 100%;
   animation: railone-shimmer 1.35s ease-in-out infinite;
 }
+
+/* Upcoming Booking Details (matched to original RailOne screenshots) */
+.railone-td-root {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.railone-td-header {
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 13px;
+}
+
+.railone-td-sec-box {
+  background-color: #111215;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='67.2' viewBox='0 0 48 67.2' preserveAspectRatio='none'%3E%3Crect width='48' height='67.2' fill='%231B1E23'/%3E%3Cpolygon points='24,0 48,33.6 24,67.2 0,33.6' fill='%23101114'/%3E%3C/svg%3E");
+  background-size: 12.5% 67.2px;
+  background-repeat: repeat;
+}
+
+.railone-td-strip-left::after,
+.railone-td-strip-right::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 1.5px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.78) 0px,
+    rgba(255, 255, 255, 0.78) 10px,
+    transparent 10px,
+    transparent 15px
+  );
+}
+
+.railone-td-strip-left::after {
+  right: 0;
+}
+
+.railone-td-strip-right::before {
+  left: 0;
+}
+
+.railone-td-vertical-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+@keyframes railone-odo-roll-down {
+  0% {
+    transform: translateY(-46px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.railone-odo-slot {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000000 14%,
+    #000000 86%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000000 14%,
+    #000000 86%,
+    transparent 100%
+  );
+}
+
+.railone-odo-track-anim {
+  animation: railone-odo-roll-down 460ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+@keyframes railone-fill-accent-bar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.railone-td-accent-fill {
+  width: 0%;
+  height: 100%;
+  animation: railone-fill-accent-bar 300s linear forwards;
+}
+
+.railone-td-editing-active {
+  outline: 2px solid #0a66ff;
+  background-color: rgba(10, 102, 255, 0.12) !important;
+  padding: 2px 6px;
+  color: #111827 !important;
+  border-radius: 4px;
+}
+
+.railone-td-qr-box canvas,
+.railone-td-qr-box img {
+  width: 272px !important;
+  height: 272px !important;
+  display: block;
+}
+
+@keyframes railone-notif-drop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -24px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.railone-notif-banner {
+  animation: railone-notif-drop 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+

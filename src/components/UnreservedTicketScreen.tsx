@@ -1,8 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { logDashboardAction } from '../firebase';
+import {
+  getCachedBookings,
+  logDashboardAction,
+  saveBookingsToFirebase,
+  TICKET_VALIDITY_MS,
+  type BookingTicket,
+} from '../firebase';
+import {
+  buildTicketNotificationBody,
+  generateTicketReferenceId,
+  requestBookingNotificationPermission,
+  sendTicketBookedNotification,
+} from '../utils/notifications';
 
 interface UnreservedTicketScreenProps {
   onClose: () => void;
+  onTicketBooked?: (fallbackMessage: string | null) => void;
 }
 
 type TicketCategory = 'normal' | 'season';
@@ -25,7 +38,32 @@ function InfoCircleIcon({ active }: { active: boolean }) {
   );
 }
 
-export function UnreservedTicketScreen({ onClose }: UnreservedTicketScreenProps) {
+function generateUtsTicketId(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
+  let suffix = '';
+  for (let i = 0; i < 8; i += 1) {
+    suffix += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return `XA${suffix}`;
+}
+
+function formatDateLabel(ms: number): string {
+  const d = new Date(ms);
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${days[d.getDay()]}, ${d.getDate()} ${mons[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`;
+}
+
+function formatStamp(ms: number): string {
+  const d = new Date(ms);
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+export function UnreservedTicketScreen({
+  onClose,
+  onTicketBooked,
+}: UnreservedTicketScreenProps) {
   const [ticketType, setTicketType] = useState<TicketCategory>('normal');
   const [stationMode, setStationMode] = useState<StationMode>('outside');
   const [fromStation, setFromStation] = useState('');
@@ -61,10 +99,47 @@ export function UnreservedTicketScreen({ onClose }: UnreservedTicketScreenProps)
     logDashboardAction('unreserved:swap');
   }, [fromStation, toStation]);
 
-  const handleProceed = useCallback(() => {
-    const meta = `${ticketType}|${stationMode}|${fromStation.trim() || '-'}->${toStation.trim() || '-'}`;
+  const handleProceed = useCallback(async () => {
+    const src = fromStation.trim().toUpperCase();
+    const dst = toStation.trim().toUpperCase();
+    const meta = `${ticketType}|${stationMode}|${src || '-'}->${dst || '-'}`;
+
+    if (src && dst) {
+      await requestBookingNotificationPermission();
+      const now = Date.now();
+      const refId = generateTicketReferenceId();
+      const utsId = generateUtsTicketId();
+
+      runAction('unreserved:proceed-to-book', meta, () => {
+        const created: BookingTicket = {
+          id: utsId,
+          uid: `${utsId}-${now}`,
+          tag: 'Unreserved',
+          type: ticketType === 'season' ? 'SEASON' : 'JOURNEY',
+          dateLabel: formatDateLabel(now),
+          from: src,
+          to: dst,
+          km: 13,
+          status: 'upcoming',
+          expiresAt: now + TICKET_VALIDITY_MS,
+          booked: formatStamp(now),
+          via: 'STM-VLCY',
+          refId,
+        };
+        const existing = getCachedBookings();
+        void saveBookingsToFirebase([...existing, created]);
+
+        void sendTicketBookedNotification(refId, 'Unreserved').then((dispatched) => {
+          onTicketBooked?.(
+            dispatched ? null : buildTicketNotificationBody(refId, 'Unreserved')
+          );
+        });
+      });
+      return;
+    }
+
     runAction('unreserved:proceed-to-book', meta);
-  }, [fromStation, runAction, stationMode, ticketType, toStation]);
+  }, [fromStation, onTicketBooked, runAction, stationMode, ticketType, toStation]);
 
   const handleCheckTrains = useCallback(() => {
     const meta = `${fromStation.trim() || '-'}->${toStation.trim() || '-'}`;

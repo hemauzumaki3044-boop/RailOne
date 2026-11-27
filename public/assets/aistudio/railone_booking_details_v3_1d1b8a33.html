@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0A66FF" />
+  <title>Booking Details - RailOne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #EEF1F5;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #374151;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 412px;
+      margin: 0 auto;
+      background-color: #EEF1F5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sticky Header */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(180deg, #0D6EFF 0%, #085CE8 100%);
+      background-color: #0A66FF;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 6px rgba(10, 102, 255, 0.25);
+    }
+
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.2px solid rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .back-btn svg {
+      width: 17px;
+      height: 17px;
+      stroke: #FFFFFF;
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    .header-title {
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 12px;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* Full-width greeting strip */
+    .greeting-banner-box {
+      width: 100%;
+      background-color: #F8FAFC;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 12px 14px;
+      text-align: center;
+      font-size: 13.5px;
+      color: #374151;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    /* Ticket card */
+    .ticket-card {
+      margin: 0 14px;
+      background-color: #F4F6F9;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #E2E6EC;
+    }
+
+    .green-band-top,
+    .green-band-bottom {
+      height: 12px;
+      background-color: #9DD6A2;
+      width: 100%;
+    }
+
+    /* Black security box */
+    .black-security-box {
+      position: relative;
+      width: 100%;
+      height: 168px;
+      overflow: hidden;
+      background-color: #080808;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%23080808'/%3E%3Cpolygon points='24,0 48,24 24,48 0,24' fill='%231C1C1C'/%3E%3C/svg%3E");
+      background-size: 46px 46px;
+      background-repeat: repeat;
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+
+    .side-strip {
+      width: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .side-strip.left::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 1.5px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.8) 0px,
+        rgba(255, 255, 255, 0.8) 10px,
+        transparent 10px,
+        transparent 15px
+      );
+    }
+
+    .side-strip.right::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 1.5px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.8) 0px,
+        rgba(255, 255, 255, 0.8) 10px,
+        transparent 10px,
+        transparent 15px
+      );
+    }
+
+    .vertical-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      font-weight: 700;
+      color: #9CA3AF;
+    }
+
+    .vertical-label.en {
+      font-size: 12px;
+      letter-spacing: 0.9px;
+    }
+
+    .vertical-label.hi {
+      font-size: 14.5px;
+      letter-spacing: 0.5px;
+    }
+
+    .security-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px 4px 0;
+      position: relative;
+    }
+
+    .preview-heading-box {
+      width: 100%;
+      padding-left: 12px;
+      text-align: left;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.28;
+    }
+
+    /* Slot-machine countdown */
+    .timer-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      margin: 2px 0 3px;
+    }
+
+    .digit-slot {
+      position: relative;
+      width: 24px;
+      height: 44px;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .digit-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .digit-track span {
+      display: block;
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      color: #EE2B1D;
+      font-size: 38px;
+      font-weight: 900;
+    }
+
+    .digit-colon {
+      display: inline-block;
+      height: 44px;
+      line-height: 38px;
+      padding: 0 2px;
+      font-size: 36px;
+      font-weight: 900;
+      color: #EE2B1D;
+    }
+
+    .booking-dt-label {
+      font-size: 11.5px;
+      color: #9CA3AF;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .booking-dt-value {
+      font-size: 21.5px;
+      font-weight: 700;
+      color: #F59E0B;
+      margin-top: 2px;
+      letter-spacing: 0.2px;
+      text-align: center;
+    }
+
+    .uts-code-clipped {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Progress bar: empty at start, fills green over the 5-minute window */
+    @keyframes fillGreenBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    .green-progress-track {
+      width: 100%;
+      height: 4px;
+      background-color: #E5E9F0;
+      overflow: hidden;
+    }
+
+    .green-progress-fill {
+      width: 0%;
+      height: 100%;
+      background-color: #9DD6A2;
+      animation: fillGreenBar 300s linear forwards;
+    }
+
+    /* Ticket details */
+    .ticket-details-body {
+      padding: 13px 16px 4px;
+      background-color: #F4F6F9;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 11px;
+    }
+
+    .field-left { text-align: left; }
+    .field-right { text-align: right; }
+
+    .field-label {
+      font-size: 11.5px;
+      color: #6B7280;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    .field-value {
+      font-size: 14px;
+      color: #374151;
+      font-weight: 600;
+      margin-top: 1px;
+      line-height: 1.3;
+      letter-spacing: 0.1px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #DCFCE7;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-top: 1px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #22C55E;
+    }
+
+    .status-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: #16A34A;
+      letter-spacing: 0.3px;
+    }
+
+    /* Via box and IR code */
+    .via-ir-section {
+      padding: 2px 16px 4px;
+      background-color: #F4F6F9;
+    }
+
+    .via-pill {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      background-color: transparent;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 2px 0 11px 0;
+    }
+
+    .via-icon {
+      width: 15px;
+      height: 15px;
+      stroke: #4B5563;
+      fill: none;
+      stroke-width: 1.9;
+      flex-shrink: 0;
+    }
+
+    .via-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      letter-spacing: 0.1px;
+    }
+
+    .ir-gst-code {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #4B5563;
+      margin-bottom: 2px;
+      letter-spacing: 0.1px;
+    }
+
+    /* Ticket cutout with notches and thin seam */
+    .perforated-row {
+      position: relative;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      background-color: #F4F6F9;
+    }
+
+    .thin-seam-line {
+      width: 100%;
+      height: 1px;
+      background-color: #E2E6EC;
+    }
+
+    .notch-left,
+    .notch-right {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #EEF1F5;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid #E2E6EC;
+      z-index: 5;
+    }
+
+    .notch-left { left: -11px; }
+    .notch-right { right: -11px; }
+
+    .ticket-validity-footer {
+      padding: 2px 16px 13px;
+      background-color: #F4F6F9;
+    }
+
+    .validity-note {
+      font-size: 10.5px;
+      color: #374151;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    /* Warning box */
+    .warning-box {
+      margin: 13px 14px 11px;
+      background-color: #F4E4E6;
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: center;
+      color: #B91C1C;
+      font-size: 12.5px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .connecting-btn-wrap {
+      padding: 0 14px;
+      margin-bottom: 18px;
+    }
+
+    .connecting-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1.3px solid #0A66FF;
+      background-color: transparent;
+      color: #0A66FF;
+      font-size: 14.5px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* QR code */
+    .qr-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2px 0 22px;
+      width: 100%;
+    }
+
+    #qr-box {
+      width: 220px;
+      height: 220px;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qr-box img,
+    #qr-box canvas {
+      display: block;
+    }
+
+    /* Footer */
+    .bottom-info-section {
+      border-top: 1px solid #DCE1E8;
+      padding: 16px 18px 32px;
+      color: #4B5563;
+    }
+
+    .dyk-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    .info-para {
+      font-size: 13.5px;
+      line-height: 1.48;
+      color: #4B5563;
+      margin-bottom: 14px;
+      font-weight: 400;
+    }
+
+    .info-para:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="top-header">
+      <button class="back-btn" aria-label="Back" onclick="handleBackAction()">
+        <svg viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div>
+        <div class="header-title">Booking Details</div>
+        <div class="header-subtitle" id="el-mobile">Mobile: 6380621214</div>
+      </div>
+    </header>
+
+    <div class="greeting-banner-box" id="el-greeting">
+      Thank You HEMAKUMAR S, Happy Journey !
+    </div>
+
+    <main class="ticket-card">
+      <div class="green-band-top"></div>
+
+      <section class="black-security-box">
+        <div class="side-strip left">
+          <span class="vertical-label en">INDIAN RAILWAYS</span>
+        </div>
+
+        <div class="security-center">
+          <div class="preview-heading-box">
+            Dynamic preview will close<br>in
+          </div>
+
+          <div class="timer-wrapper">
+            <div class="digit-slot"><div class="digit-track" id="t0"></div></div>
+            <div class="digit-slot"><div class="digit-track" id="t1"></div></div>
+            <span class="digit-colon">:</span>
+            <div class="digit-slot"><div class="digit-track" id="t2"></div></div>
+            <div class="digit-slot"><div class="digit-track" id="t3"></div></div>
+          </div>
+
+          <div class="booking-dt-label">Ticket Booking Date &amp; Time</div>
+          <div class="booking-dt-value" id="el-datetime">25 Nov 2026, 08:18</div>
+          <div class="uts-code-clipped" id="el-uts">R21607</div>
+        </div>
+
+        <div class="side-strip right">
+          <span class="vertical-label hi">भारतीय रेल</span>
+        </div>
+      </section>
+
+      <div class="green-progress-track">
+        <div class="green-progress-fill"></div>
+      </div>
+
+      <section class="ticket-details-body">
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Journey QR-Ticket</div>
+            <div class="field-value" id="el-qrticket">XA4UEIC021</div>
+          </div>
+          <div class="field-right">
+            <div class="status-badge">
+              <span class="status-dot"></span>
+              <span class="status-text">ACTIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Source</div>
+            <div class="field-value" id="el-source">PERAMBUR</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Destination</div>
+            <div class="field-value" id="el-dest">INDRA NAGAR</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Distance</div>
+            <div class="field-value" id="el-dist">21 km</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Passenger</div>
+            <div class="field-value" id="el-pax">1 Adult, 0 Child</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Ticket Type</div>
+            <div class="field-value" id="el-ttype">JOURNEY</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Train Types</div>
+            <div class="field-value" id="el-traintype">ORDINARY</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Class</div>
+            <div class="field-value" id="el-class">SECOND</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Fare</div>
+            <div class="field-value" id="el-fare">₹10.00</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="via-ir-section">
+        <div class="via-pill">
+          <svg class="via-icon" viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="2.2" />
+            <circle cx="18" cy="18" r="2.2" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.5 6h4a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-1" />
+          </svg>
+          <span class="via-text" id="el-via">Via: MSB-MPKT</span>
+        </div>
+
+        <div class="ir-gst-code" id="el-ibn">IR:33AAAGM0289C1ZQ</div>
+      </section>
+
+      <div class="perforated-row">
+        <div class="notch-left"></div>
+        <div class="thin-seam-line"></div>
+        <div class="notch-right"></div>
+      </div>
+
+      <section class="ticket-validity-footer">
+        <div class="validity-note">
+          *Valid for start of journey within 1 hour or until departure of the first train.
+        </div>
+      </section>
+
+      <div class="green-band-bottom"></div>
+    </main>
+
+    <div class="warning-box">
+      Note: This ticket is non refundable. Ticket is stored locally on the device. Please do not change your handset or perform factory reset.
+    </div>
+
+    <div class="connecting-btn-wrap">
+      <button class="connecting-btn" type="button">Book Connecting Journey</button>
+    </div>
+
+    <div class="qr-section">
+      <div id="qr-box"></div>
+    </div>
+
+    <footer class="bottom-info-section">
+      <div class="dyk-title">Do you know?</div>
+      <p class="info-para">
+        IR recovers only 57% of cost of travel on an average.
+      </p>
+      <p class="info-para">
+        This ticket is booked on a personal user ID. It's sale/purchase is an offence u/s 143 of the Railways Act, 1989
+      </p>
+      <p class="info-para">
+        For enquiry and integrated railway helpline, please dial 139.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // 1. URL parameters with defaults
+    var params = new URLSearchParams(window.location.search || '');
+    var ticket = {
+      mobile: params.get('mobile') || '6380621214',
+      user: params.get('user') || 'HEMAKUMAR S',
+      src: (params.get('src') || 'PERAMBUR').toUpperCase(),
+      dst: (params.get('dst') || 'INDRA NAGAR').toUpperCase(),
+      dist: params.get('dist') || '21 km',
+      pax: params.get('pax') || '1 Adult, 0 Child',
+      ttype: (params.get('ttype') || 'JOURNEY').toUpperCase(),
+      traintype: (params.get('traintype') || 'ORDINARY').toUpperCase(),
+      tclass: (params.get('class') || 'SECOND').toUpperCase(),
+      fare: params.get('fare') || '10.00',
+      via: params.get('via') || 'MSB-MPKT',
+      ibn: params.get('ibn') || 'IR:33AAAGM0289C1ZQ',
+      dt: params.get('dt') || '25 Nov 2026, 08:18',
+      qr: params.get('qr') || 'XA4UEIC021',
+      uts: params.get('uts') || 'R21607',
+      returnUrl: params.get('returnUrl') || ''
+    };
+
+    document.getElementById('el-mobile').textContent = 'Mobile: ' + ticket.mobile;
+    document.getElementById('el-greeting').textContent = 'Thank You ' + ticket.user + ', Happy Journey !';
+    document.getElementById('el-datetime').textContent = ticket.dt;
+    document.getElementById('el-uts').textContent = ticket.uts;
+    document.getElementById('el-qrticket').textContent = ticket.qr;
+    document.getElementById('el-source').textContent = ticket.src;
+    document.getElementById('el-dest').textContent = ticket.dst;
+    document.getElementById('el-dist').textContent = ticket.dist;
+    document.getElementById('el-pax').textContent = ticket.pax;
+    document.getElementById('el-ttype').textContent = ticket.ttype;
+    document.getElementById('el-traintype').textContent = ticket.traintype;
+    document.getElementById('el-class').textContent = ticket.tclass;
+    document.getElementById('el-fare').textContent = '₹' + ticket.fare;
+    document.getElementById('el-via').textContent = 'Via: ' + ticket.via;
+    document.getElementById('el-ibn').textContent = ticket.ibn;
+
+    // 2. QR code (QRCode.js, high error correction, scannable)
+    (function buildQr() {
+      var MON = { Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+                  Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12' };
+      var qrDate = ticket.dt;
+      var m = ticket.dt.match(/(\d{1,2})\s+(\w{3})\s+(\d{4}),?\s*(\d{1,2}:\d{2})/);
+      if (m) qrDate = m[1].padStart(2, '0') + '-' + (MON[m[2]] || '01') + '-' + m[3] + ' ' + m[4];
+      var text = ['UTS', ticket.qr, ticket.mobile, ticket.src, ticket.dst,
+                  ticket.dist.replace(/\s*km/i, 'KM'), '1A-0C', ticket.ttype, ticket.traintype,
+                  ticket.tclass, ticket.fare.replace('₹', ''), qrDate, ticket.uts,
+                  ticket.via, ticket.ibn].join('|');
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(document.getElementById('qr-box'), {
+          text: text,
+          width: 220,
+          height: 220,
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+    })();
+
+    // 3. Slot-machine countdown driven by the real clock (05:00 to 00:00)
+    (function startSlotTimer() {
+      var DIGIT_H = 44;
+      var TOTAL = 300;
+      var tracks = ['t0', 't1', 't2', 't3'].map(function (id) {
+        return document.getElementById(id);
+      });
+
+      tracks.forEach(function (track) {
+        for (var i = 0; i < 10; i++) {
+          var s = document.createElement('span');
+          s.textContent = i;
+          track.appendChild(s);
+        }
+      });
+
+      var current = [0, 5, 0, 0];
+
+      function place(index, digit, animate) {
+        var track = tracks[index];
+        track.style.transition = animate
+          ? 'transform 0.34s cubic-bezier(0.22, 1, 0.36, 1)'
+          : 'none';
+        track.style.transform = 'translateY(-' + (digit * DIGIT_H) + 'px)';
+      }
+
+      current.forEach(function (d, i) { place(i, d, false); });
+
+      var startTime = Date.now();
+
+      function render() {
+        var elapsed = Math.floor((Date.now() - startTime) / 1000);
+        var remaining = Math.max(0, TOTAL - elapsed);
+        var mm = String(Math.floor(remaining / 60)).padStart(2, '0');
+        var ss = String(remaining % 60).padStart(2, '0');
+        var str = mm + ss;
+        for (var i = 0; i < 4; i++) {
+          var d = Number(str[i]);
+          if (d !== current[i]) {
+            current[i] = d;
+            place(i, d, true);
+          }
+        }
+        if (remaining === 0) clearInterval(handle);
+      }
+
+      // Polling at 250ms keeps the display accurate even when timers are throttled
+      var handle = setInterval(render, 250);
+      render();
+    })();
+
+    function handleBackAction() {
+      if (window.parent !== window) {
+        window.parent.postMessage('CLOSE_TICKET_VIEW', '*');
+      }
+      if (ticket.returnUrl) {
+        window.location.href = ticket.returnUrl;
+      } else if (window.history.length > 1) {
+        window.history.back();
+      }
+    }
+  </script>
+</body>
+</html>

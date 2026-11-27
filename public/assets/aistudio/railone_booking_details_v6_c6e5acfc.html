@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0A66FF" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Booking Details - RailOne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #EEF1F5;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #374151;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 412px;
+      margin: 0 auto;
+      background-color: #EEF1F5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sticky header */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(180deg, #0D6EFF 0%, #085CE8 100%);
+      background-color: #0A66FF;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 6px rgba(10, 102, 255, 0.25);
+    }
+
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.2px solid rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .back-btn svg {
+      width: 17px;
+      height: 17px;
+      stroke: #FFFFFF;
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    .header-title {
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 12px;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .greeting-banner-box {
+      width: 100%;
+      background-color: #F8FAFC;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 12px 14px;
+      text-align: center;
+      font-size: 13.5px;
+      color: #374151;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    /* Ticket card */
+    .ticket-card {
+      margin: 0 14px;
+      background-color: #F4F6F9;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #E2E6EC;
+    }
+
+    .green-band-top,
+    .green-band-bottom {
+      height: 12px;
+      background-color: #9DD6A2;
+      width: 100%;
+    }
+
+    /* Elongated tall diamond grid matching the original screenshot */
+    .black-security-box {
+      position: relative;
+      width: 100%;
+      height: 176px;
+      overflow: hidden;
+      background-color: #1B1C20;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='76' height='116' viewBox='0 0 76 116' preserveAspectRatio='none'%3E%3Crect width='76' height='116' fill='%231B1C20'/%3E%3Cpolygon points='38,0 76,58 38,116 0,58' fill='%23292B31'/%3E%3C/svg%3E");
+      background-size: 20% 116px;
+      background-position: 0 -8px;
+      background-repeat: repeat;
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+
+    .side-strip {
+      width: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .side-strip.left::after,
+    .side-strip.right::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      width: 1.5px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.8) 0px,
+        rgba(255, 255, 255, 0.8) 10px,
+        transparent 10px,
+        transparent 15px
+      );
+    }
+
+    .side-strip.left::after { right: 0; }
+    .side-strip.right::before { left: 0; }
+
+    .vertical-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      font-weight: 700;
+      color: #9CA3AF;
+    }
+
+    .vertical-label.en { font-size: 12px; letter-spacing: 0.9px; }
+    .vertical-label.hi { font-size: 14.5px; letter-spacing: 0.5px; }
+
+    .security-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px 4px 0;
+      position: relative;
+    }
+
+    .preview-heading-box {
+      width: 100%;
+      padding-left: 12px;
+      text-align: left;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.28;
+    }
+
+    .timer-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      margin: 2px 0 3px;
+    }
+
+    .digit-slot {
+      position: relative;
+      width: 24px;
+      height: 44px;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .digit-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .digit-track span {
+      display: block;
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      color: #EE2B1D;
+      font-size: 38px;
+      font-weight: 900;
+    }
+
+    .digit-colon {
+      display: inline-block;
+      height: 44px;
+      line-height: 38px;
+      padding: 0 2px;
+      font-size: 36px;
+      font-weight: 900;
+      color: #EE2B1D;
+    }
+
+    .booking-dt-label {
+      font-size: 11.5px;
+      color: #9CA3AF;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .booking-dt-value {
+      font-size: 23px;
+      font-weight: 700;
+      color: #FF8C1A;
+      margin-top: 2px;
+      letter-spacing: 0.1px;
+      text-align: center;
+    }
+
+    .uts-code-clipped {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    @keyframes fillGreenBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    .green-progress-track {
+      width: 100%;
+      height: 4px;
+      background-color: #E5E9F0;
+      overflow: hidden;
+    }
+
+    .green-progress-fill {
+      width: 0%;
+      height: 100%;
+      background-color: #9DD6A2;
+      animation: fillGreenBar 300s linear forwards;
+    }
+
+    .ticket-details-body {
+      padding: 13px 16px 4px;
+      background-color: #F4F6F9;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 11px;
+    }
+
+    .field-left { text-align: left; }
+    .field-right { text-align: right; }
+
+    .field-label {
+      font-size: 11.5px;
+      color: #6B7280;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    .field-value {
+      font-size: 14px;
+      color: #374151;
+      font-weight: 600;
+      margin-top: 1px;
+      line-height: 1.3;
+      letter-spacing: 0.1px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #DCFCE7;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-top: 1px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #22C55E;
+    }
+
+    .status-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: #16A34A;
+      letter-spacing: 0.3px;
+    }
+
+    .via-ir-section {
+      padding: 2px 16px 4px;
+      background-color: #F4F6F9;
+    }
+
+    .via-pill {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      background-color: transparent;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 2px 0 11px 0;
+    }
+
+    .via-icon {
+      width: 15px;
+      height: 15px;
+      stroke: #4B5563;
+      fill: none;
+      stroke-width: 1.9;
+      flex-shrink: 0;
+    }
+
+    .via-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .ir-gst-code {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #4B5563;
+      margin-bottom: 2px;
+    }
+
+    .perforated-row {
+      position: relative;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      background-color: #F4F6F9;
+    }
+
+    .thin-seam-line {
+      width: 100%;
+      height: 1px;
+      background-color: #E2E6EC;
+    }
+
+    .notch-left,
+    .notch-right {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #EEF1F5;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid #E2E6EC;
+      z-index: 5;
+    }
+
+    .notch-left { left: -11px; }
+    .notch-right { right: -11px; }
+
+    .ticket-validity-footer {
+      padding: 2px 16px 13px;
+      background-color: #F4F6F9;
+    }
+
+    .validity-note {
+      font-size: 10.5px;
+      color: #374151;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .warning-box {
+      margin: 13px 14px 11px;
+      background-color: #F4E4E6;
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: center;
+      color: #B91C1C;
+      font-size: 12.5px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .connecting-btn-wrap {
+      padding: 0 14px;
+      margin-bottom: 18px;
+    }
+
+    .connecting-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1.3px solid #0A66FF;
+      background-color: transparent;
+      color: #0A66FF;
+      font-size: 14.5px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .qr-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2px 0 22px;
+      width: 100%;
+    }
+
+    #qr-box {
+      width: 220px;
+      height: 220px;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qr-box img,
+    #qr-box canvas {
+      display: block;
+    }
+
+    .bottom-info-section {
+      border-top: 1px solid #DCE1E8;
+      padding: 16px 18px 32px;
+      color: #4B5563;
+    }
+
+    .dyk-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    .info-para {
+      font-size: 13.5px;
+      line-height: 1.48;
+      color: #4B5563;
+      margin-bottom: 14px;
+      font-weight: 400;
+    }
+
+    .info-para:last-child { margin-bottom: 0; }
+
+    /* Double-tap editing */
+    [data-editable] {
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.15s ease;
+    }
+
+    .editing-active {
+      outline: 2px solid #0A66FF;
+      background-color: rgba(10, 102, 255, 0.12) !important;
+      padding: 2px 6px;
+      color: #111827 !important;
+      cursor: text;
+    }
+
+    .save-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background-color: #111827;
+      color: #FFFFFF;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .save-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="top-header">
+      <button class="back-btn" aria-label="Back" onclick="handleBackAction()">
+        <svg viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div>
+        <div class="header-title">Booking Details</div>
+        <div class="header-subtitle">Mobile: <span data-editable="mobile">6380621214</span></div>
+      </div>
+    </header>
+
+    <div class="greeting-banner-box">
+      Thank You <span data-editable="user">HEMAKUMAR S</span>, Happy Journey !
+    </div>
+
+    <main class="ticket-card">
+      <div class="green-band-top"></div>
+
+      <section class="black-security-box">
+        <div class="side-strip left">
+          <span class="vertical-label en">INDIAN RAILWAYS</span>
+        </div>
+
+        <div class="security-center">
+          <div class="preview-heading-box">
+            Dynamic preview will close<br>in
+          </div>
+
+          <div class="timer-wrapper" id="countdown-timer">
+            <div class="digit-slot"><div class="digit-track" id="t0"></div></div>
+            <div class="digit-slot"><div class="digit-track" id="t1"></div></div>
+            <span class="digit-colon">:</span>
+            <div class="digit-slot"><div class="digit-track" id="t2"></div></div>
+            <div class="digit-slot"><div class="digit-track" id="t3"></div></div>
+          </div>
+
+          <div class="booking-dt-label">Ticket Booking Date &amp; Time</div>
+          <div class="booking-dt-value" data-editable="dt">25 Nov 2026, 08:18</div>
+          <div class="uts-code-clipped" data-editable="uts">R21607</div>
+        </div>
+
+        <div class="side-strip right">
+          <span class="vertical-label hi">भारतीय रेल</span>
+        </div>
+      </section>
+
+      <div class="green-progress-track">
+        <div class="green-progress-fill"></div>
+      </div>
+
+      <section class="ticket-details-body">
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Journey QR-Ticket</div>
+            <div class="field-value" data-editable="qr">XA4UEIC021</div>
+          </div>
+          <div class="field-right">
+            <div class="status-badge">
+              <span class="status-dot"></span>
+              <span class="status-text" data-editable="status">ACTIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Source</div>
+            <div class="field-value" data-editable="src">PERAMBUR</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Destination</div>
+            <div class="field-value" data-editable="dst">INDRA NAGAR</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Distance</div>
+            <div class="field-value" data-editable="dist">21 km</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Passenger</div>
+            <div class="field-value" data-editable="pax">1 Adult, 0 Child</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Ticket Type</div>
+            <div class="field-value" data-editable="ttype">JOURNEY</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Train Types</div>
+            <div class="field-value" data-editable="traintype">ORDINARY</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="field-left">
+            <div class="field-label">Class</div>
+            <div class="field-value" data-editable="tclass">SECOND</div>
+          </div>
+          <div class="field-right">
+            <div class="field-label">Fare</div>
+            <div class="field-value">₹<span data-editable="fare">10.00</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="via-ir-section">
+        <div class="via-pill">
+          <svg class="via-icon" viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="2.2" />
+            <circle cx="18" cy="18" r="2.2" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.5 6h4a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-1" />
+          </svg>
+          <span class="via-text">Via: <span data-editable="via">MSB-MPKT</span></span>
+        </div>
+
+        <div class="ir-gst-code" data-editable="ibn">IR:33AAAGM0289C1ZQ</div>
+      </section>
+
+      <div class="perforated-row">
+        <div class="notch-left"></div>
+        <div class="thin-seam-line"></div>
+        <div class="notch-right"></div>
+      </div>
+
+      <section class="ticket-validity-footer">
+        <div class="validity-note">
+          *Valid for start of journey within 1 hour or until departure of the first train.
+        </div>
+      </section>
+
+      <div class="green-band-bottom"></div>
+    </main>
+
+    <div class="warning-box">
+      Note: This ticket is non refundable. Ticket is stored locally on the device. Please do not change your handset or perform factory reset.
+    </div>
+
+    <div class="connecting-btn-wrap">
+      <button class="connecting-btn" type="button">Book Connecting Journey</button>
+    </div>
+
+    <div class="qr-section">
+      <div id="qr-box"></div>
+    </div>
+
+    <footer class="bottom-info-section">
+      <div class="dyk-title">Do you know?</div>
+      <p class="info-para">IR recovers only 57% of cost of travel on an average.</p>
+      <p class="info-para">This ticket is booked on a personal user ID. It's sale/purchase is an offence u/s 143 of the Railways Act, 1989</p>
+      <p class="info-para">For enquiry and integrated railway helpline, please dial 139.</p>
+    </footer>
+  </div>
+
+  <div class="save-toast" id="save-toast">Saved</div>
+
+  <!-- Firebase compat SDKs: only used when FIREBASE_CONFIG is set below -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ---------- Configuration ----------
+    // Paste your Firebase web config here to save edits to Firestore.
+    // Leave as null to save edits to this browser's localStorage instead.
+    var FIREBASE_CONFIG = null;
+
+    // ---------- 1. Defaults, saved edits, then URL parameters ----------
+    var DEFAULTS = {
+      mobile: '6380621214',
+      user: 'HEMAKUMAR S',
+      dt: '25 Nov 2026, 08:18',
+      uts: 'R21607',
+      qr: 'XA4UEIC021',
+      status: 'ACTIVE',
+      src: 'PERAMBUR',
+      dst: 'INDRA NAGAR',
+      dist: '21 km',
+      pax: '1 Adult, 0 Child',
+      ttype: 'JOURNEY',
+      traintype: 'ORDINARY',
+      tclass: 'SECOND',
+      fare: '10.00',
+      via: 'MSB-MPKT',
+      ibn: 'IR:33AAAGM0289C1ZQ'
+    };
+
+    var params = new URLSearchParams(window.location.search || '');
+    var returnUrl = params.get('returnUrl') || '';
+    var recordId = params.get('qr') || DEFAULTS.qr;
+    var STORAGE_KEY = 'railone:' + recordId;
+
+    function loadSaved() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      } catch (e) {
+        return {};
+      }
+    }
+
+    var saved = loadSaved();
+    var values = {};
+    Object.keys(DEFAULTS).forEach(function (k) {
+      var fromUrl = params.get(k);
+      values[k] = fromUrl !== null && fromUrl !== '' ? fromUrl :
+                  (saved[k] !== undefined ? saved[k] : DEFAULTS[k]);
+    });
+
+    // Normalize display casing for ticket fields
+    ['src', 'dst', 'ttype', 'traintype', 'tclass', 'status'].forEach(function (k) {
+      values[k] = String(values[k]).toUpperCase();
+    });
+
+    // ---------- 2. Render editable fields ----------
+    function display(key) {
+      var v = values[key];
+      if (key === 'user') return v;
+      if (key === 'mobile') return v;
+      if (key === 'fare') return v;
+      if (key === 'via') return v;
+      return v;
+    }
+
+    function renderFields() {
+      document.querySelectorAll('[data-editable]').forEach(function (el) {
+        el.textContent = display(el.dataset.editable);
+      });
+      // Greeting uses the user field
+      var greet = document.querySelector('.greeting-banner-box');
+      greet.innerHTML = 'Thank You <span data-editable="user"></span>, Happy Journey !';
+      greet.querySelector('[data-editable="user"]').textContent = values.user;
+      attachEditHandlers(greet.querySelector('[data-editable="user"]'));
+      document.querySelectorAll('[data-editable]').forEach(function (el) {
+        attachEditHandlers(el);
+      });
+    }
+
+    // ---------- 3. Double-tap / double-click editing ----------
+    var attached = new WeakSet();
+
+    function attachEditHandlers(el) {
+      if (attached.has(el)) return;
+      attached.add(el);
+      var lastTap = 0;
+
+      el.addEventListener('touchend', function (e) {
+        var now = Date.now();
+        if (now - lastTap < 350) {
+          e.preventDefault();
+          startEdit(el);
+        }
+        lastTap = now;
+      });
+
+      el.addEventListener('dblclick', function () {
+        startEdit(el);
+      });
+    }
+
+    function startEdit(el) {
+      if (el.isContentEditable) return;
+      el.setAttribute('contenteditable', 'true');
+      el.classList.add('editing-active');
+      el.focus();
+
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      function finish() {
+        el.removeAttribute('contenteditable');
+        el.classList.remove('editing-active');
+        el.removeEventListener('blur', finish);
+        el.removeEventListener('keydown', onKey);
+        commitEdit(el);
+      }
+
+      function onKey(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          el.blur();
+        }
+        if (e.key === 'Escape') {
+          el.textContent = values[el.dataset.editable];
+          el.blur();
+        }
+      }
+
+      el.addEventListener('blur', finish);
+      el.addEventListener('keydown', onKey);
+    }
+
+    function commitEdit(el) {
+      var key = el.dataset.editable;
+      var text = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!text) {
+        el.textContent = values[key];
+        return;
+      }
+      values[key] = text;
+      persist();
+      showToast();
+      rebuildQr();
+    }
+
+    // ---------- 4. Saving (Firebase if configured, otherwise localStorage) ----------
+    var db = null;
+
+    function initFirebase() {
+      if (!FIREBASE_CONFIG || typeof firebase === 'undefined') return;
+      try {
+        if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+        db = firebase.firestore();
+      } catch (e) {
+        db = null;
+      }
+    }
+
+    function persist() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+      } catch (e) { /* storage full or blocked */ }
+
+      if (db) {
+        db.collection('tickets').doc(recordId).set(values, { merge: true }).catch(function () {});
+      }
+    }
+
+    var toastTimer = null;
+    function showToast() {
+      var t = document.getElementById('save-toast');
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { t.classList.remove('show'); }, 1600);
+    }
+
+    // ---------- 5. QR code (QRCode.js, high error correction) ----------
+    var qrBox = document.getElementById('qr-box');
+
+    function buildQrText() {
+      var MON = { Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+                  Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12' };
+      var qrDate = values.dt;
+      var m = values.dt.match(/(\d{1,2})\s+(\w{3})\s+(\d{4}),?\s*(\d{1,2}:\d{2})/);
+      if (m) qrDate = m[1].padStart(2, '0') + '-' + (MON[m[2]] || '01') + '-' + m[3] + ' ' + m[4];
+      return ['UTS', values.qr, values.mobile, values.src, values.dst,
+              values.dist.replace(/\s*km/i, 'KM'), '1A-0C', values.ttype, values.traintype,
+              values.tclass, values.fare, qrDate, values.uts, values.via, values.ibn].join('|');
+    }
+
+    function rebuildQr() {
+      if (typeof QRCode === 'undefined') return;
+      qrBox.innerHTML = '';
+      new QRCode(qrBox, {
+        text: buildQrText(),
+        width: 220,
+        height: 220,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    // ---------- 6. Slot-machine countdown (05:00 to 00:00, real clock) ----------
+    (function startSlotTimer() {
+      var DIGIT_H = 44;
+      var TOTAL = 300;
+      var tracks = ['t0', 't1', 't2', 't3'].map(function (id) {
+        return document.getElementById(id);
+      });
+
+      tracks.forEach(function (track) {
+        for (var i = 0; i < 10; i++) {
+          var s = document.createElement('span');
+          s.textContent = i;
+          track.appendChild(s);
+        }
+      });
+
+      var current = [0, 5, 0, 0];
+
+      function place(index, digit, animate) {
+        var track = tracks[index];
+        track.style.transition = animate
+          ? 'transform 0.34s cubic-bezier(0.22, 1, 0.36, 1)'
+          : 'none';
+        track.style.transform = 'translateY(-' + (digit * DIGIT_H) + 'px)';
+      }
+
+      current.forEach(function (d, i) { place(i, d, false); });
+
+      var startTime = Date.now();
+
+      function render() {
+        var elapsed = Math.floor((Date.now() - startTime) / 1000);
+        var remaining = Math.max(0, TOTAL - elapsed);
+        var str = String(Math.floor(remaining / 60)).padStart(2, '0') +
+                  String(remaining % 60).padStart(2, '0');
+        for (var i = 0; i < 4; i++) {
+          var d = Number(str[i]);
+          if (d !== current[i]) {
+            current[i] = d;
+            place(i, d, true);
+          }
+        }
+        if (remaining === 0) clearInterval(handle);
+      }
+
+      var handle = setInterval(render, 250);
+      render();
+    })();
+
+    // ---------- 7. Navigation ----------
+    function handleBackAction() {
+      if (window.parent !== window) {
+        window.parent.postMessage('CLOSE_TICKET_VIEW', '*');
+      }
+      if (returnUrl) {
+        window.location.href = returnUrl;
+      } else if (window.history.length > 1) {
+        window.history.back();
+      }
+    }
+
+    // ---------- Boot ----------
+    initFirebase();
+    renderFields();
+    rebuildQr();
+  </script>
+</body>
+</html>

@@ -8,6 +8,7 @@ import { YouScreen } from './components/YouScreen';
 import { MenuDrawer } from './components/MenuDrawer';
 import { PWAInstallButton } from './components/PWAInstallButton';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { RailOneNotificationBanner } from './components/RailOneNotificationBanner';
 import {
   getBiometricPreference,
   getCachedUserName,
@@ -22,6 +23,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userName, setUserName] = useState<string>(() => getCachedUserName());
   const [biometricEnabled, setBiometricEnabled] = useState<boolean>(() => getBiometricPreference());
+  const [globalNotice, setGlobalNotice] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -34,6 +36,26 @@ export default function App() {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const handleSwMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'RAILONE_OPEN_BOOKINGS') {
+        setMenuOpen(false);
+        setScreen('bookings');
+      }
+    };
+    navigator.serviceWorker.addEventListener('message', handleSwMessage);
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', handleSwMessage);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!globalNotice) return;
+    const timer = window.setTimeout(() => setGlobalNotice(null), 8500);
+    return () => window.clearTimeout(timer);
+  }, [globalNotice]);
 
   useEffect(() => {
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
@@ -115,6 +137,12 @@ export default function App() {
       <>
         <OfflineIndicator />
         <MyBookingsScreen onBackToDashboard={handleBackToDashboard} />
+        {globalNotice && (
+          <RailOneNotificationBanner
+            message={globalNotice}
+            onDismiss={() => setGlobalNotice(null)}
+          />
+        )}
       </>
     );
   }
@@ -123,7 +151,13 @@ export default function App() {
     return (
       <>
         <OfflineIndicator />
-        <UnreservedTicketScreen onClose={handleBackToDashboard} />
+        <UnreservedTicketScreen
+          onClose={handleBackToDashboard}
+          onTicketBooked={(fallbackMsg) => {
+            if (fallbackMsg) setGlobalNotice(fallbackMsg);
+            setScreen('bookings');
+          }}
+        />
       </>
     );
   }

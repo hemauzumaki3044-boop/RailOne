@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   getCachedBookings,
+  getCachedUserName,
   logDashboardAction,
   saveBookingsToFirebase,
   subscribeBookings,
@@ -10,12 +11,16 @@ import {
   type TicketStatus,
 } from '../firebase';
 import { MyBookingsShimmerSkeleton } from './ShimmerSkeletons';
+import { TicketDetailView } from './TicketDetailView';
+import { RailOneNotificationBanner } from './RailOneNotificationBanner';
 import {
   buildTicketNotificationBody,
   generateTicketReferenceId,
+  getNotificationPermissionState,
   requestBookingNotificationPermission,
   sendTicketBookedNotification,
 } from '../utils/notifications';
+import { useTicketScreenBoost } from '../utils/screenBrightness';
 
 interface MyBookingsScreenProps {
   onBackToDashboard: () => void;
@@ -140,6 +145,9 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
   const [fKm, setFKm] = useState('');
   const [fTo, setFTo] = useState('ARAKKONAM JN.');
   const [fErr, setFErr] = useState('');
+  const [notifPerm, setNotifPerm] = useState<NotificationPermission | 'unsupported'>(() =>
+    getNotificationPermissionState()
+  );
   const [fallbackNotice, setFallbackNotice] = useState<string | null>(null);
   const fallbackTimerRef = useRef<number | null>(null);
 
@@ -289,6 +297,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     setFKm('');
     setFTo('ARAKKONAM JN.');
     setFErr('');
+    setNotifPerm(getNotificationPermissionState());
     setSheetOpen(true);
   }, []);
 
@@ -304,7 +313,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
         runSweep();
       } else if (name === 'view-details' && typeof data === 'string') {
         const target = ticketsRef.current.find((t) => (t.uid || t.id) === data || t.id === data);
-        if (target && target.status === 'completed') {
+        if (target) {
           setDetailKey(target.uid || target.id);
           setView('detail');
         }
@@ -348,7 +357,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
             fallbackTimerRef.current = window.setTimeout(() => {
               setFallbackNotice(null);
               fallbackTimerRef.current = null;
-            }, 6500);
+            }, 8500);
           }
         });
       }
@@ -443,7 +452,8 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     }
 
     // Request notification permission inside direct user gesture before loader timeout
-    await requestBookingNotificationPermission();
+    const permResult = await requestBookingNotificationPermission();
+    setNotifPerm(permResult);
 
     const refId = generateTicketReferenceId();
     closeSheet();
@@ -464,6 +474,103 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     ? tickets.find((t) => (t.uid || t.id) === detailKey || t.id === detailKey) || null
     : null;
   const effectiveDetail = inDetail && detailTicket !== null;
+  const isUpcomingDetail = effectiveDetail && detailTicket.status === 'upcoming';
+
+  useTicketScreenBoost(effectiveDetail);
+
+  const renderCompletedDetail = (t: BookingTicket) => {
+    const statusLabel = t.statusText || 'Ticket Expired';
+    const paxLabel = getDetailPaxDisplay(t);
+    const fareLabel = t.fare || 'Fare : ₹20.00 | Class : SECOND';
+
+    return (
+      <div className="min-h-[calc(100dvh-62px)] bg-[#F5F5F5] pb-[28px]">
+        <div className="px-[14px] pt-[16px]">
+          <div className="railone-dcard relative overflow-hidden rounded-[18px] bg-[#C8EBF1] px-[18px] pt-[18px] pb-[20px] text-[#111827] shadow-[0_2px_8px_rgba(15,23,42,0.06)]">
+            <div className="mb-[14px] flex items-center justify-between gap-[8px]">
+              <span
+                onClick={() => handleDetailTextTap('type', 'Ticket Type', t.type)}
+                className="cursor-pointer rounded-[8px] bg-white/80 px-[10px] py-[4px] text-[12px] font-bold tracking-[0.4px] text-[#0E5D70] select-none"
+              >
+                {t.type}
+              </span>
+              <span
+                onClick={() => handleDetailTextTap('id', 'UTS Number', t.id)}
+                className="cursor-pointer text-[13px] font-bold text-[#0F172A] select-none"
+              >
+                UTS: {t.id}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-[10px]">
+              <div>
+                <div className="text-[11px] font-semibold text-[#4B6B74]">From</div>
+                <div
+                  onClick={() => handleDetailTextTap('from', 'Source Station', t.from)}
+                  className="mt-[2px] cursor-pointer text-[15px] leading-[19px] font-bold uppercase text-[#111827] select-none"
+                >
+                  {t.from}
+                </div>
+              </div>
+              <div className="text-center text-[11px] font-semibold whitespace-nowrap text-[#3B5E68]">
+                — {t.km} km —
+              </div>
+              <div className="text-right">
+                <div className="text-[11px] font-semibold text-[#4B6B74]">To</div>
+                <div
+                  onClick={() => handleDetailTextTap('to', 'Destination Station', t.to)}
+                  className="mt-[2px] cursor-pointer text-[15px] leading-[19px] font-bold uppercase text-[#111827] select-none"
+                >
+                  {t.to}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-[16px] flex items-center justify-between border-t border-dashed border-[#6AAAB8] pt-[12px] text-[12.5px] font-medium text-[#214550]">
+              <span
+                onClick={() => handleDetailTextTap('via', 'Via Route', t.via)}
+                className="cursor-pointer select-none"
+              >
+                Via: {t.via}
+              </span>
+              <span
+                onClick={() => handleDetailTextTap('booked', 'Booked On', t.booked)}
+                className="cursor-pointer select-none"
+              >
+                {t.booked}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-[14px] rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[16px]">
+            <div className="flex items-center justify-between border-b border-[#F1F5F9] pb-[12px]">
+              <span className="text-[13px] font-medium text-[#6B7280]">Status</span>
+              <span
+                onClick={() => handleDetailTextTap('statusText', 'Ticket Status', statusLabel)}
+                className="cursor-pointer rounded-full bg-[#FEE2E2] px-[10px] py-[3px] text-[12px] font-bold text-[#DC2626] select-none"
+              >
+                {statusLabel}
+              </span>
+            </div>
+
+            <div
+              onClick={() => handleDetailTextTap('pax', 'Passenger(s)', paxLabel)}
+              className="cursor-pointer border-b border-[#F1F5F9] py-[12px] text-[14px] font-semibold text-[#1F2937] select-none"
+            >
+              {paxLabel}
+            </div>
+
+            <div
+              onClick={() => handleDetailTextTap('fare', 'Fare & Class', fareLabel)}
+              className="cursor-pointer pt-[12px] text-[14px] font-semibold text-[#1F2937] select-none"
+            >
+              {fareLabel}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const upcomingList = tickets.filter((t) => t.status === 'upcoming');
   const completedList = tickets.filter((t) => t.status === 'completed');
@@ -622,6 +729,36 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
     );
   };
 
+  if (isUpcomingDetail && detailTicket) {
+    return (
+      <>
+        <TicketDetailView
+          ticket={detailTicket}
+          userName={getCachedUserName()}
+          onBack={() => act('back')}
+          onUpdateTicket={(updated) => {
+            const next = ticketsRef.current.map((t) =>
+              (t.uid || t.id) === (updated.uid || updated.id) ? updated : t
+            );
+            persistTickets(next);
+          }}
+        />
+        {showLoader && (
+          <div
+            aria-hidden="true"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(20,24,32,0.38)]"
+          >
+            <img
+              src="/assets/dashboard/loader-ring.png"
+              alt=""
+              className="railone-loader-spin block h-[64px] w-[64px]"
+            />
+          </div>
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="min-h-dvh w-full bg-white text-[#212121] sm:bg-[#E5E7EB]">
       <div className="railone-mb-shell relative mx-auto min-h-dvh w-full overflow-x-hidden bg-white sm:max-w-[430px]">
@@ -700,97 +837,7 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
           {isInitialLoading ? (
             <MyBookingsShimmerSkeleton />
           ) : effectiveDetail && detailTicket ? (
-            <div className="min-h-[calc(100dvh-62px)] bg-[#F5F5F5] pt-[0.1px] pb-[40px]">
-              <div className="railone-dcard relative mx-[10.5px] mt-[15.5px] h-[153px] w-[calc(100%-21px)] rounded-[20px] bg-[#C8EBF1] text-[#1F2A30]">
-                <span
-                  onClick={() =>
-                    handleDetailTextTap('type', 'Ticket Type', detailTicket.type || 'JOURNEY')
-                  }
-                  className="absolute top-[35px] left-[15.5px] m-0 cursor-pointer text-[13px] font-normal tracking-[0.2px] whitespace-nowrap select-none"
-                >
-                  {detailTicket.type || 'JOURNEY'}
-                </span>
-                <span
-                  onClick={() => handleDetailTextTap('id', 'UTS Number', detailTicket.id)}
-                  className="absolute top-[33px] right-[21px] m-0 cursor-pointer text-[12.5px] font-medium whitespace-nowrap select-none"
-                >
-                  {detailTicket.id}
-                </span>
-                <span
-                  onClick={() => handleDetailTextTap('from', 'From Station', detailTicket.from)}
-                  className="absolute top-[72px] left-[15.5px] m-0 cursor-pointer text-[12.5px] font-medium whitespace-nowrap uppercase select-none"
-                >
-                  {detailTicket.from}
-                </span>
-                <span
-                  onClick={() => handleDetailTextTap('to', 'To Station', detailTicket.to)}
-                  className="absolute top-[72px] right-[21px] m-0 cursor-pointer text-[12.5px] font-medium whitespace-nowrap uppercase select-none"
-                >
-                  {detailTicket.to}
-                </span>
-                <span className="absolute top-[99px] left-[15.5px] m-0 text-[13px] font-normal whitespace-nowrap text-[#5F7276] select-none">
-                  Via
-                </span>
-                <span className="absolute top-[99px] right-[21px] m-0 text-[13px] font-normal whitespace-nowrap text-[#5F7276] select-none">
-                  Booked on
-                </span>
-                <span
-                  onClick={() =>
-                    handleDetailTextTap('via', 'Via Route', detailTicket.via || 'MAS-MPK-MSF')
-                  }
-                  className="absolute top-[116px] left-[15.5px] m-0 cursor-pointer text-[13px] font-medium whitespace-nowrap select-none"
-                >
-                  {detailTicket.via || 'MAS-MPK-MSF'}
-                </span>
-                <span
-                  onClick={() => handleDetailTextTap('booked', 'Booked On', detailTicket.booked)}
-                  className="absolute top-[116px] right-[21px] m-0 cursor-pointer text-[13px] font-medium whitespace-nowrap select-none"
-                >
-                  {detailTicket.booked}
-                </span>
-              </div>
-
-              <div className="relative mt-[15px] h-[141.5px] bg-white">
-                <p
-                  onClick={() =>
-                    handleDetailTextTap(
-                      'statusText',
-                      'Ticket Status',
-                      detailTicket.statusText ||
-                        (detailTicket.status === 'completed' ? 'Ticket Expired' : 'Ticket Active')
-                    )
-                  }
-                  className="absolute top-[20.5px] left-[21px] m-0 cursor-pointer text-[13px] font-medium whitespace-nowrap text-[#7C7C84] select-none"
-                >
-                  {detailTicket.statusText ||
-                    (detailTicket.status === 'completed' ? 'Ticket Expired' : 'Ticket Active')}
-                </p>
-                <p
-                  onClick={() =>
-                    handleDetailTextTap(
-                      'pax',
-                      'Passenger Details',
-                      getDetailPaxDisplay(detailTicket)
-                    )
-                  }
-                  className="absolute top-[58.5px] left-[21px] m-0 cursor-pointer text-[15px] font-medium whitespace-nowrap text-black select-none"
-                >
-                  {getDetailPaxDisplay(detailTicket)}
-                </p>
-                <p
-                  onClick={() =>
-                    handleDetailTextTap(
-                      'fare',
-                      'Fare & Class',
-                      detailTicket.fare || 'SECOND | ORDINARY | JOURNEY | ₹40.00'
-                    )
-                  }
-                  className="absolute top-[89.5px] left-[21px] m-0 cursor-pointer text-[15px] font-semibold whitespace-nowrap text-black select-none"
-                >
-                  {detailTicket.fare || 'SECOND | ORDINARY | JOURNEY | ₹40.00'}
-                </p>
-              </div>
-            </div>
+            renderCompletedDetail(detailTicket)
           ) : (
             renderList()
           )}
@@ -982,6 +1029,22 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
               />
             </div>
 
+            {notifPerm === 'default' && (
+              <button
+                type="button"
+                onClick={async () => {
+                  const res = await requestBookingNotificationPermission();
+                  setNotifPerm(res);
+                }}
+                className="mb-[10px] flex w-full cursor-pointer items-center justify-between rounded-[12px] border border-[#BFDBFE] bg-[#EFF6FF] px-[12px] py-[9px] text-left text-[12.5px] font-semibold text-[#1D4ED8]"
+              >
+                <span>Enable real phone booking alerts</span>
+                <span className="rounded-full bg-[#0166FF] px-[10px] py-[3px] text-[11px] font-bold text-white">
+                  Allow
+                </span>
+              </button>
+            )}
+
             <p className="m-0 mb-[6px] min-h-[18px] text-[12.5px] text-[#DC2626]">{fErr}</p>
 
             <button
@@ -1069,29 +1132,16 @@ export function MyBookingsScreen({ onBackToDashboard }: MyBookingsScreenProps) {
         </div>
       )}
 
-      {/* Fallback notification banner (shown only if OS push notifications are unavailable/denied) */}
+      {/* Fallback Android notification banner (shown if OS push notification is unavailable/denied) */}
       {fallbackNotice && (
-        <div
-          role="status"
-          aria-live="polite"
-          onClick={() => setFallbackNotice(null)}
-          className="fixed top-[12px] left-1/2 z-[110] flex w-[calc(100%-24px)] max-w-[406px] -translate-x-1/2 cursor-pointer items-start gap-[12px] rounded-[20px] bg-[#5E5E63]/95 px-[14px] py-[12px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-md"
-        >
-          <img
-            src="/pwa-192x192.png"
-            alt="RailOne"
-            className="mt-[2px] block h-[38px] w-[38px] shrink-0 rounded-[10px]"
-          />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-[8px]">
-              <span className="text-[14.5px] leading-[18px] font-bold text-white">RailOne</span>
-              <span className="text-[11.5px] font-medium text-white/75">Now</span>
-            </div>
-            <p className="mt-[3px] mb-0 text-[12.5px] leading-[17px] font-normal text-white/95">
-              {fallbackNotice}
-            </p>
-          </div>
-        </div>
+        <RailOneNotificationBanner
+          message={fallbackNotice}
+          onDismiss={() => setFallbackNotice(null)}
+          onOpen={() => {
+            setTab('upcoming');
+            setView('list');
+          }}
+        />
       )}
 
       {/* Loader overlay */}
